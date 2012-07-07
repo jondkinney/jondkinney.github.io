@@ -3,12 +3,15 @@ layout: post
 title: "my new gig at bolstr"
 date: 2012-07-07 01:28
 comments: true
-categories: entrepreneurship
+categories: 
+- Entrepreneurship
 ---
 
+{% img left /images/bolstr_star.png Bolstr Logo %}
+<div style='height:8px;'>&nbsp;</div>
 It's been nearly seven months since I joined the great team at [Bolstr](http://bolstr.com) as Chief Technology Officer and I have to say, it's a job that gets even better with time!
 
-Since I started I've done a bunch of things:
+Since I started, I've done a bunch of things:
 
 * Made significant improvements to [http://bolstr.com](http://bolstr.com)
 * Added a ton of functionality to our main application and improved test coverage / speed
