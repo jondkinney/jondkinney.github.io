@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "breaking out of an iframe from a rails controller"
-date: 2012-07-07 03:56
+date: 2012-07-08 03:56
 comments: true
 categories: 
 - Rails 
