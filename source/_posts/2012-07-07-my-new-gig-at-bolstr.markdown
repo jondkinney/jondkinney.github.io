@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "my new gig at bolstr"
+title: "My New Gig at Bolstr"
 date: 2012-07-07 01:28
 comments: true
 categories: 
