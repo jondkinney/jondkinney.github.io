@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title id="page_title">Untitled</title>
+  <script type="text/javascript" charset="utf-8">
+    if(document.compatMode == 'CSS1Compat'){
+     document.title = "Standards Mode"
+     //alert("Standards mode");
+    }else{
+     document.title = "Quirks Mode"
+     //alert("Quirks mode");
+    }
+  </script>
+  
+  <link rel="stylesheet" href="reset.css" type="text/css" media="screen" title="reset" charset="utf-8" />
+	
+  <style type="text/css" media="screen">
+    html{
+      height:100%; /* It's important to set height 100% for all elements above the element you want to stretch the full height of the browser since HTML elements with height 100% only stretch to the total height of their immediate parent */
+    }
+    
+    body{
+      height:100%;
+      background:#ccc;
+      /* the below background definition is the shorthand form that allows multiple things to be set. Namely the background color to use when the background image runs out. Also repeat-x will make it stretch the full width of the browser viewport. */
+      /* uncomment the below definition to stretch the header across the page */
+/*      background:#ccc url(images/green_header_background.png) repeat-x;*/
+    }
+    
+    #container{
+      width:800px;
+      background:lightgreen; /*must be same color as main content area*/
+    
+      /*required for footer push*/
+      margin:0px auto -4em; /* this shorthand means (top, left/right, bottom) */
+      /* These 3 heights are your best bet to get all browsers to obey the height 100% */
+      min-height: 100%;
+      height: auto !important;
+      height: 100%; 
+    }
+    
+    #header{
+      background:green;
+      height:70px;
+      font-size:40px;
+      text-align:center;
+      padding:30px 0 0 0;
+    }
+    
+    #top_nav li{
+      float:left; /*required FOR IE to not have a ladder/step looking menu*/
+    }
+    
+    #top_nav li a{
+      font-size:1.2em; /* 12px */
+      float:left;
+      margin:5px; /* (top, right, bottom, left) */
+      background:#fff;
+      padding:5px; /* (top, right, bottom, left) */
+      color:red;
+    }
+    
+    #top_nav li a:hover{
+     color:#fff;
+     background:darkblue; 
+    }
+        
+    #main_text{
+      clear:left;
+      font-size:1.2em; /* 12px */
+    	width:780px; /* 800px but subtract 10 from each side for the padding */
+    	padding:10px; /* (top, right, bottom, left) */
+      background:lightgreen; /*must be same color as container*/
+    }
+    
+    #footer, .push{
+     height:4em;
+    }
+    
+    .push{ 
+      /* Uncomment the below to see where the push is... */
+/*     background:red; */
+    }
+    
+    #footer{
+      font-size:1em; /*it is already 10px or 1em by default */
+      background:orange;
+      text-align:center;
+      
+      /* Comment out the 2 lines below to allow the footer to stretch the whole width of the site */
+      margin:0px auto;
+      width:800px;
+    }
+    
+    #footer_links{
+     position:relative; /* you need to set position to enable specifying top below, you also need to specify position to get access to the z-index property (which controls stacking order or how elements show up on top of one another) */
+     top:15px;
+     text-align:center; 
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="container">
+    <div id="header">Hello everyone. Thank you for coming.</div>
+  
+    <ul id="top_nav">
+      <li><a href="2_col_float.html">Other Example</a></li>
+      <li><a href="#">link 2</a></li>
+      <li><a href="#">link 3</a></li>
+      <li><a href="#">link 4</a></li>
+      <li><a href="#">link 5</a></li>
+    </ul>
+
+    <div id="main_text">
+      <h1 id="welcome">Welcome to our test</h1>
+      <!-- <h1 style="font-size:24px;">Welcome to our test</h1> -->
+  
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </div>
+    <div class="push"></div>
+  </div><!-- closes the container div-->
+
+  <div id="footer">
+    <div id="footer_links">&copy;2009 <a href="#">Jon Kinney</a> Demos</div>
+  </div>
+</body>
+</html>

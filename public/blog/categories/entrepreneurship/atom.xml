@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Entrepreneurship | self.extended(thoughts)]]></title>
+  <link href="http://j2fly.github.com/blog/categories/entrepreneurship/atom.xml" rel="self"/>
+  <link href="http://j2fly.github.com/"/>
+  <updated>2012-07-08T21:18:39-05:00</updated>
+  <id>http://j2fly.github.com/</id>
+  <author>
+    <name><![CDATA[Jon Kinney]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My New Gig at Bolstr]]></title>
+    <link href="http://j2fly.github.com/blog/2012/07/07/my-new-gig-at-bolstr/"/>
+    <updated>2012-07-07T01:28:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/07/07/my-new-gig-at-bolstr</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/bolstr_star.png" title="Bolstr Logo" ></p>
+
+<div style='height:8px;'>&nbsp;</div>
+
+
+<p>It's been nearly seven months since I joined the great team at <a href="http://bolstr.com">Bolstr</a> as Chief Technology Officer and I have to say, it's a job that gets even better with time!</p>
+
+<p>Since I started, I've done a bunch of things:</p>
+
+<ul>
+<li>Made significant improvements to <a href="http://bolstr.com">http://bolstr.com</a></li>
+<li>Added a ton of functionality to our main application and improved test coverage / speed</li>
+<li>Written a <a href="https://github.com/j2fly/docusign_rest">robust wrapper gem</a> to the Docusign REST API and implemented their embedded e-signature solution into our main application</li>
+<li>Switched to using <a href="https://gist.github.com/2040114">Tmux and Console Vim</a> after a brief affair with Sublime Text 2</li>
+<li>Started a <a href="http://greenbayrug.com">Ruby User Group</a> in Green Bay, WI</li>
+<li>Completed <a href="http://rubyoffrails.com">several</a> advanced Ruby <a href="http://pragmaticstudio.com/ruby">courses</a> to hone my code slinging skills</li>
+</ul>
+
+
+<p>It's funny how time flies when you love what you do. I'm very excited about what we're doing and we have some amazing opportunities already lined up in the months ahead.</p>
+
+<p>Keep in touch if you want to see the financial and banking industries squirm when crowdfunding goes mainstream!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Intridea Blog Posts]]></title>
+    <link href="http://j2fly.github.com/blog/2011/10/12/intridea-blog-posts/"/>
+    <updated>2011-10-12T17:00:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2011/10/12/intridea-blog-posts</id>
+    <content type="html"><![CDATA[<p>I've been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the "Published Posts" section after my bio.</p>
+
+<p>Here are direct links to what is posted to date (I'll try to keep this updated).</p>
+
+<ul>
+<li><a href="http://intridea.com/posts/its-not-enough-to-bash-in-heads-youve-got-to-bash-in-minds-with-zsh">It's not enough to bash in heads, you've got to bash in minds...with ZSH (May 18, 2011)</a></li>
+<li><a href="http://intridea.com/posts/remote-cold-boot-a-mac">Remote Cold Boot a Mac (January 14, 2011)</a></li>
+<li><a href="http://intridea.com/posts/using-bind-locally-on-os-x-for-easy-access-to-subdomains">Using BIND locally on OS X for easy access to subdomains (June 2, 2010)</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

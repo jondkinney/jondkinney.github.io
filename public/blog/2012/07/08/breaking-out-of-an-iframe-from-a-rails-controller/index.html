@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Breaking Out of an iframe From a Rails Controller - self.extended(thoughts)</title>
+  <meta name="author" content="Jon Kinney">
+
+  
+  <meta name="description" content="For the docusign_rest gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="self.extended(thoughts)" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10775549-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">self.extended(thoughts)</a></h1>
+  
+    <h2>Code, Entrepreneurship, Music, Life</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:j2fly.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/studio">Studio</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Breaking Out of an Iframe From a Rails Controller</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-08T03:56:00-05:00" pubdate data-updated="true">Jul 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&#8217;s view.</p>
+
+<p>After a bit of Googling I found this code snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">charset=</span><span class="s">&#39;utf-8&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nx">parent</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s1">&#39;/myloc&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which can be implemented in a Rails controller like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">render</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;window.parent.document.location.href = &#39;/myloc&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>The above code snippet takes the place of the traditional <code>redirect_to</code>. The beauty of this solution is that after the signer interacts with the document and completes his or her signing ceremony, the app will act just like we had served the embedded signing iframe code directly from our own view. There isn&#8217;t a button to click that says &#8220;go to parent&#8221; or &#8220;back to home&#8221; or anything, it just works and redirects appropriately when the user is done interacting with the iframe.</p>
+
+<p>I created a little utility method in the <a href="https://github.com/j2fly/docusign_rest/blob/master/lib/docusign_rest/utility.rb#L49">docusign_rest</a> gem to abstract the JS portion and make it more consise. See lines 23 and 26 in the example controller code below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomeController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># the view corresponding to this action has the iframe in it with the</span>
+</span><span class='line'>  <span class="c1"># @url as it&#39;s src. @envelope_response is populated from either:</span>
+</span><span class='line'>  <span class="c1"># @envelope_response = client.create_envelope_from_document</span>
+</span><span class='line'>  <span class="c1"># or</span>
+</span><span class='line'>  <span class="c1"># @envelope_response = client.create_envelope_from_template</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">embedded_signing</span>
+</span><span class='line'>    <span class="n">client</span> <span class="o">=</span> <span class="no">DocusignRest</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipient_view</span><span class="p">(</span>
+</span><span class='line'>      <span class="n">envelope_id</span><span class="p">:</span> <span class="vi">@envelope_response</span><span class="o">[</span><span class="s2">&quot;envelopeId&quot;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>      <span class="nb">name</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">email</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">return_url</span><span class="p">:</span> <span class="s2">&quot;http://localhost:3000/docusign_response&quot;</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">docusign_response</span>
+</span><span class='line'>    <span class="n">utility</span> <span class="o">=</span> <span class="no">DocusignRest</span><span class="o">::</span><span class="no">Utility</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:event</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;signing_complete&quot;</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Thanks! Successfully signed&quot;</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">utility</span><span class="o">.</span><span class="n">breakout_path</span><span class="p">(</span><span class="n">some_path</span><span class="p">),</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You chose not to sign the document.&quot;</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">utility</span><span class="o">.</span><span class="n">breakout_path</span><span class="p">(</span><span class="n">some_other_path</span><span class="p">),</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is the method in the Utility class of the DocuSign module that handles embedding the path in the HTML snippet.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">breakout_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>  <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;parent.location.href = &#39;</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jon Kinney</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-08T03:56:00-05:00" pubdate data-updated="true">Jul 8<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/" data-via="j2fly" data-counturl="http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/07/my-new-gig-at-bolstr/" title="Previous Post: My New Gig at Bolstr">&laquo; My New Gig at Bolstr</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Husband, Rails Dev & CTO at <a href='http://bolstr.com'>Bolstr</a>, Sound Engineer & A Cappella Producer, Hockey Player, Movie Geek</p>
+  <img src='/images/me100x100.png' />
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">Breaking Out of an iframe From a Rails Controller</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/07/my-new-gig-at-bolstr/">My New Gig at Bolstr</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/12/intridea-blog-posts/">Intridea Blog Posts</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("j2fly", 3, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/j2fly" class="twitter-follow-button" data-show-count="false">Follow @j2fly</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'j2fly',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos',
+            skip_repos: 'j2fly.github.com'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Jon Kinney
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jonkinney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/';
+        var disqus_url = 'http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

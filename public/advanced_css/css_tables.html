@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>CSS Tables</title>
+	
+	<style type="text/css" media="screen">
+	  .grid { 
+      display: table; 
+      border-spacing: 4px; 
+    } 
+    
+    .row { 
+      display: table-row; 
+    } 
+   
+   .image { 
+     display: table-cell; 
+     width: 240px; 
+     background-color: #000; 
+     border: 8px solid #000; 
+     vertical-align: top; 
+     text-align: center; 
+   } 
+   
+   .image p { 
+     color: #fff; 
+     font-size: 85%;
+     text-align: left;
+     padding-top: 8px;
+   }
+	</style>
+	
+</head>
+
+<body>
+
+  <div class="grid"> 
+    <div class="row"> 
+      <div class="image"> 
+        <img src="images/photo1.png" alt="A Lily" width="528px" /> 
+        <p>A lily in the gardens of The Vyne Country House</p> 
+      </div> 
+      <div class="image"> 
+        <img src="images/photo3.png" alt="A Fuchsia plant" /> 
+        <p>Fuchsia plant in my garden</p> 
+      </div> 
+    </div> 
+    <div class="row"> 
+      <div class="image"> 
+        <img src="images/photo2.png" alt="A crazy looking Allium flower" />
+        <p>A crazy looking flower</p>
+      </div>
+      <div class="image">
+        <img src="images/photo4.png" 
+        alt="A Robin sitting on a fence" />
+        <p>This robin has been visiting our garden over the summer. He is very friendly and doesn't seem to be too worried about sharing the garden with us.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

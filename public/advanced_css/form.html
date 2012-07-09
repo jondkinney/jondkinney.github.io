@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title id="page_title">Untitled</title>
+  <script type="text/javascript" charset="utf-8">
+    if(document.compatMode == 'CSS1Compat'){
+     document.title = "Standards Mode"
+     //alert("Standards mode");
+    }else{
+     document.title = "Quirks Mode"
+     //alert("Quirks mode");
+    }
+  </script>
+  
+  <link rel="stylesheet" href="reset.css" type="text/css" media="screen" title="reset" charset="utf-8">
+	
+  <style type="text/css" media="screen">
+  /* You can import other stylesheets with the @import rule below */
+    @import url("buttons.css");
+    @import url("form.css");
+  
+    html{
+      
+    }
+    
+    body{
+     background:#474747; 
+    }
+  
+    #container{
+      background:white; /*must be same color as main content area*/
+      margin:20px auto;
+      padding:0; 
+      width:800px;
+    }
+    
+    #header{
+      background:green;
+      font-size:40px;
+      height:70px;
+      padding:30px 0 0 0;
+      text-align:center;
+      width:800px;
+    }
+    
+    #page_left{
+    	float:left;
+    	margin:0px -200px 0 0px;
+    	padding:10px;
+    	width:180px;
+      background:red;
+      font-size:1.2em;
+      position:relative;
+    }
+    
+    #left_nav{
+/*     background:purple; */
+    }
+    
+    #left_nav li{
+      background:yellow; 
+      margin:0 0 5px 0;
+      padding:8px;
+    }
+    
+    #main_text{
+      background:white; /*must be same color as container*/
+    	border-left:200px solid red;
+    	float:left;
+    	padding:10px;
+    	width:580px;
+      font-size:1.2em;
+    }
+    
+    #footer{
+      background:orange;
+      clear:both;
+      font-size:1em;
+      height:25px;
+      padding:15px 0 0 0; 
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  
+<div id="container">
+
+  <div id="header">Hello everyone. Thank you for coming.</div>
+  
+  <div id="page_left">
+    <ul id="left_nav">
+      <li><a href="footer_stick.html">Other Example</a></li>
+      <li>link 2</li>
+      <li>link 3</li>
+      <li>link 4</li>
+      <li>link 5</li>
+    </ul>
+  </div>
+  
+  <div id="main_text">
+    <h1 id="welcome">Form Demo</h1>
+    <!-- <h1 style="font-size:24px;">Welcome to our test</h1> -->
+    
+    <form action="#" method="post">
+      <fieldset>
+        <legend>Please Register</legend>
+        <p><label for= "name">Name</label> <input type= "text" id="name" tabindex="1" /></p>
+        <p><label for= "e-mail">Email</label> <input type= "text" id= "e-mail" tabindex="2" /><br /></p>
+                
+        <div class="buttons submit">
+            <button type="submit" class="positive" tabindex="3">
+                <img src="images/icons/tick.png" alt=""/> 
+                Save
+            </button>
+
+            <a href="/password/reset/">
+                <img src="images/icons/textfield_key.png" alt=""/> 
+                Change Password
+            </a>
+
+            <a href="#" class="negative">
+                <img src="images/icons/cross.png" alt=""/>
+                Cancel
+            </a>
+        </div>  <!-- closes the '.buttons .submit' div -->
+      </fieldset>
+    </form>
+  </div> <!-- closes the #main_text div -->
+
+  <div id="footer">
+    &copy;2009 <a href="#">Jon Kinney</a> Demos
+  </div>
+
+</div><!-- closes the #container div -->
+</body>
+</html>
