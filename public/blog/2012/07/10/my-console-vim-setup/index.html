@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rails - self.extended(thoughts)</title>
+  <title>My Console Vim and Tmux Setup - self.extended(thoughts)</title>
   <meta name="author" content="Jon Kinney">
 
   
-  <meta name="description" content="Category: Rails">
+  <meta name="description" content="I&#8217;ve been using Vim (7.3) in the console through Tmux for close to 6-months now and it&#8217;s definitely the best development setup I&#8217;ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://j2fly.github.comblog/categories/rails/">
+  <link rel="canonical" href="http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -76,143 +76,130 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rails</h1>
+    
+      <h1 class="entry-title">My Console Vim and Tmux Setup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-10T23:03:00-05:00" pubdate data-updated="true">Jul 10<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I&#8217;ve been using Vim (7.3) in the console through Tmux for close to 6-months now and it&#8217;s definitely the best development setup I&#8217;ve ever had. Prior to this I have used (roughly in re-verse order):</p>
 
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/07/10/organizing-cucumber-features/">Organizing Cucumber Features</a></h1>
-<time datetime="2012-07-10T22:29:00-05:00" pubdate><span class='month'>Jul</span> <span class='day'>10</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cucumber/'>Cucumber</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
+<ul>
+<li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
+<li><a href="http://macvim.org/OSX/index.php">MacVim</a></li>
+<li><a href="http://www.jetbrains.com/ruby/">Rubymine</a></li>
+<li><a href="http://macromates.com/">Textmate</a></li>
+<li><a href="http://www.eclipse.org/">Eclipse (on Windows&#8230; yikes!)</a></li>
+</ul>
 
 
-</article>
+<!-- more -->
 
 
+<p>I have also installed and played with <a href="http://redcareditor.com/">Redcar</a> which was pretty neat, but I&#8217;ve never used it for any real development. I still use Rubymine occasionally for step through debugging or major refactoring of Models or Classes (though I&#8217;m anxious to try tpope&#8217;s <a href="https://github.com/tpope/vim-abolish">vim-abolish</a> next time I need to do that kind of a refactoring).</p>
 
-<article>
-  
-<h1><a href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">Breaking Out of an iframe From a Rails Controller</a></h1>
-<time datetime="2012-07-08T03:56:00-05:00" pubdate><span class='month'>Jul</span> <span class='day'>08</span> <span class='year'>2012</span></time>
+<h3>Now on to my setup!</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
+<p>This setup can be installed easily on a Mac OS X or Linux machine provided a few prerequisites are met (all of which I prefer to keep updated by installing the latest versions through <a href="http://mxcl.github.com/homebrew/">Homebrew</a>:</p>
 
-
-</article>
-
+<ul>
+<li>Git is installed</li>
+<li>Vim is installed (preferably 7.3 or above)</li>
+<li>Tmux is installed (preferably 1.6 or above)</li>
+</ul>
 
 
-  
-  <h2>2010</h2>
+<p><strong>I also highly recommend checking out:</strong></p>
 
-<article>
-  
-<h1><a href="/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/">Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS</a></h1>
-<time datetime="2010-04-21T16:43:00-05:00" pubdate><span class='month'>Apr</span> <span class='day'>21</span> <span class='year'>2010</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cucumber/'>Cucumber</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
+<ul>
+<li><a href="http://www.iterm2.com/#/section/home">iTerm 2</a> (not required, but highly recommended as an alternative to the built in Terminal.app)</li>
+<li><a href="https://github.com/robbyrussell/oh-my-zsh/">Zsh &amp; oh-my-zsh</a> (follow the installation instructions for that project separately if you want to run Zsh instead of Bash for your shell)</li>
+</ul>
 
 
-</article>
+<h3>Enough already, show me the ~/.vimrc!</h3>
 
+<p>Alright, here is the gist I use to setup my entire development environment: <a href="https://gist.github.com/2040114">https://gist.github.com/2040114</a></p>
 
-
-<article>
-  
-<h1><a href="/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/">Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)</a></h1>
-<time datetime="2010-03-06T16:53:00-06:00" pubdate><span class='month'>Mar</span> <span class='day'>06</span> <span class='year'>2010</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/sql/'>SQL</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2009</h2>
-
-<article>
-  
-<h1><a href="/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/">Change Locale on OS X Snow Leopard for FreeTDS Functionality</a></h1>
-<time datetime="2009-11-23T15:29:00-06:00" pubdate><span class='month'>Nov</span> <span class='day'>23</span> <span class='year'>2009</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/os-x/'>OS X</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/">Deploying to Multiple Server Environments with Cap</a></h1>
-<time datetime="2009-04-30T16:49:00-05:00" pubdate><span class='month'>Apr</span> <span class='day'>30</span> <span class='year'>2009</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2009/04/01/logging-cron-jobs-on-ubuntu/">Logging Cron Jobs on Ubuntu</a></h1>
-<time datetime="2009-04-01T15:53:00-05:00" pubdate><span class='month'>Apr</span> <span class='day'>01</span> <span class='year'>2009</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2008</h2>
-
-<article>
-  
-<h1><a href="/blog/2008/09/16/rails-in-the-entreprise/">Rails in the Entreprise</a></h1>
-<time datetime="2008-09-16T16:20:00-05:00" pubdate><span class='month'>Sep</span> <span class='day'>16</span> <span class='year'>2008</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
-
-
-</article>
-
+<p>Let me know if you have any questions or comments! I love to talk shop about Vim :)</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Jon Kinney</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-10T23:03:00-05:00" pubdate data-updated="true">Jul 10<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/" data-via="j2fly" data-counturl="http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/10/organizing-cucumber-features/" title="Previous Post: Organizing Cucumber Features">&laquo; Organizing Cucumber Features</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/10/docusign-rest-and-embedded-signing/" title="Next Post: DocuSign REST and Embedded Signing">DocuSign REST and Embedded Signing &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -306,7 +293,10 @@
       var disqus_shortname = 'jonkinney';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/';
+        var disqus_url = 'http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

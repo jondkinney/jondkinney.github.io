@@ -4,7 +4,7 @@
   <title><![CDATA[self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-07-12T03:04:54-05:00</updated>
+  <updated>2012-10-01T11:32:24-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -12,6 +12,215 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Wiring up LittleSnapper to CloudApp]]></title>
+    <link href="http://j2fly.github.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
+    <updated>2012-10-01T09:28:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
+    <content type="html"><![CDATA[<p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
+
+<p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn&#8217;t want to wait any longer so I started down the path of solving the problem myself.</p>
+
+<p>Here&#8217;s how it works:</p>
+
+<ul>
+<li>Configure LittleSnapper to use SFTP to &#8216;publish&#8217; locally to a folder of your choosing.</li>
+<li>Create a new Automator &#8220;Folder Action&#8221; which runs an AppleScript when the contents of the folder changes.</li>
+<li>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Details with Code and Screenshots</h2>
+
+<ol>
+<li><p>Configure LittleSnapper&#8217;s publishing preferences to include a location local to your machine.</p>
+
+<ul>
+<li><p>Use you Mac username and password when setting up this connection. The &#8216;Server&#8217; is whatever shows up when you open System Preferences and choose &#8216;Sharing&#8217;. At the top you&#8217;ll see a note stating: &#8216;Computers on your local network can access your computer at: MBPr.local&#8217;. Use the full name including .local shown there (which will likely be different than mine).</p></li>
+<li><p>The file path I&#8217;m using is: <code>/Users/jon/Pictures/ScreenShots/LittleSnapper</code>.</p>
+
+<ul>
+<li>Note: I used TinkerTool to change the default location where OS X stores screenshots to ~/Pictures/ScreenShots so using a subdirectory of that folder seemes optimal.</li>
+</ul>
+</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1G3P2f1z1Q0t1I1Z2C07/Screen%20Shot%202012-10-01%20at%209.40.07%20AM.png" alt="LittleSnapper Publishing Preferences" /></p></li>
+<li><p>Create a new Automator &#8220;Folder Action&#8221; which runs an AppleScript when the contents of a folder you specify changes.</p>
+
+<p> <img src="http://f.cl.ly/items/0X1u2S2h43160Z2n0h0Q/Screen%20Shot%202012-10-01%20at%2010.21.50%20AM.png" alt="New Automator Folder Action" /></p>
+
+<p> Filter the available Actions by searching for &#8216;Run AppleScript&#8217;, then drag that action to your workflow:</p>
+
+<p> <img src="http://f.cl.ly/items/3D0G1g0H2K1O222M2t3A/Screen%20Shot%202012-10-01%20at%2010.25.35%20AM.png" alt="Drag Run AppleScript to Workflow" /></p>
+
+<p> Set the folder action to the same folder you chose in the above steps and paste in (and customize if necessary) the provided AppleScript</p>
+
+<p> <img src="http://f.cl.ly/items/3o1Q2j0K2h0P0l0p2j1a/Screen%20Shot%202012-10-01%20at%2010.26.56%20AM.png" alt="Configure AppleScript" /></p>
+
+<p> AppleScript for the Automator Action:</p>
+
+<pre><code> set cloudappSlug to do shell script "cd /Users/jon/Pictures/ScreenShots/scripts; /Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby cloud.rb"
+ set the clipboard to cloudappSlug
+ do shell script "afplay /System/Library/Sounds/Glass.aiff"
+</code></pre>
+
+<p> <strong>Note:</strong> It&#8217;s necessary to use the full path to the version of Ruby that has the cloudapp_api gem installed under it. Type <code>which ruby</code> to show the full path to your currently executable Ruby and be sure to <code>gem install cloudapp_api</code> or <code>sudo gem install cloudapp_api</code> under that same Ruby version. Sudo is only required if you&#8217;re not using a Ruby version management solution and are using the default system Ruby that shipped with OS X. You can also see in the above AppleScript that we change into the folder that contains the Ruby script before calling it. Be sure to customize the script to change into the folder where you place the Ruby script if it&#8217;s different than mine.</p>
+
+<ul>
+<li>After saving the Automator Action (I chose the name &#8216;Watch LittleSnapper&#8217;), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup&#8230;</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1N06122b3x0d2q1q411Q/Screen%20Shot%202012-10-01%20at%2010.55.48%20AM.png" alt="Finder Folder Action Menu" /></p>
+
+<ul>
+<li>Cancel the pop up dialog and verify that your Automator Folder Action is there and checked (enabled).</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/2d1z1l3G1o1S2p1K3w3h/Screen%20Shot%202012-10-01%20at%2010.57.05%20AM.png" alt="Folder Action Worked" /></p></li>
+<li><p>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</p>
+
+<ul>
+<li><p>Place the below Ruby script somewhere on your machine (the AppleScript I provide assumes it&#8217;s in ~/Pictures/ScreenShots/scripts/cloud.rb).</p></li>
+<li><p>Note that the first line of the Ruby script also references the full path to the version of Ruby you want to use. It will likely be different than what I show here. It should be customized the same as it was in the AppleScript above.</p></li>
+<li><p>You can also see there is authentication to the CloudApp servers necessary on line 7. Customize the script with your CloudApp username and password here.</p></li>
+</ul>
+</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;cloudapp_api&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># customize me please</span>
+</span><span class='line'><span class="no">CloudApp</span><span class="o">.</span><span class="n">authenticate</span> <span class="s2">&quot;your_email_here&quot;</span><span class="p">,</span> <span class="s2">&quot;your_password_here&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pasteboard_file</span> <span class="o">=</span> <span class="sb">`cd /Users/jon/Pictures/ScreenShots/LittleSnapper; ls -td * | head -1`</span>
+</span><span class='line'><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;/Users/jon/Pictures/ScreenShots/LittleSnapper/</span><span class="si">#{</span><span class="n">pasteboard_file</span><span class="o">.</span><span class="n">chomp</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@drop</span> <span class="o">=</span> <span class="no">CloudApp</span><span class="o">::</span><span class="no">Drop</span><span class="o">.</span><span class="n">create</span> <span class="ss">:upload</span><span class="p">,</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="n">file</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="vi">@drop</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="s2">&quot;url&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Make sure the ruby script is executable:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> ~/Pictures/ScreenShots/scripts
+</span><span class='line'>chmod 755 cloud.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Wrapping Up</h3>
+
+<p>All that&#8217;s left to do is try it out!</p>
+
+<ul>
+<li>Take a screenshot with LittleSnapper and publish it to local folder we setup in step 1</li>
+<li>Wait for the ding</li>
+<li>Paste the new CloudApp slug to the screen shot you just uploaded!</li>
+</ul>
+
+
+<p>If this all seems like a bit of a pain for something so simple, you&#8217;re right&#8230; it is. And for the vast majority of cases I still do what I did with Skitch which is to just take a screenshot of my annotated screenshot with the normal Cmd+Shift+4 shortcut which will automatically upload to CloudApp. However, LittleSnapper can also take screenshots of entire web pages (even the portion that doesn&#8217;t fit on your screen!) and sometimes I want to upload those screenshots to CloudApp too. Hopefully the Realmac team will just start providing CloudApp support natively so folks won&#8217;t have to use crazy workarounds like this!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DocuSign REST and Embedded Signing]]></title>
+    <link href="http://j2fly.github.com/blog/2012/07/10/docusign-rest-and-embedded-signing/"/>
+    <updated>2012-07-10T23:07:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/07/10/docusign-rest-and-embedded-signing</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Console Vim and Tmux Setup]]></title>
+    <link href="http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/"/>
+    <updated>2012-07-10T23:03:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve been using Vim (7.3) in the console through Tmux for close to 6-months now and it&#8217;s definitely the best development setup I&#8217;ve ever had. Prior to this I have used (roughly in re-verse order):</p>
+
+<ul>
+<li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
+<li><a href="http://macvim.org/OSX/index.php">MacVim</a></li>
+<li><a href="http://www.jetbrains.com/ruby/">Rubymine</a></li>
+<li><a href="http://macromates.com/">Textmate</a></li>
+<li><a href="http://www.eclipse.org/">Eclipse (on Windows&#8230; yikes!)</a></li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>I have also installed and played with <a href="http://redcareditor.com/">Redcar</a> which was pretty neat, but I&#8217;ve never used it for any real development. I still use Rubymine occasionally for step through debugging or major refactoring of Models or Classes (though I&#8217;m anxious to try tpope&#8217;s <a href="https://github.com/tpope/vim-abolish">vim-abolish</a> next time I need to do that kind of a refactoring).</p>
+
+<h3>Now on to my setup!</h3>
+
+<p>This setup can be installed easily on a Mac OS X or Linux machine provided a few prerequisites are met (all of which I prefer to keep updated by installing the latest versions through <a href="http://mxcl.github.com/homebrew/">Homebrew</a>:</p>
+
+<ul>
+<li>Git is installed</li>
+<li>Vim is installed (preferably 7.3 or above)</li>
+<li>Tmux is installed (preferably 1.6 or above)</li>
+</ul>
+
+
+<p><strong>I also highly recommend checking out:</strong></p>
+
+<ul>
+<li><a href="http://www.iterm2.com/#/section/home">iTerm 2</a> (not required, but highly recommended as an alternative to the built in Terminal.app)</li>
+<li><a href="https://github.com/robbyrussell/oh-my-zsh/">Zsh &amp; oh-my-zsh</a> (follow the installation instructions for that project separately if you want to run Zsh instead of Bash for your shell)</li>
+</ul>
+
+
+<h3>Enough already, show me the ~/.vimrc!</h3>
+
+<p>Alright, here is the gist I use to setup my entire development environment: <a href="https://gist.github.com/2040114">https://gist.github.com/2040114</a></p>
+
+<p>Let me know if you have any questions or comments! I love to talk shop about Vim :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Organizing Cucumber Features]]></title>
+    <link href="http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features/"/>
+    <updated>2012-07-10T22:29:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features</id>
+    <content type="html"><![CDATA[<p>Show the features directory
+Had to modify the require for the web_steps.rb file
+Created the ruby script and guard thing to track a file of avail steps</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>

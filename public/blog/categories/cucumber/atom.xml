@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cucumber | self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/blog/categories/cucumber/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-07-12T03:04:54-05:00</updated>
+  <updated>2012-10-01T11:32:24-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Organizing Cucumber Features]]></title>
+    <link href="http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features/"/>
+    <updated>2012-07-10T22:29:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features</id>
+    <content type="html"><![CDATA[<p>Show the features directory
+Had to modify the require for the web_steps.rb file
+Created the ruby script and guard thing to track a file of avail steps</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS]]></title>
