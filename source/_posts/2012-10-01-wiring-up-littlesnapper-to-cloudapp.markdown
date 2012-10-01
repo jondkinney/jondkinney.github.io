@@ -23,7 +23,7 @@ Here's how it works:
 
 1. Configure LittleSnapper's publishing preferences to include a location local to your machine. 
 
-    * Use your Mac username and password when setting up this connection. The 'Server' is whatever shows up when you open System Preferences and choose 'Sharing'. At the top you'll see a note stating: 'Computers on your local network can access your computer at: MBPr.local'. Use the full name including .local shown there (which will likely be different than mine).
+    * Use your Mac username and password when setting up this connection. The "Server" is whatever shows up when you open System Preferences and choose "Sharing". At the top you'll see a note stating: "Computers on your local network can access your computer at: MBPr.local". Use the full name including .local shown there (which will likely be different than mine).
     
     * The file path I'm using is: `/Users/jon/Pictures/ScreenShots/LittleSnapper`. 
 
@@ -35,7 +35,7 @@ Here's how it works:
 
     ![New Automator Folder Action](http://f.cl.ly/items/0X1u2S2h43160Z2n0h0Q/Screen%20Shot%202012-10-01%20at%2010.21.50%20AM.png)
 
-    Filter the available Actions by searching for 'Run AppleScript', then drag that action to your workflow:
+    Filter the available Actions by searching for "Run AppleScript", then drag that action to your workflow:
 
     ![Drag Run AppleScript to Workflow](http://f.cl.ly/items/3D0G1g0H2K1O222M2t3A/Screen%20Shot%202012-10-01%20at%2010.25.35%20AM.png)
 
@@ -51,7 +51,7 @@ Here's how it works:
       
     **Note:** It's necessary to use the full path to the version of Ruby that has the cloudapp_api gem installed under it. Type `which ruby` to show the full path to your currently executable Ruby and be sure to `gem install cloudapp_api` or `sudo gem install cloudapp_api` under that same Ruby version. Sudo is only required if you're not using a Ruby version management solution and are using the default system Ruby that shipped with OS X. You can also see in the above AppleScript that we change into the folder that contains the Ruby script before calling it. Be sure to customize the script to change into the folder where you place the Ruby script if it's different than mine.
 
-    * After saving the Automator Action (I chose the name 'Watch LittleSnapper'), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup... 
+    * After saving the Automator Action (I chose the name "Watch LittleSnapper"), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup... 
     
     ![Finder Folder Action Menu](http://f.cl.ly/items/1N06122b3x0d2q1q411Q/Screen%20Shot%202012-10-01%20at%2010.55.48%20AM.png)
     
