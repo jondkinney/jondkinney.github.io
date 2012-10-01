@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS X | self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-10-01T11:35:35-05:00</updated>
+  <updated>2012-10-01T12:06:06-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -25,7 +25,7 @@
 <p>Here's how it works:</p>
 
 <ul>
-<li>Configure LittleSnapper to use SFTP to 'publish' locally to a folder of your choosing.</li>
+<li>Configure LittleSnapper to use SFTP to "publish" locally to a folder of your choosing.</li>
 <li>Create a new Automator "Folder Action" which runs an AppleScript when the contents of the folder changes.</li>
 <li>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</li>
 </ul>
@@ -40,7 +40,7 @@
 <li><p>Configure LittleSnapper's publishing preferences to include a location local to your machine.</p>
 
 <ul>
-<li><p>Use you Mac username and password when setting up this connection. The 'Server' is whatever shows up when you open System Preferences and choose 'Sharing'. At the top you'll see a note stating: 'Computers on your local network can access your computer at: MBPr.local'. Use the full name including .local shown there (which will likely be different than mine).</p></li>
+<li><p>Use your Mac username and password when setting up this connection. The "Server" is whatever shows up when you open System Preferences and choose "Sharing". At the top you'll see a note stating: "Computers on your local network can access your computer at: MBPr.local". Use the full name including .local shown there (which will likely be different than mine).</p></li>
 <li><p>The file path I'm using is: <code>/Users/jon/Pictures/ScreenShots/LittleSnapper</code>.</p>
 
 <ul>
@@ -55,7 +55,7 @@
 
 <p> <img src="http://f.cl.ly/items/0X1u2S2h43160Z2n0h0Q/Screen%20Shot%202012-10-01%20at%2010.21.50%20AM.png" alt="New Automator Folder Action" /></p>
 
-<p> Filter the available Actions by searching for 'Run AppleScript', then drag that action to your workflow:</p>
+<p> Filter the available Actions by searching for "Run AppleScript", then drag that action to your workflow:</p>
 
 <p> <img src="http://f.cl.ly/items/3D0G1g0H2K1O222M2t3A/Screen%20Shot%202012-10-01%20at%2010.25.35%20AM.png" alt="Drag Run AppleScript to Workflow" /></p>
 
@@ -73,7 +73,7 @@
 <p> <strong>Note:</strong> It's necessary to use the full path to the version of Ruby that has the cloudapp_api gem installed under it. Type <code>which ruby</code> to show the full path to your currently executable Ruby and be sure to <code>gem install cloudapp_api</code> or <code>sudo gem install cloudapp_api</code> under that same Ruby version. Sudo is only required if you're not using a Ruby version management solution and are using the default system Ruby that shipped with OS X. You can also see in the above AppleScript that we change into the folder that contains the Ruby script before calling it. Be sure to customize the script to change into the folder where you place the Ruby script if it's different than mine.</p>
 
 <ul>
-<li>After saving the Automator Action (I chose the name 'Watch LittleSnapper'), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup...</li>
+<li>After saving the Automator Action (I chose the name "Watch LittleSnapper"), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup...</li>
 </ul>
 
 
