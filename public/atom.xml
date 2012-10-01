@@ -4,7 +4,7 @@
   <title><![CDATA[self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-10-01T11:32:24-05:00</updated>
+  <updated>2012-10-01T11:35:35-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -151,74 +151,6 @@
 
 
 <p>If this all seems like a bit of a pain for something so simple, you&#8217;re right&#8230; it is. And for the vast majority of cases I still do what I did with Skitch which is to just take a screenshot of my annotated screenshot with the normal Cmd+Shift+4 shortcut which will automatically upload to CloudApp. However, LittleSnapper can also take screenshots of entire web pages (even the portion that doesn&#8217;t fit on your screen!) and sometimes I want to upload those screenshots to CloudApp too. Hopefully the Realmac team will just start providing CloudApp support natively so folks won&#8217;t have to use crazy workarounds like this!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[DocuSign REST and Embedded Signing]]></title>
-    <link href="http://j2fly.github.com/blog/2012/07/10/docusign-rest-and-embedded-signing/"/>
-    <updated>2012-07-10T23:07:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/07/10/docusign-rest-and-embedded-signing</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My Console Vim and Tmux Setup]]></title>
-    <link href="http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup/"/>
-    <updated>2012-07-10T23:03:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/07/10/my-console-vim-setup</id>
-    <content type="html"><![CDATA[<p>I&#8217;ve been using Vim (7.3) in the console through Tmux for close to 6-months now and it&#8217;s definitely the best development setup I&#8217;ve ever had. Prior to this I have used (roughly in re-verse order):</p>
-
-<ul>
-<li><a href="http://www.sublimetext.com/2">Sublime Text 2</a></li>
-<li><a href="http://macvim.org/OSX/index.php">MacVim</a></li>
-<li><a href="http://www.jetbrains.com/ruby/">Rubymine</a></li>
-<li><a href="http://macromates.com/">Textmate</a></li>
-<li><a href="http://www.eclipse.org/">Eclipse (on Windows&#8230; yikes!)</a></li>
-</ul>
-
-
-<!-- more -->
-
-
-<p>I have also installed and played with <a href="http://redcareditor.com/">Redcar</a> which was pretty neat, but I&#8217;ve never used it for any real development. I still use Rubymine occasionally for step through debugging or major refactoring of Models or Classes (though I&#8217;m anxious to try tpope&#8217;s <a href="https://github.com/tpope/vim-abolish">vim-abolish</a> next time I need to do that kind of a refactoring).</p>
-
-<h3>Now on to my setup!</h3>
-
-<p>This setup can be installed easily on a Mac OS X or Linux machine provided a few prerequisites are met (all of which I prefer to keep updated by installing the latest versions through <a href="http://mxcl.github.com/homebrew/">Homebrew</a>:</p>
-
-<ul>
-<li>Git is installed</li>
-<li>Vim is installed (preferably 7.3 or above)</li>
-<li>Tmux is installed (preferably 1.6 or above)</li>
-</ul>
-
-
-<p><strong>I also highly recommend checking out:</strong></p>
-
-<ul>
-<li><a href="http://www.iterm2.com/#/section/home">iTerm 2</a> (not required, but highly recommended as an alternative to the built in Terminal.app)</li>
-<li><a href="https://github.com/robbyrussell/oh-my-zsh/">Zsh &amp; oh-my-zsh</a> (follow the installation instructions for that project separately if you want to run Zsh instead of Bash for your shell)</li>
-</ul>
-
-
-<h3>Enough already, show me the ~/.vimrc!</h3>
-
-<p>Alright, here is the gist I use to setup my entire development environment: <a href="https://gist.github.com/2040114">https://gist.github.com/2040114</a></p>
-
-<p>Let me know if you have any questions or comments! I love to talk shop about Vim :)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Organizing Cucumber Features]]></title>
-    <link href="http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features/"/>
-    <updated>2012-07-10T22:29:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/07/10/organizing-cucumber-features</id>
-    <content type="html"><![CDATA[<p>Show the features directory
-Had to modify the require for the web_steps.rb file
-Created the ruby script and guard thing to track a file of avail steps</p>
 ]]></content>
   </entry>
   
