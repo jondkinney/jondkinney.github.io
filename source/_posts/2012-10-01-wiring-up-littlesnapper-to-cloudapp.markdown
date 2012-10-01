@@ -13,7 +13,7 @@ I also use CloudApp multiple times per day (and pay for a pro subscription) so I
 
 Here's how it works:
 
-  * Configure LittleSnapper to use SFTP to 'publish' locally to a folder of your choosing.
+  * Configure LittleSnapper to use SFTP to "publish" locally to a folder of your choosing.
   * Create a new Automator "Folder Action" which runs an AppleScript when the contents of the folder changes.
   * Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.
 
@@ -23,7 +23,7 @@ Here's how it works:
 
 1. Configure LittleSnapper's publishing preferences to include a location local to your machine. 
 
-    * Use you Mac username and password when setting up this connection. The 'Server' is whatever shows up when you open System Preferences and choose 'Sharing'. At the top you'll see a note stating: 'Computers on your local network can access your computer at: MBPr.local'. Use the full name including .local shown there (which will likely be different than mine).
+    * Use your Mac username and password when setting up this connection. The 'Server' is whatever shows up when you open System Preferences and choose 'Sharing'. At the top you'll see a note stating: 'Computers on your local network can access your computer at: MBPr.local'. Use the full name including .local shown there (which will likely be different than mine).
     
     * The file path I'm using is: `/Users/jon/Pictures/ScreenShots/LittleSnapper`. 
 
