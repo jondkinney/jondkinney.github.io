@@ -4,7 +4,7 @@
   <title><![CDATA[self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-10-01T12:06:06-05:00</updated>
+  <updated>2012-10-10T13:31:37-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -12,6 +12,185 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[using both phantomjs through poltergeist and selenium in the same cucumber test suite]]></title>
+    <link href="http://j2fly.github.com/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite/"/>
+    <updated>2012-10-10T12:51:00-05:00</updated>
+    <id>http://j2fly.github.com/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite</id>
+    <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver it&#8217;s functionality so there was that added complexity right off the bat. Secondly because we&#8217;re doing integration testing I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect because stubbing those requests out wouldn&#8217;t give me insight into any unexpected API changes breaking our app. Because we&#8217;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to <code>sleep 3</code> in the step definitions.</p>
+
+<p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&#8217;t solve but I didn&#8217;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
+
+<!-- more -->
+
+
+<p>The rest of this post assumes you <a href="https://github.com/jonleighton/poltergeist">already have Poltergeist intalled</a>.</p>
+
+<p>Inside of <code>features/support/env.rb</code> add the following hooks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Hooks</span>
+</span><span class='line'><span class="no">Before</span><span class="p">(</span><span class="s1">&#39;@docusign&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">scenario</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Capybara</span><span class="o">.</span><span class="n">current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">After</span><span class="p">(</span><span class="s1">&#39;@docusign&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">scenario</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Capybara</span><span class="o">.</span><span class="n">use_default_driver</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Additionally, add:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:rack_test</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">javascript_driver</span> <span class="o">=</span> <span class="ss">:poltergeist</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8230;which I actually have in my <code>Spork.each_run do</code> block</p>
+
+<p>Now by default any stories tagged with just <code>@javascript</code> will run through PhantomJS. If you want to use Selenium for a given test then you need to tag it with BOTH <code>@javascript</code> AND <code>@docusign</code>. Perhaps naming the tag <code>@selenium</code> would be more approperiate, but I only plan to use Selenium for testing DocuSign stories so this works for me for now. Note: I&#8217;m not sure why the <code>@javascript</code> tag is required, but it didn&#8217;t work for me unless I had both tags specified. I&#8217;m guessing <code>@javacript</code> sets up more than just the driver, but if anyone has more of an explanation I&#8217;d love to know.</p>
+
+<p>In an effort to help other devs perhaps more quickly acceptance test DocuSign with Cucumber here are the step definitions that I came up with for our use case.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">When</span> <span class="sr">/^I sign the docusign document as an &quot;(.+)&quot; and click finish$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">user_type</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Docusign disclaimer (review button)</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_startReview_btnInline&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Sign</span>
+</span><span class='line'>    <span class="n">page</span><span class="o">.</span><span class="n">find_button</span><span class="p">(</span><span class="s1">&#39;Sign Here&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Adopt and sign (might not always need to do this step if the user has</span>
+</span><span class='line'>    <span class="c1"># already adopted his or her signature. I would have though we&#39;d have to</span>
+</span><span class='line'>    <span class="c1"># adopt each time in the testing world but it doesn&#39;t seem to be that way)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">page</span><span class="o">.</span><span class="n">has_css?</span><span class="p">(</span><span class="s1">&#39;#ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">user_type</span> <span class="o">==</span> <span class="s1">&#39;attorney&#39;</span>
+</span><span class='line'>      <span class="c1"># DocuSign gives us .FirstPage as a class on the first page and just</span>
+</span><span class='line'>      <span class="c1"># .Page for each page after that, so this really only works if your first</span>
+</span><span class='line'>      <span class="c1"># &#39;Sign Here&#39; is on the first page and there is only one subsequent one</span>
+</span><span class='line'>      <span class="c1"># within all of the rest of the .Page pages. Still, fits this use case</span>
+</span><span class='line'>      <span class="c1"># alright as long as the engagement letters in the test env fit on one</span>
+</span><span class='line'>      <span class="c1"># page so the attorney disclaimer bit is always on page two.</span>
+</span><span class='line'>      <span class="n">within</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s2">&quot;//div[@class=&#39;Page&#39; and @class != &#39;FirstPage&#39;]&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">click_button</span> <span class="s1">&#39;Sign Here&#39;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Confirm signing</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_navnexttext_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I choose to sign the docusign document later$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Finish Later</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_btnIntroSignLater_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I decline to sign the docusign document$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Decline to Sign</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_btnIntroDecline_btnInline&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Decline confirmation</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgDecline_btnDecline_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Wiring up LittleSnapper to CloudApp]]></title>

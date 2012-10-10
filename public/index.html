@@ -9,7 +9,7 @@
   <meta name="author" content="Jon Kinney">
 
   
-  <meta name="description" content="I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of &hellip;">
+  <meta name="description" content="We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite/">Using Both Phantomjs Through Poltergeist and Selenium in the Same Cucumber Test Suite</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-10T12:51:00-05:00" pubdate data-updated="true">Oct 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver it&#8217;s functionality so there was that added complexity right off the bat. Secondly because we&#8217;re doing integration testing I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect because stubbing those requests out wouldn&#8217;t give me insight into any unexpected API changes breaking our app. Because we&#8217;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to <code>sleep 3</code> in the step definitions.</p>
+
+<p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&#8217;t solve but I didn&#8217;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -301,49 +344,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/">Using Save_and_open_page to Open Failed Cucumber Scenerios in a Browser With Images and CSS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-21T16:43:00-05:00" pubdate data-updated="true">Apr 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber&#8230; debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
-
-<p>The only problem was that the page didn&#8217;t look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -364,15 +364,15 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite/">using both phantomjs through poltergeist and selenium in the same cucumber test suite</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/">Wiring up LittleSnapper to CloudApp</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">Breaking Out of an iframe From a Rails Controller</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/07/my-new-gig-at-bolstr/">My New Gig at Bolstr</a>
       </li>
     
   </ul>
