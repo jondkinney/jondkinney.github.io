@@ -8,13 +8,13 @@ categories:
 - Cucumber
 ---
 
-We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver it's functionality so there was that added complexity right off the bat. Secondly because we're doing integration testing I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect because stubbing those requests out wouldn't give me insight into any unexpected API changes breaking our app. Because we're reaching out externally I had to account for the delay in receiving data from DocuSign often needing to `sleep 3` in the step definitions.
+We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we're doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn't give me insight into any unexpected API changes breaking our app. Because we're reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like `sleep 3` in the step definitions.
 
 The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn't solve but I didn't want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.
 
 <!-- more -->
 
-The rest of this post assumes you [already have Poltergeist intalled](https://github.com/jonleighton/poltergeist).
+The rest of this post assumes you [already have Poltergeist installed](https://github.com/jonleighton/poltergeist).
 
 Inside of `features/support/env.rb` add the following hooks:
 
@@ -38,7 +38,7 @@ Capybara.javascript_driver = :poltergeist
 
 ...which I actually have in my `Spork.each_run do` block
 
-Now by default any stories tagged with just `@javascript` will run through PhantomJS. If you want to use Selenium for a given test then you need to tag it with BOTH `@javascript` AND `@docusign`. Perhaps naming the tag `@selenium` would be more approperiate, but I only plan to use Selenium for testing DocuSign stories so this works for me for now. Note: I'm not sure why the `@javascript` tag is required, but it didn't work for me unless I had both tags specified. I'm guessing `@javacript` sets up more than just the driver, but if anyone has more of an explanation I'd love to know.
+Now by default any stories tagged with just `@javascript` will run through PhantomJS. If you want to use Selenium for a given test then you need to tag it with BOTH `@javascript` AND `@docusign`. Perhaps naming the tag `@selenium` would be more appropriate, but I only plan to use Selenium for testing DocuSign stories so this works for me for now. Note: I'm not sure why the `@javascript` tag is required, but it didn't work for me unless I had both tags specified. I'm guessing `@javacript` sets up more than just the driver, but if anyone has more of an explanation I'd love to know.
 
 In an effort to help other devs perhaps more quickly acceptance test DocuSign with Cucumber here are the step definitions that I came up with for our use case.
 
