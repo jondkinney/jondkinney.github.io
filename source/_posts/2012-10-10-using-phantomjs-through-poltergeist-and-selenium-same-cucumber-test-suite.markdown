@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "using both phantomjs through poltergeist and selenium in the same cucumber test suite"
+title: "using PhantomJS (through poltergeist) and selenium in the same cucumber test suite"
 date: 2012-10-10 12:51
 comments: true
 categories: 

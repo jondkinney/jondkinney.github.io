@@ -4,7 +4,7 @@
   <title><![CDATA[self.extended(thoughts)]]></title>
   <link href="http://j2fly.github.com/atom.xml" rel="self"/>
   <link href="http://j2fly.github.com/"/>
-  <updated>2012-10-10T13:31:37-05:00</updated>
+  <updated>2012-10-10T13:36:47-05:00</updated>
   <id>http://j2fly.github.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[using both phantomjs through poltergeist and selenium in the same cucumber test suite]]></title>
-    <link href="http://j2fly.github.com/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite/"/>
+    <title type="html"><![CDATA[using PhantomJS (through poltergeist) and selenium in the same cucumber test suite]]></title>
+    <link href="http://j2fly.github.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
     <updated>2012-10-10T12:51:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/10/10/using-both-phantomjs-through-poltergeist-and-selenium-in-the-same-cucumber-test-suite</id>
+    <id>http://j2fly.github.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
     <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver it&#8217;s functionality so there was that added complexity right off the bat. Secondly because we&#8217;re doing integration testing I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect because stubbing those requests out wouldn&#8217;t give me insight into any unexpected API changes breaking our app. Because we&#8217;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to <code>sleep 3</code> in the step definitions.</p>
 
 <p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&#8217;t solve but I didn&#8217;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
