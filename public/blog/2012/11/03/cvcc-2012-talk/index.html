@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Logging Cron Jobs on Ubuntu - self.extended(thoughts)</title>
+  <title>How to be a One-Man Coding Army for a Startup - self.extended(thoughts)</title>
   <meta name="author" content="Jon Kinney">
 
   
-  <meta name="description" content="I am running a VPS over at SilverRack.com and I love it. Dave (the owner) has been very helpful and responsive anytime I&#8217;ve had questions or &hellip;">
+  <meta name="description" content="Last weekend I was fortunate enough to be invited to speak at Chippewa Valley Code Camp - 2012. CVCC is a free, 1-day, 4-track conference in Eau &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://j2fly.github.com/blog/2009/04/01/logging-cron-jobs-on-ubuntu/">
+  <link rel="canonical" href="http://j2fly.github.com/blog/2012/11/03/cvcc-2012-talk/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">Logging Cron Jobs on Ubuntu</h1>
+      <h1 class="entry-title">How to Be a One-Man Coding Army for a Startup</h1>
     
     
       <p class="meta">
@@ -96,58 +96,20 @@
   
 
 
-<time datetime="2009-04-01T15:53:00-05:00" pubdate data-updated="true">Apr 1<span>st</span>, 2009</time>
+<time datetime="2012-11-03T16:04:00-05:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I am running a VPS over at <a href="http://silverrack.com">SilverRack.com</a> and I love it. Dave (the owner) has been very helpful and responsive anytime I&#8217;ve had questions or issues, and I highly recommend their service. Also if you&#8217;re a member of a local Ruby user group then you can get $10 off the standard 256mb slice making it extremely affordable to have your very own server! I also have an unlimited Dreamhost account, but I like having root access and full reign of my server.</p>
+<div class="entry-content"><p>Last weekend I was fortunate enough to be invited to speak at <a href="http://chippewavalleycodecamp.com/">Chippewa Valley Code Camp - 2012</a>. CVCC is a free, 1-day, 4-track conference in Eau Claire, WI that attracts some of the brightest developers in Wisconsin and Minnesota.</p>
 
-<h3>Enable the cron.log for Ubuntu</h3>
+<p>This year there were over 120 attendees and some 20 speakers presenting on things ranging from <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/76/Default.aspx">running a massive Java web application at scale</a> to <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/90/Default.aspx">Single Page Applications with JavaScript</a>. I had an awesome time meeting new people and sharing a little bit about how I run the technical and development side of Bolstr. Specifically, I talked about how we collaborate on work-flows for new features through user stories with <a href="http://cukes.info/">Cucumber</a> as we build out our Ruby on Rails web application at <a href="http://bolstr.com">Bolstr.com</a>.</p>
 
-<p>By default, Ubuntu disables the cron log, so you need to turn it on, and additionally create the log file before you can start tailing that log.</p>
+<p>The slides from my talk &#8220;How to be a One-Man Coding Army for a Startup&#8221; are <a href="http://jonkinney.com/cvcc-talk-2012">available online</a>, and if you attended the session I&#8217;d sure love it if you could leave some feedback at <a href="http://speakerrate.com/talks/18321-how-to-be-a-one-man-coding-army-for-a-startup">speakerrate</a> for me.</p>
 
-<!-- more -->
-
-
-<p>Use these steps to get your log on:</p>
-
-<p>Create the cron.log file</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>touch /var/log/cron.log
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Edit /etc/syslog.conf and uncomment the line starting with <code>cron.*</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/syslog.conf
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Restart sysklogd</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>/etc/init.d/sysklogd restart
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Restart cron</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>/etc/init.d/cron restart
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then to watch your cron jobs execute this command:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>tail -f /var/log/cron.log
-</span></code></pre></td></tr></table></div></figure>
-
+<p>Also, a big shout out to <a href="http://napcs.com/">Brian Hogan</a> for encouraging me to submit a talk and even suggesting the name. Thanks Brian!</p>
 </div>
 
 
@@ -170,21 +132,15 @@
   
 
 
-<time datetime="2009-04-01T15:53:00-05:00" pubdate data-updated="true">Apr 1<span>st</span>, 2009</time>
+<time datetime="2012-11-03T16:04:00-05:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2012</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://j2fly.github.com/blog/2009/04/01/logging-cron-jobs-on-ubuntu/" data-via="j2fly" data-counturl="http://j2fly.github.com/blog/2009/04/01/logging-cron-jobs-on-ubuntu/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://j2fly.github.com/blog/2012/11/03/cvcc-2012-talk/" data-via="j2fly" data-counturl="http://j2fly.github.com/blog/2012/11/03/cvcc-2012-talk/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -197,14 +153,18 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/02/27/madison-web-meetup-advanced-css/" title="Previous Post: Madison web meetup: Advanced CSS">&laquo; Madison web meetup: Advanced CSS</a>
+        <a class="basic-alignment left" href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/" title="Previous Post: using PhantomJS (through poltergeist) and selenium in the same cucumber test suite">&laquo; using PhantomJS (through poltergeist) and selenium in the same cucumber test suite</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/" title="Next Post: Deploying to Multiple Server Environments with Cap">Deploying to Multiple Server Environments with Cap &raquo;</a>
       
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -293,6 +253,22 @@
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'jonkinney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://j2fly.github.com/blog/2012/11/03/cvcc-2012-talk/';
+        var disqus_url = 'http://j2fly.github.com/blog/2012/11/03/cvcc-2012-talk/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 

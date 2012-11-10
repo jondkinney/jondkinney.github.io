@@ -1,0 +1,15 @@
+---
+layout: post
+title: "How to be a One-Man Coding Army for a Startup"
+date: 2012-11-03 16:04
+comments: true
+categories: 
+---
+
+Last weekend I was fortunate enough to be invited to speak at [Chippewa Valley Code Camp - 2012](http://chippewavalleycodecamp.com/). CVCC is a free, 1-day, 4-track conference in Eau Claire, WI that attracts some of the brightest developers in Wisconsin and Minnesota.
+
+This year there were over 120 attendees and some 20 speakers presenting on things ranging from [running a massive Java web application at scale](http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/76/Default.aspx) to [Single Page Applications with JavaScript](http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/90/Default.aspx). I had an awesome time meeting new people and sharing a little bit about how I run the technical and development side of Bolstr. Specifically, I talked about how we collaborate on work-flows for new features through user stories with [Cucumber](http://cukes.info/) as we build out our Ruby on Rails web application at [Bolstr.com](http://bolstr.com).
+
+The slides from my talk "How to be a One-Man Coding Army for a Startup" are [available online](http://jonkinney.com/cvcc-talk-2012), and if you attended the session I'd sure love it if you could leave some feedback at [speakerrate](http://speakerrate.com/talks/18321-how-to-be-a-one-man-coding-army-for-a-startup) for me. 
+
+Also, a big shout out to [Brian Hogan](http://napcs.com/) for encouraging me to submit a talk and even suggesting the name. Thanks Brian!
