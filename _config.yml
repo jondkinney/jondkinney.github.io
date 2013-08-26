@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://j2fly.github.com
+url: http://jondkinney.github.io
 title: self.extended(thoughts)
 subtitle: Code, Entrepreneurship, Music, Life
 author: Jon Kinney
 simple_search: http://google.com/search
-description: The blogging home of Jon Kinney aka @j2fly
+description: The blogging home of Jon Kinney aka @jondkinney
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -64,7 +64,7 @@ default_asides: [custom/asides/about.html, asides/recent_posts.html, asides/twit
 # ----------------------- #
 
 # Twitter
-twitter_user: j2fly
+twitter_user: jondkinney
 twitter_tweet_count: 3
 twitter_show_replies: true
 twitter_follow_button: true
@@ -72,11 +72,11 @@ twitter_show_follower_count: false
 twitter_tweet_button: true
 
 # Github repositories
-github_user: j2fly
+github_user: jondkinney
 github_repo_count: 6
 github_show_profile_link: false
 github_skip_forks: true
-github_skip_repos: j2fly.github.com
+github_skip_repos: jondkinney.github.io
 
 # Google +1
 google_plus_one: true
