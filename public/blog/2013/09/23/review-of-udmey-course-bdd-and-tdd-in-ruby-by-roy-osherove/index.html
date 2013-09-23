@@ -109,6 +109,9 @@
 
 <p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don&#8217;t complain every time a method on the object under test is called that you didn&#8217;t explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
 
+<!-- more -->
+
+
 <p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a &#8216;spy&#8217; where in he does the assert AFTER the method under test is invoked. That&#8217;s a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -166,7 +169,7 @@
 
 <p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the &#8216;live demo&#8217; demons and had to pull his chute / abandon ship / insert clever metaphor here&#8230;but it didn&#8217;t detract from the lesson too much.</p>
 
-<p>All and all I&#8217;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.</p>
+<p>All in all, I&#8217;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.</p>
 </div>
 
 

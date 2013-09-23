@@ -112,66 +112,12 @@
 
 <p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don&#8217;t complain every time a method on the object under test is called that you didn&#8217;t explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
 
-<p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a &#8216;spy&#8217; where in he does the assert AFTER the method under test is invoked. That&#8217;s a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">blah</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:something</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>or in the new RSpec syntax&#8230;</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">blah</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:something</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it&#8217;s backwards from the typical &#8216;do work&#8217; and &#8216;assert a state change&#8217; work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they&#8217;re both fine ways, I just wish the multiple ways of doing it were discussed in this course. Here&#8217;s a <a href="http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released">blog article</a> that shows how to do both options in RSpec (check the Mocks:Spies section).</p>
-
-<p>Another error I noticed was in the discussion of <code>let</code> vs <code>let!</code>. Roy talks about how <code>let</code> memoizes (caches) whatever it&#8217;s storing so that if that variable is used multiple times, it&#8217;ll just retrieve whatever was set on that variable previously. That is in fact how let in RSpec works, BUT that only happens within the current example if the let gets called multiple times. It DOES NOT memoize/cache the <code>let</code> value BETWEEN examples as Roy described. See the <a href="https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let">docs</a>.</p>
-
-<p>One thing I picked up that I liked quite a bit was this tip:</p>
-
-<p>When describing a method on a class like <code>Calc#add</code>, define a method that does what you want to test below the describe/context for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
-
-<p>Here&#8217;s an example where extracting a method called &#8216;adding&#8217; could help clean up specs:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">Calculator</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">context</span> <span class="s2">&quot;a single number&quot;</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">adding</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="c1">#calls a let defined above</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;adding 2 increases the number by 2&quot;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">adding</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Roy also does a good job of explaining RSpec&#8217;s &#8216;subject&#8217; and &#8216;its&#8217; which I never took the time to fully grok until now.</p>
-
-<p>Truth be told, I didn&#8217;t watch the TeamCity stuff because I&#8217;m using Jenkins for CI on <a href="http://circleci.com">CircleCi</a> (which I highly recommend!). If you don&#8217;t know anything about CI or want a bit more hand holding to setup your own server, then I&#8217;m sure this section is fine.</p>
-
-<p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn&#8217;t appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all &#8216;live&#8217; in that Roy was teaching a class of real people while screen recording these videos. I didn&#8217;t realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
-
-<p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the &#8216;live demo&#8217; demons and had to pull his chute / abandon ship / insert clever metaphor here&#8230;but it didn&#8217;t detract from the lesson too much.</p>
-
-<p>All and all I&#8217;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Read on &rarr;</a>
+    </footer>
   
 
 
