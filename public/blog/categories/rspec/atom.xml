@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2013-09-23T12:38:13-05:00</updated>
+  <updated>2013-09-23T12:40:50-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -42,7 +42,7 @@ expect(blah).to receive(:something)
 
 <p>One thing I picked up that I liked quite a bit was this tip:</p>
 
-<p>When describing a method on a class like <code>Calc#adding</code>, define a method that does what you want to test below the describe for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
+<p>When describing a method on a class like <code>Calc#add</code>, define a method that does what you want to test below the describe/context for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
 
 <p>Here's an example where extracting a method called 'adding' could help clean up specs:</p>
 
@@ -65,7 +65,7 @@ end
 
 <p>Roy also does a good job of explaining RSpec's 'subject' and 'its' which I never took the time to fully grok until now.</p>
 
-<p>Truth be told, I didn't even watch the TeamCity stuff because I'm using Jenkins for CI on <a href="http://circleci.com">Circleci</a> (which I highly recommend!). If you don't know anything about CI or want a bit more hand holding to setup your own server, then I'm sure that section is fine.</p>
+<p>Truth be told, I didn't watch the TeamCity stuff because I'm using Jenkins for CI on <a href="http://circleci.com">CircleCi</a> (which I highly recommend!). If you don't know anything about CI or want a bit more hand holding to setup your own server, then I'm sure this section is fine.</p>
 
 <p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn't appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all 'live' in that Roy was teaching a class of real people while screen recording these videos. I didn't realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
 

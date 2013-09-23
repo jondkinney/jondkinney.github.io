@@ -14,6 +14,8 @@ As an experienced developer, I'd give this course 3.5 stars if it was an option,
 
 The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called [Bogus](https://github.com/psyho/bogus). The reason is to allow for non-strict mock expectations, which are less brittle since they don't complain every time a method on the object under test is called that you didn't explicitly stub out. However, RSpec does support this with the [as_null_object](https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object) method so it would have been nice to not introduce an additional gem unnecessarily. 
 
+<!-- more -->
+
 Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a 'spy' where in he does the assert AFTER the method under test is invoked. That's a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first 
 
 ```ruby
@@ -58,4 +60,4 @@ One other negative of this class was the rather lackluster production quality. I
 
 Speaking of live screen recording, there were definitely a few times when Roy got bit by the 'live demo' demons and had to pull his chute / abandon ship / insert clever metaphor here...but it didn't detract from the lesson too much.
 
-All and all I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.
+All in all, I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.
