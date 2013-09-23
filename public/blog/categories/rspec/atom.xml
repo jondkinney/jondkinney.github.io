@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2013-09-23T12:51:23-05:00</updated>
+  <updated>2013-09-23T13:01:35-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -75,6 +75,8 @@ end
 <p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the 'live demo' demons and had to pull his chute / abandon ship / insert clever metaphor here...but it didn't detract from the lesson too much.</p>
 
 <p>All in all, I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi for tweeting about it to get me there.</p>
+
+<p>Here are some notes I took while going through the course: <a href="https://gist.github.com/jondkinney/6674458">https://gist.github.com/jondkinney/6674458</a></p>
 ]]></content>
   </entry>
   
