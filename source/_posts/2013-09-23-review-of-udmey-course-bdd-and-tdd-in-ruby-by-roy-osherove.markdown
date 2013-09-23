@@ -26,13 +26,29 @@ or in the new RSpec syntax...
 expect(blah).to receive(:something) 
 ```
 
-and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it's backwards from the typical 'do work' and 'assert a state change' work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they're both fine ways I just wish the multiple ways of doing it were discussed in this course. Here's a [blog article](http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released) that shows how to do both options in RSpec (check the Mocks:Spies section). 
+and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it's backwards from the typical 'do work' and 'assert a state change' work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they're both fine ways, I just wish the multiple ways of doing it were discussed in this course. Here's a [blog article](http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released) that shows how to do both options in RSpec (check the Mocks:Spies section). 
 
 Another error I noticed was in the discussion of `let` vs `let!`. Roy talks about how `let` memoizes (caches) whatever it's storing so that if that variable is used multiple times, it'll just retrieve whatever was set on that variable previously. That is in fact how let in RSpec works, BUT that only happens within the current example if the let gets called multiple times. It DOES NOT memoize/cache the `let` value BETWEEN examples as Roy described. See the [docs](https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let).
 
 One thing I picked up that I liked quite a bit was this tip:
 
 When describing a method on a class like `Calc#adding`, define a method that does what you want to test below the describe for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place. 
+
+Here's an example where extracting a method called 'adding' could help clean up specs:
+
+```ruby
+describe Calculator do
+  context "a single number"
+    def adding(input)
+      calc.add(input) #calls a let defined above
+    end
+
+    it "adding 2 increases the number by 2" do
+      expect(adding('2')).to eq(2)
+    end
+  end
+end
+```
 
 Roy also does a good job of explaining RSpec's 'subject' and 'its' which I never took the time to fully grok until now.
 
