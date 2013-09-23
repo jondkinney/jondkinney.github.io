@@ -60,4 +60,4 @@ One other negative of this class was the rather lackluster production quality. I
 
 Speaking of live screen recording, there were definitely a few times when Roy got bit by the 'live demo' demons and had to pull his chute / abandon ship / insert clever metaphor here...but it didn't detract from the lesson too much.
 
-All in all, I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.
+All in all, I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi for tweeting about it to get me there.
