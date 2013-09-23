@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove"
+title: "Review of Udmey course: BDD and TDD in Ruby by Roy Osherove"
 date: 2013-09-23 12:01
 comments: true
 categories: 
@@ -12,12 +12,12 @@ Avdi Grimm recently [tweeted](https://twitter.com/avdi/status/381090549488287744
 
 As an experienced developer, I'd give this course 3.5 stars if it was an option, but I rounded up because if you don't know anything about unit testing then this course is a great overview.
 
-The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called 'Bogus'. The reason is to allow for non-strict mock expectations, which are less brittle since they don't complain every time a method on the object under test is called that you didn't explicitly stub out. However, RSpec does support this with the as_null_object method so it would have been nice to not have to introduce an additional gem unnecessarily. https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object 
+The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called 'Bogus'. The reason is to allow for non-strict mock expectations, which are less brittle since they don't complain every time a method on the object under test is called that you didn't explicitly stub out. However, RSpec does support this with the [as_null_object](https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object) method so it would have been nice to not have to introduce an additional gem unnecessarily. 
 
 Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a 'spy' where in he does the assert AFTER the method under test is invoked. That's a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first 
 
 ```ruby
-blah.should_receive(:something
+blah.should_receive(:something)
 ```
 
 or in the new RSpec syntax...
@@ -28,7 +28,7 @@ expect(blah).to receive(:something)
 
 and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it's backwards from the typical 'do work' and 'assert a state change' work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they're both fine ways I just wish the multiple ways of doing it were discussed in this course. Here's a [blog article](http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released) that shows how to do both options in RSpec (check the Mocks:Spies section). 
 
-Another error I noticed was in the discussion of `let` vs `let!`. Roy talks about how `let` memoizes (caches) whatever it's storing so that if that variable is used multiple times, it'll just retrieve whatever was set on that variable previously. That is in fact how let in RSpec works, BUT that only happens within the current example if the let gets called multiple times. It DOES NOT memoize/cache the `let` value BETWEEN examples as Roy described. See docs here: https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let
+Another error I noticed was in the discussion of `let` vs `let!`. Roy talks about how `let` memoizes (caches) whatever it's storing so that if that variable is used multiple times, it'll just retrieve whatever was set on that variable previously. That is in fact how let in RSpec works, BUT that only happens within the current example if the let gets called multiple times. It DOES NOT memoize/cache the `let` value BETWEEN examples as Roy described. See the [docs](https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let).
 
 One thing I picked up that I liked quite a bit was this tip:
 

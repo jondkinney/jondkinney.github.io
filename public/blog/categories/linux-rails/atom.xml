@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Linux, Rails | self.extended(thoughts)]]></title>
-  <link href="http://j2fly.github.com/blog/categories/linux-rails/atom.xml" rel="self"/>
-  <link href="http://j2fly.github.com/"/>
-  <updated>2013-08-01T11:14:44-05:00</updated>
-  <id>http://j2fly.github.com/</id>
+  <link href="http://jondkinney.github.io/blog/categories/linux-rails/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.io/"/>
+  <updated>2013-09-23T12:22:45-05:00</updated>
+  <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Bluepill init script for Monitoring Delayed Job on Linux openSUSE]]></title>
-    <link href="http://j2fly.github.com/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/"/>
+    <link href="http://jondkinney.github.io/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/"/>
     <updated>2010-02-01T16:08:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse</id>
+    <id>http://jondkinney.github.io/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse</id>
     <content type="html"><![CDATA[<p>I recently moved a long running request in my application to delayed job (<a href="http://github.com/collectiveidea/delayed_job">the collectiveidea fork</a>) and it went really well. However, after some time the delayed job process died and my users couldn't use an essential part of the application. I knew it was time for a process monitor. I probably should have put one in to begin with, but I was new to delayed job (really to background processing in general) and the though hadn't crossed my mind.</p>
 
 <!-- more -->

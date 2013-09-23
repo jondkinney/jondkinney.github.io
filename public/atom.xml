@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[self.extended(thoughts)]]></title>
-  <link href="http://j2fly.github.com/atom.xml" rel="self"/>
-  <link href="http://j2fly.github.com/"/>
-  <updated>2013-08-01T11:14:44-05:00</updated>
-  <id>http://j2fly.github.com/</id>
+  <link href="http://jondkinney.github.io/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.io/"/>
+  <updated>2013-09-23T12:22:45-05:00</updated>
+  <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -14,10 +14,55 @@
 
   
   <entry>
+    <title type="html"><![CDATA[review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove]]></title>
+    <link href="http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/"/>
+    <updated>2013-09-23T12:01:00-05:00</updated>
+    <id>http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove</id>
+    <content type="html"><![CDATA[<p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I&#8217;m not sure if this was an endorsement by Avdi, or more of a &#8220;oh hey, there&#8217;s this thing over here which might be interesting&#8221; type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>&#8230; people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
+
+<p>As an experienced developer, I&#8217;d give this course 3.5 stars if it was an option, but I rounded up because if you don&#8217;t know anything about unit testing then this course is a great overview.</p>
+
+<p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called &#8216;Bogus&#8217;. The reason is to allow for non-strict mock expectations, which are less brittle since they don&#8217;t complain every time a method on the object under test is called that you didn&#8217;t explicitly stub out. However, RSpec does support this with the as_null_object method so it would have been nice to not have to introduce an additional gem unnecessarily. https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object</p>
+
+<p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a &#8216;spy&#8217; where in he does the assert AFTER the method under test is invoked. That&#8217;s a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">blah</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or in the new RSpec syntax&#8230;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">blah</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:something</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it&#8217;s backwards from the typical &#8216;do work&#8217; and &#8216;assert a state change&#8217; work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they&#8217;re both fine ways I just wish the multiple ways of doing it were discussed in this course. Here&#8217;s a <a href="http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released">blog article</a> that shows how to do both options in RSpec (check the Mocks:Spies section).</p>
+
+<p>Another error I noticed was in the discussion of <code>let</code> vs <code>let!</code>. Roy talks about how <code>let</code> memoizes (caches) whatever it&#8217;s storing so that if that variable is used multiple times, it&#8217;ll just retrieve whatever was set on that variable previously. That is in fact how let in RSpec works, BUT that only happens within the current example if the let gets called multiple times. It DOES NOT memoize/cache the <code>let</code> value BETWEEN examples as Roy described. See docs here: https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let</p>
+
+<p>One thing I picked up that I liked quite a bit was this tip:</p>
+
+<p>When describing a method on a class like <code>Calc#adding</code>, define a method that does what you want to test below the describe for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
+
+<p>Roy also does a good job of explaining RSpec&#8217;s &#8216;subject&#8217; and &#8216;its&#8217; which I never took the time to fully grok until now.</p>
+
+<p>Truth be told, I didn&#8217;t even watch the TeamCity stuff because I&#8217;m using Jenkins for CI on <a href="http://circleci.com">Circleci</a> (which I highly recommend!). If you don&#8217;t know anything about CI or want a bit more hand holding to setup your own server, then I&#8217;m sure that section is fine.</p>
+
+<p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn&#8217;t appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all &#8216;live&#8217; in that Roy was teaching a class of real people while screen recording these videos. I didn&#8217;t realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
+
+<p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the &#8216;live demo&#8217; demons and had to pull his chute / abandon ship / insert clever metaphor here&#8230;but it didn&#8217;t detract from the lesson too much.</p>
+
+<p>All and all I&#8217;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi Grimm for tweeting about it to get me there.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[How to be a One-Man Coding Army for a Startup]]></title>
-    <link href="http://j2fly.github.com/blog/2012/11/05/cvcc-2012-talk/"/>
+    <link href="http://jondkinney.github.io/blog/2012/11/05/cvcc-2012-talk/"/>
     <updated>2012-11-05T16:04:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2012/11/05/cvcc-2012-talk</id>
+    <id>http://jondkinney.github.io/blog/2012/11/05/cvcc-2012-talk</id>
     <content type="html"><![CDATA[<p>Last weekend I was fortunate enough to be invited to speak at <a href="http://chippewavalleycodecamp.com/">Chippewa Valley Code Camp - 2012</a>. CVCC is a free, 1-day, 4-track conference in Eau Claire, WI that attracts some of the brightest developers in Wisconsin and Minnesota.</p>
 
 <p>This year there were over 120 attendees and some 20 speakers presenting on things ranging from <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/76/Default.aspx">running a massive Java web application at scale</a> to <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/90/Default.aspx">Single Page Applications with JavaScript</a>. I had an awesome time meeting new people and sharing a little bit about how I run the technical and development side of Bolstr. Specifically, I talked about how we collaborate on work-flows for new features through user stories with <a href="http://cukes.info/">Cucumber</a> as we build out our Ruby on Rails web application at <a href="http://bolstr.com">Bolstr.com</a>.</p>
@@ -30,9 +75,9 @@
   
   <entry>
     <title type="html"><![CDATA[using PhantomJS (through poltergeist) and selenium in the same cucumber test suite]]></title>
-    <link href="http://j2fly.github.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
+    <link href="http://jondkinney.github.io/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
     <updated>2012-10-10T12:51:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
+    <id>http://jondkinney.github.io/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
     <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we&#8217;re doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn&#8217;t give me insight into any unexpected API changes breaking our app. Because we&#8217;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like <code>sleep 3</code> in the step definitions.</p>
 
 <p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&#8217;t solve but I didn&#8217;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
@@ -209,9 +254,9 @@
   
   <entry>
     <title type="html"><![CDATA[Wiring up LittleSnapper to CloudApp]]></title>
-    <link href="http://j2fly.github.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
+    <link href="http://jondkinney.github.io/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
     <updated>2012-10-01T09:28:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
+    <id>http://jondkinney.github.io/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
     <content type="html"><![CDATA[<p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
 
 <p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn&#8217;t want to wait any longer so I started down the path of solving the problem myself.</p>
@@ -350,9 +395,9 @@
   
   <entry>
     <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>
-    <link href="http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
+    <link href="http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
     <updated>2012-07-08T03:56:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
+    <id>http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
     <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&#8217;s view.</p>
 
 <p>After a bit of Googling I found this code snippet:</p>
@@ -468,10 +513,10 @@
   
   <entry>
     <title type="html"><![CDATA[My New Gig at Bolstr]]></title>
-    <link href="http://j2fly.github.com/blog/2012/07/07/my-new-gig-at-bolstr/"/>
+    <link href="http://jondkinney.github.io/blog/2012/07/07/my-new-gig-at-bolstr/"/>
     <updated>2012-07-07T01:28:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2012/07/07/my-new-gig-at-bolstr</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://j2fly.github.com/images/bolstr_star.png" title="Bolstr Logo" ></p>
+    <id>http://jondkinney.github.io/blog/2012/07/07/my-new-gig-at-bolstr</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://jondkinney.github.io/images/bolstr_star.png" title="Bolstr Logo" ></p>
 
 <div style='height:8px;'>&nbsp;</div>
 
@@ -498,9 +543,9 @@
   
   <entry>
     <title type="html"><![CDATA[Intridea Blog Posts]]></title>
-    <link href="http://j2fly.github.com/blog/2011/10/12/intridea-blog-posts/"/>
+    <link href="http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts/"/>
     <updated>2011-10-12T17:00:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2011/10/12/intridea-blog-posts</id>
+    <id>http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the &#8220;Published Posts&#8221; section after my bio.</p>
 
 <p>Here are direct links to what is posted to date (I&#8217;ll try to keep this updated).</p>
@@ -516,9 +561,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS]]></title>
-    <link href="http://j2fly.github.com/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
+    <link href="http://jondkinney.github.io/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
     <updated>2010-04-21T16:43:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
+    <id>http://jondkinney.github.io/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber&#8230; debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
 
 <p>The only problem was that the page didn&#8217;t look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
@@ -639,9 +684,9 @@
   
   <entry>
     <title type="html"><![CDATA[Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)]]></title>
-    <link href="http://j2fly.github.com/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
+    <link href="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
     <updated>2010-03-06T16:53:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
+    <id>http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
     <content type="html"><![CDATA[<p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
 
 <!-- more -->
@@ -837,9 +882,9 @@
   
   <entry>
     <title type="html"><![CDATA[Bluepill init script for Monitoring Delayed Job on Linux openSUSE]]></title>
-    <link href="http://j2fly.github.com/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/"/>
+    <link href="http://jondkinney.github.io/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/"/>
     <updated>2010-02-01T16:08:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse</id>
+    <id>http://jondkinney.github.io/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse</id>
     <content type="html"><![CDATA[<p>I recently moved a long running request in my application to delayed job (<a href="http://github.com/collectiveidea/delayed_job">the collectiveidea fork</a>) and it went really well. However, after some time the delayed job process died and my users couldn&#8217;t use an essential part of the application. I knew it was time for a process monitor. I probably should have put one in to begin with, but I was new to delayed job (really to background processing in general) and the though hadn&#8217;t crossed my mind.</p>
 
 <!-- more -->
@@ -974,9 +1019,9 @@
   
   <entry>
     <title type="html"><![CDATA[Change Locale on OS X Snow Leopard for FreeTDS Functionality]]></title>
-    <link href="http://j2fly.github.com/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
+    <link href="http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
     <updated>2009-11-23T15:29:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
+    <id>http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
     <content type="html"><![CDATA[<p>Recently I&#8217;ve been trying to get my new unibody macbook pro connecting to SQL Server 2005 with FreeTDS. I was following the <a href="http://www.metaskills.net/2009/9/5/the-ultimate-os-x-snow-leopard-stack-for-rails-development-x86_64-macports-ruby-1-8-1-9-sql-server-more">great guide</a> from Ken Collins, author of the <a href="http://github.com/rails-sqlserver/2000-2005-adapter">rails-sqlserver activerecord adapter</a> that I use but no matter what configuration settings I edited I couldn&#8217;t get my machine to connect to the SQL Server.</p>
 
 <!-- more -->
@@ -1034,9 +1079,9 @@
   
   <entry>
     <title type="html"><![CDATA[Deploying to Multiple Server Environments with Cap]]></title>
-    <link href="http://j2fly.github.com/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/"/>
+    <link href="http://jondkinney.github.io/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/"/>
     <updated>2009-04-30T16:49:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap</id>
+    <id>http://jondkinney.github.io/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap</id>
     <content type="html"><![CDATA[<p>Most anytime I develop a web application I need to deploy to multiple server environments. For me this used to mean maintaining two separate deploy.rb scripts, and I would rename one while deploying to staging, and then rename the other when I needed to deploy to production. After about three deploys I said, the hell with this! And I figured out how to allow the specification of your deployment at the command line during the cap deploy task.</p>
 
 <!-- more -->
@@ -1383,9 +1428,9 @@
   
   <entry>
     <title type="html"><![CDATA[Logging Cron Jobs on Ubuntu]]></title>
-    <link href="http://j2fly.github.com/blog/2009/04/01/logging-cron-jobs-on-ubuntu/"/>
+    <link href="http://jondkinney.github.io/blog/2009/04/01/logging-cron-jobs-on-ubuntu/"/>
     <updated>2009-04-01T15:53:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2009/04/01/logging-cron-jobs-on-ubuntu</id>
+    <id>http://jondkinney.github.io/blog/2009/04/01/logging-cron-jobs-on-ubuntu</id>
     <content type="html"><![CDATA[<p>I am running a VPS over at <a href="http://silverrack.com">SilverRack.com</a> and I love it. Dave (the owner) has been very helpful and responsive anytime I&#8217;ve had questions or issues, and I highly recommend their service. Also if you&#8217;re a member of a local Ruby user group then you can get $10 off the standard 256mb slice making it extremely affordable to have your very own server! I also have an unlimited Dreamhost account, but I like having root access and full reign of my server.</p>
 
 <h3>Enable the cron.log for Ubuntu</h3>
@@ -1436,27 +1481,27 @@
   
   <entry>
     <title type="html"><![CDATA[Madison web meetup: Advanced CSS]]></title>
-    <link href="http://j2fly.github.com/blog/2009/02/27/madison-web-meetup-advanced-css/"/>
+    <link href="http://jondkinney.github.io/blog/2009/02/27/madison-web-meetup-advanced-css/"/>
     <updated>2009-02-27T16:29:00-06:00</updated>
-    <id>http://j2fly.github.com/blog/2009/02/27/madison-web-meetup-advanced-css</id>
+    <id>http://jondkinney.github.io/blog/2009/02/27/madison-web-meetup-advanced-css</id>
     <content type="html"><![CDATA[<p>Recently Inacom had the privilege of hosting the <a href="http://www.meetup.com/madisonwebmeetup/">Madison Web Design &amp; Development Meetup</a>. The topic for this meeting was Advanced CSS. I put together a sideshow to try to keep the presentation more guided, but because of the depth of the topic we wound up going quite a bit over our loose 1 hour time slot. I just wanted to thank everyone for sticking around and seeming quite interested! I had a great time presenting and I hope that you all enjoyed our discussions. If you&#8217;re looking for the demo files and the presentation check them out in the full article.</p>
 
 <!-- more -->
 
 
-<p>Here is a PDF of the sideshow: <a href="http://j2fly.github.com/assets/21/advanced_css.pdf">Advanced CSS Presentation</a> which has a lot of great resources for everyone to use. The links inside the PDF are also clickable so that should work out great.</p>
+<p>Here is a PDF of the sideshow: <a href="http://jondkinney.github.io/assets/21/advanced_css.pdf">Advanced CSS Presentation</a> which has a lot of great resources for everyone to use. The links inside the PDF are also clickable so that should work out great.</p>
 
-<p>I posted my demo files in a <a href="http://j2fly.github.com/assets/22/demos.zip">zipped folder</a> and also put them up in HTML format so people could view them that way if desired. I would recommend downloading the zip and viewing the source code in the following order as my comments in the HTML and CSS go from the most detailed to the least (in hopes that you don&#8217;t need a ton of comments each and every time! We are learning after all right?!?! :)</p>
+<p>I posted my demo files in a <a href="http://jondkinney.github.io/assets/22/demos.zip">zipped folder</a> and also put them up in HTML format so people could view them that way if desired. I would recommend downloading the zip and viewing the source code in the following order as my comments in the HTML and CSS go from the most detailed to the least (in hopes that you don&#8217;t need a ton of comments each and every time! We are learning after all right?!?! :)</p>
 
 <h3>DEMOS!!</h3>
 
 <ul>
-<li><a href="http://j2fly.github.com/advanced_css/2_col_float.html">2 column with floating and negative margining</a></li>
-<li><a href="http://j2fly.github.com/advanced_css/footer_stick.html">Footer stick</a></li>
-<li><a href="http://j2fly.github.com/advanced_css/form.html">Form</a></li>
-<li><a href="http://j2fly.github.com/advanced_css/css_tables.html">CSS Tables</a></li>
-<li><a href="http://j2fly.github.com/advanced_css/newspaper.html">Newspaper 3 columns</a></li>
-<li><a href="http://j2fly.github.com/advanced_css/newspaper2.html">Newspaper 3 columns that auto match the height of each</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/2_col_float.html">2 column with floating and negative margining</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/footer_stick.html">Footer stick</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/form.html">Form</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/css_tables.html">CSS Tables</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/newspaper.html">Newspaper 3 columns</a></li>
+<li><a href="http://jondkinney.github.io/advanced_css/newspaper2.html">Newspaper 3 columns that auto match the height of each</a></li>
 </ul>
 
 
@@ -1466,9 +1511,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rails in the Entreprise]]></title>
-    <link href="http://j2fly.github.com/blog/2008/09/16/rails-in-the-entreprise/"/>
+    <link href="http://jondkinney.github.io/blog/2008/09/16/rails-in-the-entreprise/"/>
     <updated>2008-09-16T16:20:00-05:00</updated>
-    <id>http://j2fly.github.com/blog/2008/09/16/rails-in-the-entreprise</id>
+    <id>http://jondkinney.github.io/blog/2008/09/16/rails-in-the-entreprise</id>
     <content type="html"><![CDATA[<p>The first website that I built for Inacom using <a href="http://rubyonrails.org/">ruby on rails</a> in 2006 was deployed to <a href="http://www.ubuntu.com/">Ubuntu</a> 6.06 LTS server and I hand rolled my own install for everything (it was painful). We had <a href="http://www.mysql.com/">MySQL</a> on the same 256 MB VM as the rails code was running from, and we setup a proxy with <a href="http://www.apache.org/">Apache</a> and <a href="http://mongrel.rubyforge.org/">Mongrel</a>. Deploying from <a href="http://www.capify.org/">Capistrano</a> 1.4 made things a bit easier once everything was setup, but the initial build was not an easy task. It was also my first time doing what some would consider fairly heavy Linux command line system administration, so that didn&#8217;t speed up the process either.</p>
 
 <!-- more -->
