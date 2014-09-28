@@ -111,7 +111,7 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="no">Start</span> <span class="n">command</span> <span class="n">execution</span> <span class="n">returned</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="nb">exit</span> <span class="n">code</span><span class="p">:</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="no">Start</span> <span class="n">command</span> <span class="n">execution</span> <span class="n">returned</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="nb">exit</span> <span class="ss">code</span><span class="p">:</span>
 </span><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="p">{</span><span class="ss">:stdout</span><span class="o">=&gt;</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:stderr</span><span class="o">=&gt;</span><span class="s2">&quot;script/delayed_job:3:in &#39;require&#39;: no such file to load -- rubygems (LoadError) from script/delayed_job:3&quot;</span><span class="p">,</span> <span class="ss">:exit_code</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">}</span>
 </span><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="no">Going</span> <span class="n">from</span> <span class="n">down</span> <span class="o">=&gt;</span> <span class="n">starting</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -194,35 +194,35 @@
 </span><span class='line'>
 </span><span class='line'><span class="c"># Check for missing binaries</span>
 </span><span class='line'><span class="nv">BLUEPILL_BIN</span><span class="o">=</span>/usr/local/bin/bluepill
-</span><span class='line'><span class="nb">test</span> -x <span class="nv">$BLUEPILL_BIN</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_BIN not installed&quot;</span>;
-</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">exit </span>0;
-</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>5; <span class="k">fi</span>; <span class="o">}</span>
+</span><span class='line'><span class="nb">test</span> -x <span class="nv">$BLUEPILL_BIN</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_BIN not installed&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then </span><span class="nb">exit </span>0<span class="p">;</span>
+</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>5<span class="p">;</span> <span class="k">fi</span><span class="p">;</span> <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Check for existence of needed config file and read it</span>
 </span><span class='line'><span class="nv">BLUEPILL_CONFIG</span><span class="o">=</span>/srv/www/app_name/shared/config/delayed_job.pill
-</span><span class='line'><span class="nb">test</span> -r <span class="nv">$BLUEPILL_CONFIG</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_CONFIG not existing&quot;</span>;
-</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">exit </span>0;
-</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>6; <span class="k">fi</span>; <span class="o">}</span>
+</span><span class='line'><span class="nb">test</span> -r <span class="nv">$BLUEPILL_CONFIG</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_CONFIG not existing&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then </span><span class="nb">exit </span>0<span class="p">;</span>
+</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>6<span class="p">;</span> <span class="k">fi</span><span class="p">;</span> <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
 </span><span class='line'>    start<span class="o">)</span>
 </span><span class='line'>        <span class="nb">echo</span> -n <span class="s2">&quot;Starting bluepill &quot;</span>
 </span><span class='line'>        <span class="nv">$BLUEPILL_BIN</span> load <span class="nv">$BLUEPILL_CONFIG</span>
-</span><span class='line'>        ;;
+</span><span class='line'>        <span class="p">;;</span>
 </span><span class='line'>    stop<span class="o">)</span>
 </span><span class='line'>        <span class="nb">echo</span> -n <span class="s2">&quot;Shutting down bluepill &quot;</span>
 </span><span class='line'>        <span class="nv">$BLUEPILL_BIN</span> quit
-</span><span class='line'>        ;;
+</span><span class='line'>        <span class="p">;;</span>
 </span><span class='line'>    restart<span class="o">)</span>
 </span><span class='line'>        <span class="c">## Stop the service and regardless of whether it was</span>
 </span><span class='line'>        <span class="c">## running or not, start it again.</span>
 </span><span class='line'>        <span class="nv">$0</span> stop
 </span><span class='line'>        <span class="nv">$0</span> start
-</span><span class='line'>        ;;
+</span><span class='line'>        <span class="p">;;</span>
 </span><span class='line'>    *<span class="o">)</span>
 </span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Usage: $0 {start|stop|restart}&quot;</span>
 </span><span class='line'>        <span class="nb">exit </span>1
-</span><span class='line'>        ;;
+</span><span class='line'>        <span class="p">;;</span>
 </span><span class='line'><span class="k">esac</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -291,15 +291,15 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/29/back-to-consulting/">Back to Consulting!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a>
       </li>
     
   </ul>

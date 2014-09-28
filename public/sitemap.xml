@@ -3,6 +3,14 @@
   
   
   <url>
+    <loc>http://jonkinney.com/blog/2014/07/29/back-to-consulting/</loc>
+    
+    <lastmod>2014-07-29T20:08:01-05:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jonkinney.com/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/</loc>
     
     <lastmod>2013-09-23T12:01:00-05:00</lastmod>
@@ -125,21 +133,21 @@
   
   <url>
     <loc>http://jonkinney.com/blog/archives/</loc>
-    <lastmod>2014-09-27T22:56:38-05:00</lastmod>
+    <lastmod>2014-09-27T23:18:25-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/</loc>
-    <lastmod>2014-09-27T22:56:38-05:00</lastmod>
+    <lastmod>2014-09-27T23:18:25-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/studio/</loc>
-    <lastmod>2014-09-27T22:56:38-05:00</lastmod>
+    <lastmod>2014-09-27T23:18:25-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -148,109 +156,109 @@
   
   <url>
     <loc>http://jonkinney.com/advanced_css/2_col_float.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/advanced_css/css_tables.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/advanced_css/footer_stick.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/advanced_css/form.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/advanced_css/newspaper.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/advanced_css/newspaper2.html</loc>
-    <lastmod>2014-09-27T22:43:45Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/cvcc-talk-2012/index.html</loc>
-    <lastmod>2014-09-27T22:47:40Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/ide/index.html</loc>
-    <lastmod>2014-09-27T22:47:42Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/vim/index.html</loc>
-    <lastmod>2014-09-27T22:47:41Z</lastmod>
+    <lastmod>2014-09-27T22:58:12Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2008/09/16/rails-in-the-enterprise/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/02/27/madison-web-meetup-advanced-css/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/04/01/logging-cron-jobs-on-ubuntu/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/04/30/deploying-to-multiple-server-environments-with-cap/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/03/06/easily-convert-a-has_and_belongs_to_many-to-a-has_many_through-in-rails-for-ms-sql-server/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/04/21/using-save_and_open_page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2011/10/12/intridea-blog-posts/index.html</loc>
-    <lastmod>2014-09-27T22:56:38Z</lastmod>
+    <lastmod>2014-09-27T23:18:25Z</lastmod>
     <priority>0.6</priority>
   </url>
   

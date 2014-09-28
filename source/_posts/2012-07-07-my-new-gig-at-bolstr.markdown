@@ -5,6 +5,7 @@ date: 2012-07-07 01:28
 comments: true
 categories: 
 - Entrepreneurship
+- Life
 ---
 
 {% img left /images/bolstr_star.png Bolstr Logo %}
