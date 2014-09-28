@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server) - self.extended(thoughts)</title>
+  <title>Easily Convert a Has_and_belongs_to_many to a Has_many_through in Rails (for: MS SQL Server) - self.extended(thoughts)</title>
   <meta name="author" content="Jon Kinney">
 
   
@@ -18,13 +18,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/">
+  <link rel="canonical" href="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="self.extended(thoughts)" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -89,14 +90,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-03-06T16:53:00-06:00" pubdate data-updated="true">Mar 6<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-03-06T16:53:00-06:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>4:53 pm</span></time>
         
       </p>
     
@@ -143,11 +137,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Here&#8217;s <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn&#8217;t news in and of itself, it&#8217;s important if you&#8217;re working with a legacy app and you try to convert a HABTM to a HM:T and can&#8217;t figure out why it&#8217;s not working. That&#8217;s exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I&#8217;m working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
+<p>Here&rsquo;s <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn&rsquo;t news in and of itself, it&rsquo;s important if you&rsquo;re working with a legacy app and you try to convert a HABTM to a HM:T and can&rsquo;t figure out why it&rsquo;s not working. That&rsquo;s exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I&rsquo;m working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
 
-<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn&#8217;t sure how to go about doing this. I&#8217;m also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use &#8220;change scripts&#8221; instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
+<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn&rsquo;t sure how to go about doing this. I&rsquo;m also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use &ldquo;change scripts&rdquo; instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
 
-<p>I modified the table in our staging environment with SQL Management Studio, I added an &#8220;id&#8221; column, and both &#8220;updated_at&#8221; and &#8220;created_at&#8221; timestamp columns and then generated a change script. Note: it&#8217;s important that when in design mode that you click the &#8220;generate change script&#8221; button before saving the table, otherwise if you save the table before generating the change script you can&#8217;t click the change script button anymore&#8230; it gets grayed out.</p>
+<p>I modified the table in our staging environment with SQL Management Studio, I added an &ldquo;id&rdquo; column, and both &ldquo;updated_at&rdquo; and &ldquo;created_at&rdquo; timestamp columns and then generated a change script. Note: it&rsquo;s important that when in design mode that you click the &ldquo;generate change script&rdquo; button before saving the table, otherwise if you save the table before generating the change script you can&rsquo;t click the change script button anymore&hellip; it gets grayed out.</p>
 
 <p>Initially I tried just executing the whole change script directly in an execute block inside of self.up, which would look something like this:</p>
 
@@ -164,7 +158,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Unfortunately that didn&#8217;t work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new &#8220;execute&#8221; call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn&#8217;t screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they&#8217;re in the change script as &#8220;BEGIN TRANSACTION&#8221;, we just can&#8217;t execute that code directly in our migration which is why you don&#8217;t see them in the final code example.</p>
+<p>Unfortunately that didn&rsquo;t work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new &ldquo;execute&rdquo; call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn&rsquo;t screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they&rsquo;re in the change script as &ldquo;BEGIN TRANSACTION&rdquo;, we just can&rsquo;t execute that code directly in our migration which is why you don&rsquo;t see them in the final code example.</p>
 
 <p>For more discussion on transactions in Rails look at this <a href="http://stackoverflow.com/questions/686852/rolling-back-a-failed-rails-migration">stackoverflow thread</a>.</p>
 
@@ -179,7 +173,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Because we want to retain all the data that exists in the join table and we&#8217;re adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
+<p>Because we want to retain all the data that exists in the join table and we&rsquo;re adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -308,19 +302,12 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-03-06T16:53:00-06:00" pubdate data-updated="true">Mar 6<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-03-06T16:53:00-06:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>4:53 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/sql/'>SQL</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/sql/'>sql</a>
   
 </span>
 
@@ -329,7 +316,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/" data-via="jondkinney" data-counturl="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/" data-via="jondkinney" data-counturl="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -365,15 +352,15 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey course: BDD and TDD in Ruby by Roy Osherove</a>
+        <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/11/05/cvcc-2012-talk/">How to be a One-Man Coding Army for a Startup</a>
+        <a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">using PhantomJS (through poltergeist) and selenium in the same cucumber test suite</a>
+        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a>
       </li>
     
   </ul>
@@ -382,7 +369,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -399,11 +386,11 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -416,8 +403,7 @@
             user: 'jondkinney',
             count: 6,
             skip_forks: true,
-            target: '#gh_repos',
-            skip_repos: 'jondkinney.github.io'
+            target: '#gh_repos'
         });
     });
   </script>
@@ -445,7 +431,7 @@
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
+  js = d.createElement(s); js.id = id; js.async = true;
   js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
@@ -467,7 +453,7 @@
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

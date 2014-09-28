@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: SQL | self.extended(thoughts)]]></title>
+  <title><![CDATA[Category: sql | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/sql/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T22:17:11-05:00</updated>
+  <updated>2014-09-27T22:51:10-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -25,128 +25,106 @@
 
 <p>Writing the association code yourself required some array math and it was hard to remember what order to do things in and how to exactly format it. I had to copy and paste the code in from a snippet library every time. Not only that but it was ugly and a pain in the butt to maintain, and really felt like it should be handled in the core Rails framework. It looked like this (at least my version):</p>
 
-<p>```ruby</p>
+<pre><code class="ruby">#This is from an old app that managed a relationship between MetaKeywords and Pages
 
-<h1>This is from an old app that managed a relationship between MetaKeywords and Pages</h1>
+def manage_meta_keyword_associations(new_meta_keywords)
+  current_meta_keywords = MetaKeywordPage.find_all_by_page_id(self.id).collect{|mkp| mkp.meta_keyword_id.to_s}
 
-<p>def manage_meta_keyword_associations(new_meta_keywords)
-  current_meta_keywords = MetaKeywordPage.find_all_by_page_id(self.id).collect{|mkp| mkp.meta_keyword_id.to_s}</p>
+  meta_keywords_to_add = new_meta_keywords - current_meta_keywords
+  for meta_keyword in meta_keywords_to_add
+    MetaKeywordPage.create(:meta_keyword_id =&gt; meta_keyword, :page_id =&gt; self.id) 
+  end
 
-<p>  meta_keywords_to_add = new_meta_keywords - current_meta_keywords
-  for meta_keyword in meta_keywords_to_add</p>
-
-<pre><code>MetaKeywordPage.create(:meta_keyword_id =&gt; meta_keyword, :page_id =&gt; self.id) 
-</code></pre>
-
-<p>  end</p>
-
-<p>  meta_keywords_to_remove = current_meta_keywords - new_meta_keywords
-  for meta_keyword in meta_keywords_to_remove</p>
-
-<pre><code>MetaKeywordPage.find_by_meta_keyword_id_and_page_id(meta_keyword, self.id).destroy
-</code></pre>
-
-<p>  end
+  meta_keywords_to_remove = current_meta_keywords - new_meta_keywords
+  for meta_keyword in meta_keywords_to_remove
+    MetaKeywordPage.find_by_meta_keyword_id_and_page_id(meta_keyword, self.id).destroy
+  end
 end
-```</p>
+</code></pre>
 
-<p>Here's <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn't news in and of itself, it's important if you're working with a legacy app and you try to convert a HABTM to a HM:T and can't figure out why it's not working. That's exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I'm working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
+<p>Here&rsquo;s <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn&rsquo;t news in and of itself, it&rsquo;s important if you&rsquo;re working with a legacy app and you try to convert a HABTM to a HM:T and can&rsquo;t figure out why it&rsquo;s not working. That&rsquo;s exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I&rsquo;m working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
 
-<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn't sure how to go about doing this. I'm also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use "change scripts" instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
+<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn&rsquo;t sure how to go about doing this. I&rsquo;m also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use &ldquo;change scripts&rdquo; instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
 
-<p>I modified the table in our staging environment with SQL Management Studio, I added an "id" column, and both "updated_at" and "created_at" timestamp columns and then generated a change script. Note: it's important that when in design mode that you click the "generate change script" button before saving the table, otherwise if you save the table before generating the change script you can't click the change script button anymore... it gets grayed out.</p>
+<p>I modified the table in our staging environment with SQL Management Studio, I added an &ldquo;id&rdquo; column, and both &ldquo;updated_at&rdquo; and &ldquo;created_at&rdquo; timestamp columns and then generated a change script. Note: it&rsquo;s important that when in design mode that you click the &ldquo;generate change script&rdquo; button before saving the table, otherwise if you save the table before generating the change script you can&rsquo;t click the change script button anymore&hellip; it gets grayed out.</p>
 
 <p>Initially I tried just executing the whole change script directly in an execute block inside of self.up, which would look something like this:</p>
 
-<p>```ruby
-class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
-  def self.up</p>
-
-<pre><code>execute "change script here"
+<pre><code class="ruby">class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
+  def self.up
+    execute "change script here"
+  end
+end
 </code></pre>
 
-<p>  end
-end
-```</p>
-
-<p>Unfortunately that didn't work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new "execute" call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn't screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they're in the change script as "BEGIN TRANSACTION", we just can't execute that code directly in our migration which is why you don't see them in the final code example.</p>
+<p>Unfortunately that didn&rsquo;t work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new &ldquo;execute&rdquo; call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn&rsquo;t screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they&rsquo;re in the change script as &ldquo;BEGIN TRANSACTION&rdquo;, we just can&rsquo;t execute that code directly in our migration which is why you don&rsquo;t see them in the final code example.</p>
 
 <p>For more discussion on transactions in Rails look at this <a href="http://stackoverflow.com/questions/686852/rolling-back-a-failed-rails-migration">stackoverflow thread</a>.</p>
 
-<p>```ruby</p>
-
-<h1>A transaction in Active Record</h1>
-
-<p>ActiveRecord::Base.transaction do
+<pre><code class="ruby">#A transaction in Active Record
+ActiveRecord::Base.transaction do
   execute "update users set enabled = 1 where name like 'batman'"
 end
-```</p>
-
-<p>Because we want to retain all the data that exists in the join table and we're adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
-
-<p>```ruby
-class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
-  def self.up</p>
-
-<pre><code>ActiveRecord::Base.transaction do
-  execute "
-  CREATE TABLE dbo.Tmp_locations_users
-    (
-    id int NOT NULL IDENTITY (1, 1),
-    location_id int NOT NULL,
-    user_id int NOT NULL,
-    created_at datetime NULL,
-    updated_at datetime NULL
-    ) ON [PRIMARY]
-  "
-  execute "SET IDENTITY_INSERT dbo.Tmp_locations_users OFF"
-
-  execute "IF EXISTS(SELECT * FROM dbo.locations_users)
-     EXEC('INSERT INTO dbo.Tmp_locations_users (location_id, user_id)
-      SELECT location_id, user_id FROM dbo.locations_users WITH (HOLDLOCK TABLOCKX)')"
-  execute "DROP TABLE dbo.locations_users"
-  execute "EXECUTE sp_rename N'dbo.Tmp_locations_users', N'locations_users', 'OBJECT'"
-
-  execute"ALTER TABLE dbo.locations_users ADD CONSTRAINT
-    PK_locations_users PRIMARY KEY CLUSTERED 
-    (
-    id
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
-
-
-  execute "CREATE NONCLUSTERED INDEX index_locations_users_on_location_id ON dbo.locations_users
-    (
-    location_id
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
-
-  execute = "CREATE NONCLUSTERED INDEX index_locations_users_on_user_id ON dbo.locations_users
-    (
-    user_id
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-  "
-
-  execute "update locations_users set created_at = '1-1-2010'"
-  execute "update locations_users set updated_at = '1-1-2010'"
-
-  add_column :locations_users, :position, :integer
-end
 </code></pre>
 
-<p>  end</p>
+<p>Because we want to retain all the data that exists in the join table and we&rsquo;re adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
 
-<p>  def self.down</p>
+<pre><code class="ruby">class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
+  def self.up
+    ActiveRecord::Base.transaction do
+      execute "
+      CREATE TABLE dbo.Tmp_locations_users
+        (
+        id int NOT NULL IDENTITY (1, 1),
+        location_id int NOT NULL,
+        user_id int NOT NULL,
+        created_at datetime NULL,
+        updated_at datetime NULL
+        ) ON [PRIMARY]
+      "
+      execute "SET IDENTITY_INSERT dbo.Tmp_locations_users OFF"
 
-<pre><code>ActiveRecord::Base.transaction do
-  remove_column :locations_users, :position
-  remove_column :locations_users, :id
-  remove_column :locations_users, :created_at
-  remove_column :locations_users, :updated_at
+      execute "IF EXISTS(SELECT * FROM dbo.locations_users)
+         EXEC('INSERT INTO dbo.Tmp_locations_users (location_id, user_id)
+          SELECT location_id, user_id FROM dbo.locations_users WITH (HOLDLOCK TABLOCKX)')"
+      execute "DROP TABLE dbo.locations_users"
+      execute "EXECUTE sp_rename N'dbo.Tmp_locations_users', N'locations_users', 'OBJECT'"
+
+      execute"ALTER TABLE dbo.locations_users ADD CONSTRAINT
+        PK_locations_users PRIMARY KEY CLUSTERED 
+        (
+        id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
+
+
+      execute "CREATE NONCLUSTERED INDEX index_locations_users_on_location_id ON dbo.locations_users
+        (
+        location_id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
+
+      execute = "CREATE NONCLUSTERED INDEX index_locations_users_on_user_id ON dbo.locations_users
+        (
+        user_id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+      "
+
+      execute "update locations_users set created_at = '1-1-2010'"
+      execute "update locations_users set updated_at = '1-1-2010'"
+
+      add_column :locations_users, :position, :integer
+    end
+  end
+
+  def self.down
+    ActiveRecord::Base.transaction do
+      remove_column :locations_users, :position
+      remove_column :locations_users, :id
+      remove_column :locations_users, :created_at
+      remove_column :locations_users, :updated_at
+    end
+  end
 end
 </code></pre>
-
-<p>  end
-end
-```</p>
 ]]></content>
   </entry>
   

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Reviews | self.extended(thoughts)]]></title>
+  <title><![CDATA[Category: reviews | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/reviews/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T22:17:11-05:00</updated>
+  <updated>2014-09-27T22:51:10-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -18,63 +18,57 @@
     <link href="http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/"/>
     <updated>2013-09-23T12:01:00-05:00</updated>
     <id>http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove</id>
-    <content type="html"><![CDATA[<p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I'm not sure if this was an endorsement by Avdi, or more of a "oh hey, there's this thing over here which might be interesting" type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>... people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
+    <content type="html"><![CDATA[<p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I&rsquo;m not sure if this was an endorsement by Avdi, or more of a &ldquo;oh hey, there&rsquo;s this thing over here which might be interesting&rdquo; type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>&hellip; people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
 
-<p>As an experienced developer, I'd give this course 3.5 stars if it was an option, but I rounded up because if you don't know anything about unit testing then this course is a great overview.</p>
+<p>As an experienced developer, I&rsquo;d give this course 3.5 stars if it was an option, but I rounded up because if you don&rsquo;t know anything about unit testing then this course is a great overview.</p>
 
-<p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don't complain every time a method on the object under test is called that you didn't explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
+<p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don&rsquo;t complain every time a method on the object under test is called that you didn&rsquo;t explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
 
 <!-- more -->
 
 
-<p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a 'spy' where in he does the assert AFTER the method under test is invoked. That's a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
+<p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a &lsquo;spy&rsquo; where in he does the assert AFTER the method under test is invoked. That&rsquo;s a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
 
-<p><code>ruby
-blah.should_receive(:something)
-</code></p>
+<pre><code class="ruby">blah.should_receive(:something)
+</code></pre>
 
-<p>or in the new RSpec syntax...</p>
+<p>or in the new RSpec syntax&hellip;</p>
 
-<p><code>ruby
-expect(blah).to receive(:something)
-</code></p>
+<pre><code class="ruby">expect(blah).to receive(:something) 
+</code></pre>
 
-<p>and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it's backwards from the typical 'do work' and 'assert a state change' work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they're both fine ways, I just wish the multiple ways of doing it were discussed in this course. Here's a <a href="http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released">blog article</a> that shows how to do both options in RSpec (check the Mocks:Spies section).</p>
+<p>and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it&rsquo;s backwards from the typical &lsquo;do work&rsquo; and &lsquo;assert a state change&rsquo; work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they&rsquo;re both fine ways, I just wish the multiple ways of doing it were discussed in this course. Here&rsquo;s a <a href="http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released">blog article</a> that shows how to do both options in RSpec (check the Mocks:Spies section).</p>
 
-<p>Another error I noticed was in the discussion of <code>let</code> vs <code>let!</code>. Roy talks about how <code>let</code> memoizes (caches) whatever it's storing so that if that variable is used multiple times, it'll just retrieve whatever was set on that variable previously. That is in fact how <code>let</code> in RSpec works, BUT that only happens within the current example if the <code>let</code> gets called multiple times. It DOES NOT memoize/cache the <code>let</code> value BETWEEN examples as Roy described. See the <a href="https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let">docs</a>.</p>
+<p>Another error I noticed was in the discussion of <code>let</code> vs <code>let!</code>. Roy talks about how <code>let</code> memoizes (caches) whatever it&rsquo;s storing so that if that variable is used multiple times, it&rsquo;ll just retrieve whatever was set on that variable previously. That is in fact how <code>let</code> in RSpec works, BUT that only happens within the current example if the <code>let</code> gets called multiple times. It DOES NOT memoize/cache the <code>let</code> value BETWEEN examples as Roy described. See the <a href="https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let">docs</a>.</p>
 
 <p>One thing I picked up that I liked quite a bit was this tip:</p>
 
 <p>When describing a method on a class like <code>Calc#add</code>, define a method that does what you want to test below the describe/context for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
 
-<p>Here's an example where extracting a method called 'adding' could help clean up specs:</p>
+<p>Here&rsquo;s an example where extracting a method called &lsquo;adding&rsquo; could help clean up specs:</p>
 
-<p>```ruby
-describe Calculator do
-  context "a single number"</p>
+<pre><code class="ruby">describe Calculator do
+  context "a single number"
+    def adding(input)
+      calc.add(input) #calls a let defined above
+    end
 
-<pre><code>def adding(input)
-  calc.add(input) #calls a let defined above
-end
-
-it "adding 2 increases the number by 2" do
-  expect(adding('2')).to eq(2)
+    it "adding 2 increases the number by 2" do
+      expect(adding('2')).to eq(2)
+    end
+  end
 end
 </code></pre>
 
-<p>  end
-end
-```</p>
+<p>Roy also does a good job of explaining RSpec&rsquo;s &lsquo;subject&rsquo; and &lsquo;its&rsquo; which I never took the time to fully grok until now.</p>
 
-<p>Roy also does a good job of explaining RSpec's 'subject' and 'its' which I never took the time to fully grok until now.</p>
+<p>Truth be told, I didn&rsquo;t watch the TeamCity stuff because I&rsquo;m using Jenkins for CI on <a href="http://circleci.com">CircleCi</a> (which I highly recommend!). If you don&rsquo;t know anything about CI or want a bit more hand holding to setup your own server, then I&rsquo;m sure this section is fine.</p>
 
-<p>Truth be told, I didn't watch the TeamCity stuff because I'm using Jenkins for CI on <a href="http://circleci.com">CircleCi</a> (which I highly recommend!). If you don't know anything about CI or want a bit more hand holding to setup your own server, then I'm sure this section is fine.</p>
+<p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn&rsquo;t appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all &lsquo;live&rsquo; in that Roy was teaching a class of real people while screen recording these videos. I didn&rsquo;t realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
 
-<p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn't appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all 'live' in that Roy was teaching a class of real people while screen recording these videos. I didn't realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
+<p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the &lsquo;live demo&rsquo; demons and had to pull his chute / abandon ship / insert clever metaphor here&hellip;but it didn&rsquo;t detract from the lesson too much.</p>
 
-<p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the 'live demo' demons and had to pull his chute / abandon ship / insert clever metaphor here...but it didn't detract from the lesson too much.</p>
-
-<p>All in all, I'm glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi for tweeting about it to get me there.</p>
+<p>All in all, I&rsquo;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi for tweeting about it to get me there.</p>
 
 <p>Here are some notes I took while going through the course: <a href="https://gist.github.com/jondkinney/6674458">https://gist.github.com/jondkinney/6674458</a></p>
 ]]></content>

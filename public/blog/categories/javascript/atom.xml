@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: JavaScript | self.extended(thoughts)]]></title>
+  <title><![CDATA[Category: javascript | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T22:17:11-05:00</updated>
+  <updated>2014-09-27T22:51:10-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -18,82 +18,69 @@
     <link href="http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
     <updated>2012-07-08T03:56:00-05:00</updated>
     <id>http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
-    <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action's view.</p>
+    <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&rsquo;s view.</p>
 
 <p>After a bit of Googling I found this code snippet:</p>
 
-<p>```html
-<html>
-  <body></p>
-
-<pre><code>&lt;script type='text/javascript' charset='utf-8'&gt;
-  parent.location.href = '/myloc';
-&lt;/script&gt;
+<pre><code class="html">&lt;html&gt;
+  &lt;body&gt;
+    &lt;script type='text/javascript' charset='utf-8'&gt;
+      parent.location.href = '/myloc';
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-
-<p>  </body>
-</html>
-```</p>
 
 <p>Which can be implemented in a Rails controller like so:</p>
 
-<p><code>ruby
-render text: "&lt;html&gt;&lt;body&gt;&lt;script type='text/javascript' charset='utf-8'&gt;window.parent.document.location.href = '/myloc';&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;", content_type: :html
-</code></p>
+<pre><code class="ruby">render text: "&lt;html&gt;&lt;body&gt;&lt;script type='text/javascript' charset='utf-8'&gt;window.parent.document.location.href = '/myloc';&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;", content_type: :html
+</code></pre>
 
 <!-- more -->
 
 
-<p>The above code snippet takes the place of the traditional <code>redirect_to</code>. The beauty of this solution is that after the signer interacts with the document and completes his or her signing ceremony, the app will act just like we had served the embedded signing iframe code directly from our own view. There isn't a button to click that says "go to parent" or "back to home" or anything, it just works and redirects appropriately when the user is done interacting with the iframe.</p>
+<p>The above code snippet takes the place of the traditional <code>redirect_to</code>. The beauty of this solution is that after the signer interacts with the document and completes his or her signing ceremony, the app will act just like we had served the embedded signing iframe code directly from our own view. There isn&rsquo;t a button to click that says &ldquo;go to parent&rdquo; or &ldquo;back to home&rdquo; or anything, it just works and redirects appropriately when the user is done interacting with the iframe.</p>
 
 <p>I created a little utility method in the <a href="https://github.com/j2fly/docusign_rest/blob/master/lib/docusign_rest/utility.rb#L49">docusign_rest</a> gem to abstract the JS portion and make it more consise. See lines 23 and 26 in the example controller code below:</p>
 
-<p>```ruby  <br/>
-class SomeController &lt; ApplicationController</p>
+<pre><code class="ruby    ">class SomeController &lt; ApplicationController
 
-<p>  # the view corresponding to this action has the iframe in it with the
+  # the view corresponding to this action has the iframe in it with the
   # @url as it's src. @envelope_response is populated from either:
   # @envelope_response = client.create_envelope_from_document
   # or
   # @envelope_response = client.create_envelope_from_template
-  def embedded_signing</p>
+  def embedded_signing
+    client = DocusignRest::Client.new
+    @url = client.get_recipient_view(
+      envelope_id: @envelope_response["envelopeId"],
+      name: current_user.display_name,
+      email: current_user.email,
+      return_url: "http://localhost:3000/docusign_response"
+    )
+  end
 
-<pre><code>client = DocusignRest::Client.new
-@url = client.get_recipient_view(
-  envelope_id: @envelope_response["envelopeId"],
-  name: current_user.display_name,
-  email: current_user.email,
-  return_url: "http://localhost:3000/docusign_response"
-)
-</code></pre>
+  def docusign_response
+    utility = DocusignRest::Utility.new
 
-<p>  end</p>
+    if params[:event] == "signing_complete"
+      flash[:notice] = "Thanks! Successfully signed"
+      render :text =&gt; utility.breakout_path(some_path), content_type: :html
+    else
+      flash[:notice] = "You chose not to sign the document."
+      render :text =&gt; utility.breakout_path(some_other_path), content_type: :html
+    end
+  end
 
-<p>  def docusign_response</p>
-
-<pre><code>utility = DocusignRest::Utility.new
-
-if params[:event] == "signing_complete"
-  flash[:notice] = "Thanks! Successfully signed"
-  render :text =&gt; utility.breakout_path(some_path), content_type: :html
-else
-  flash[:notice] = "You chose not to sign the document."
-  render :text =&gt; utility.breakout_path(some_other_path), content_type: :html
 end
 </code></pre>
-
-<p>  end</p>
-
-<p>end
-```</p>
 
 <p>Here is the method in the Utility class of the DocuSign module that handles embedding the path in the HTML snippet.</p>
 
-<p><code>ruby
-def breakout_path(path)
+<pre><code class="ruby">def breakout_path(path)
   "&lt;html&gt;&lt;body&gt;&lt;script type='text/javascript' charset='utf-8'&gt;parent.location.href = '#{path}';&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"
 end
-</code></p>
+</code></pre>
 ]]></content>
   </entry>
   

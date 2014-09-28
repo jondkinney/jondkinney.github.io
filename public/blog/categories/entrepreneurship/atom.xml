@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Entrepreneurship | self.extended(thoughts)]]></title>
+  <title><![CDATA[Category: entrepreneurship | self.extended(thoughts)]]></title>
   <link href="http://jondkinney.github.io/blog/categories/entrepreneurship/atom.xml" rel="self"/>
   <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T22:17:11-05:00</updated>
+  <updated>2014-09-27T22:51:10-05:00</updated>
   <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
@@ -23,9 +23,9 @@
 <div style='height:8px;'>&nbsp;</div>
 
 
-<p>It's been nearly seven months since I joined the great team at <a href="http://bolstr.com">Bolstr</a> as Chief Technology Officer and I have to say, it's a job that gets even better with time!</p>
+<p>It&rsquo;s been nearly seven months since I joined the great team at <a href="http://bolstr.com">Bolstr</a> as Chief Technology Officer and I have to say, it&rsquo;s a job that gets even better with time!</p>
 
-<p>Since I started, I've done a bunch of things:</p>
+<p>Since I started, I&rsquo;ve done a bunch of things:</p>
 
 <ul>
 <li>Made significant improvements to <a href="http://bolstr.com">http://bolstr.com</a></li>
@@ -37,7 +37,7 @@
 </ul>
 
 
-<p>It's funny how time flies when you love what you do. I'm very excited about what we're doing and we have some amazing opportunities already lined up in the months ahead.</p>
+<p>It&rsquo;s funny how time flies when you love what you do. I&rsquo;m very excited about what we&rsquo;re doing and we have some amazing opportunities already lined up in the months ahead.</p>
 
 <p>Keep in touch if you want to see the financial and banking industries squirm when crowdfunding goes mainstream!</p>
 ]]></content>
@@ -48,12 +48,12 @@
     <link href="http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts/"/>
     <updated>2011-10-12T17:00:00-05:00</updated>
     <id>http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts</id>
-    <content type="html"><![CDATA[<p>I've been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the "Published Posts" section after my bio.</p>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the &ldquo;Published Posts&rdquo; section after my bio.</p>
 
-<p>Here are direct links to what is posted to date (I'll try to keep this updated).</p>
+<p>Here are direct links to what is posted to date (I&rsquo;ll try to keep this updated).</p>
 
 <ul>
-<li><a href="http://intridea.com/posts/its-not-enough-to-bash-in-heads-youve-got-to-bash-in-minds-with-zsh">It's not enough to bash in heads, you've got to bash in minds...with ZSH (May 18, 2011)</a></li>
+<li><a href="http://intridea.com/posts/its-not-enough-to-bash-in-heads-youve-got-to-bash-in-minds-with-zsh">It&rsquo;s not enough to bash in heads, you&rsquo;ve got to bash in minds&hellip;with ZSH (May 18, 2011)</a></li>
 <li><a href="http://intridea.com/posts/remote-cold-boot-a-mac">Remote Cold Boot a Mac (January 14, 2011)</a></li>
 <li><a href="http://intridea.com/posts/using-bind-locally-on-os-x-for-easy-access-to-subdomains">Using BIND locally on OS X for easy access to subdomains (June 2, 2010)</a></li>
 </ul>
