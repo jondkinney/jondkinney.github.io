@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Entrepreneurship | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.io/blog/categories/entrepreneurship/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T21:55:53-05:00</updated>
-  <id>http://jondkinney.github.io/</id>
+  <link href="http://jondkinney.github.com/jondkinney/blog/categories/entrepreneurship/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My New Gig at Bolstr]]></title>
-    <link href="http://jondkinney.github.io/blog/2012/07/07/my-new-gig-at-bolstr/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/07/07/my-new-gig-at-bolstr/"/>
     <updated>2012-07-07T01:28:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2012/07/07/my-new-gig-at-bolstr</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/07/07/my-new-gig-at-bolstr</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/bolstr_star.png" title="Bolstr Logo" ></p>
 
 <div style='height:8px;'>&nbsp;</div>
@@ -45,9 +45,9 @@
   
   <entry>
     <title type="html"><![CDATA[Intridea Blog Posts]]></title>
-    <link href="http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2011/10/12/intridea-blog-posts/"/>
     <updated>2011-10-12T17:00:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2011/10/12/intridea-blog-posts</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2011/10/12/intridea-blog-posts</id>
     <content type="html"><![CDATA[<p>I've been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the "Published Posts" section after my bio.</p>
 
 <p>Here are direct links to what is posted to date (I'll try to keep this updated).</p>

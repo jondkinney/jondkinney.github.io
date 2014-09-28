@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: SQL | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.io/blog/categories/sql/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T21:55:53-05:00</updated>
-  <id>http://jondkinney.github.io/</id>
+  <link href="http://jondkinney.github.com/jondkinney/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)]]></title>
-    <link href="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
     <updated>2010-03-06T16:53:00-06:00</updated>
-    <id>http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
     <content type="html"><![CDATA[<p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
 
 <!-- more -->

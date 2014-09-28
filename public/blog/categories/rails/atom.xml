@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rails | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.io/blog/categories/rails/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T21:55:53-05:00</updated>
-  <id>http://jondkinney.github.io/</id>
+  <link href="http://jondkinney.github.com/jondkinney/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[using PhantomJS (through poltergeist) and selenium in the same cucumber test suite]]></title>
-    <link href="http://jondkinney.github.io/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
     <updated>2012-10-10T12:51:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
     <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we're doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn't give me insight into any unexpected API changes breaking our app. Because we're reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like <code>sleep 3</code> in the step definitions.</p>
 
 <p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn't solve but I didn't want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
@@ -131,9 +131,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>
-    <link href="http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
     <updated>2012-07-08T03:56:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
     <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action's view.</p>
 
 <p>After a bit of Googling I found this code snippet:</p>
@@ -215,9 +215,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS]]></title>
-    <link href="http://jondkinney.github.io/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
     <updated>2010-04-21T16:43:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
     <content type="html"><![CDATA[<p>I've been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber... debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
 
 <p>The only problem was that the page didn't look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
@@ -294,9 +294,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)]]></title>
-    <link href="http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
     <updated>2010-03-06T16:53:00-06:00</updated>
-    <id>http://jondkinney.github.io/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
     <content type="html"><![CDATA[<p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
 
 <!-- more -->
@@ -431,9 +431,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Change Locale on OS X Snow Leopard for FreeTDS Functionality]]></title>
-    <link href="http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
     <updated>2009-11-23T15:29:00-06:00</updated>
-    <id>http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
     <content type="html"><![CDATA[<p>Recently I've been trying to get my new unibody macbook pro connecting to SQL Server 2005 with FreeTDS. I was following the <a href="http://www.metaskills.net/2009/9/5/the-ultimate-os-x-snow-leopard-stack-for-rails-development-x86_64-macports-ruby-1-8-1-9-sql-server-more">great guide</a> from Ken Collins, author of the <a href="http://github.com/rails-sqlserver/2000-2005-adapter">rails-sqlserver activerecord adapter</a> that I use but no matter what configuration settings I edited I couldn't get my machine to connect to the SQL Server.</p>
 
 <!-- more -->
