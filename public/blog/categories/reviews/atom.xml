@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: reviews | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.io/blog/categories/reviews/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.io/"/>
-  <updated>2014-09-27T22:51:10-05:00</updated>
-  <id>http://jondkinney.github.io/</id>
+  <link href="http://jonkinney.com/blog/categories/reviews/atom.xml" rel="self"/>
+  <link href="http://jonkinney.com/"/>
+  <updated>2014-09-27T22:56:38-05:00</updated>
+  <id>http://jonkinney.com/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Review of Udmey course: BDD and TDD in Ruby by Roy Osherove]]></title>
-    <link href="http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/"/>
+    <link href="http://jonkinney.com/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/"/>
     <updated>2013-09-23T12:01:00-05:00</updated>
-    <id>http://jondkinney.github.io/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove</id>
+    <id>http://jonkinney.com/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove</id>
     <content type="html"><![CDATA[<p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I&rsquo;m not sure if this was an endorsement by Avdi, or more of a &ldquo;oh hey, there&rsquo;s this thing over here which might be interesting&rdquo; type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>&hellip; people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
 
 <p>As an experienced developer, I&rsquo;d give this course 3.5 stars if it was an option, but I rounded up because if you don&rsquo;t know anything about unit testing then this course is a great overview.</p>
