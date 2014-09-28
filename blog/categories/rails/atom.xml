@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | self.extended(thoughts)]]></title>
+  <link href="http://jonkinney.com/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://jonkinney.com/"/>
+  <updated>2014-09-27T22:56:38-05:00</updated>
+  <id>http://jonkinney.com/</id>
+  <author>
+    <name><![CDATA[Jon Kinney]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[using PhantomJS (through poltergeist) and selenium in the same cucumber test suite]]></title>
+    <link href="http://jonkinney.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
+    <updated>2012-10-10T12:51:00-05:00</updated>
+    <id>http://jonkinney.com/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
+    <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we&rsquo;re doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn&rsquo;t give me insight into any unexpected API changes breaking our app. Because we&rsquo;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like <code>sleep 3</code> in the step definitions.</p>
+
+<p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&rsquo;t solve but I didn&rsquo;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
+
+<!-- more -->
+
+
+<p>The rest of this post assumes you <a href="https://github.com/jonleighton/poltergeist">already have Poltergeist installed</a>.</p>
+
+<p>Inside of <code>features/support/env.rb</code> add the following hooks:</p>
+
+<pre><code class="ruby"># Hooks
+Before('@docusign') do |scenario|
+  Capybara.current_driver = :selenium
+end
+
+After('@docusign') do |scenario|
+  Capybara.use_default_driver
+end
+</code></pre>
+
+<p>Additionally, add:</p>
+
+<pre><code class="ruby">Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :poltergeist
+</code></pre>
+
+<p>&hellip;which I actually have in my <code>Spork.each_run do</code> block</p>
+
+<p>Now by default any stories tagged with just <code>@javascript</code> will run through PhantomJS. If you want to use Selenium for a given test then you need to tag it with BOTH <code>@javascript</code> AND <code>@docusign</code>. Perhaps naming the tag <code>@selenium</code> would be more appropriate, but I only plan to use Selenium for testing DocuSign stories so this works for me for now. Note: I&rsquo;m not sure why the <code>@javascript</code> tag is required, but it didn&rsquo;t work for me unless I had both tags specified. I&rsquo;m guessing <code>@javacript</code> sets up more than just the driver, but if anyone has more of an explanation I&rsquo;d love to know.</p>
+
+<p>In an effort to help other devs perhaps more quickly acceptance test DocuSign with Cucumber here are the step definitions that I came up with for our use case.</p>
+
+<pre><code class="ruby">When /^I sign the docusign document as an "(.+)" and click finish$/ do |user_type|
+  sleep 3
+
+  within_frame("docusign_iframe") do
+    # Docusign disclaimer (review button)
+    click_button 'ds_hldrBdy_dlgStart_startReview_btnInline'
+
+    # Sign
+    page.find_button('Sign Here').click
+
+    # Adopt and sign (might not always need to do this step if the user has
+    # already adopted his or her signature. I would have though we'd have to
+    # adopt each time in the testing world but it doesn't seem to be that way)
+    if page.has_css?('#ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline')
+      click_button 'ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline'
+    end
+
+    if user_type == 'attorney'
+      # DocuSign gives us .FirstPage as a class on the first page and just
+      # .Page for each page after that, so this really only works if your first
+      # 'Sign Here' is on the first page and there is only one subsequent one
+      # within all of the rest of the .Page pages. Still, fits this use case
+      # alright as long as the engagement letters in the test env fit on one
+      # page so the attorney disclaimer bit is always on page two.
+      within(:xpath, "//div[@class='Page' and @class != 'FirstPage']") do
+        click_button 'Sign Here'
+      end
+    end
+
+    # Confirm signing
+    click_button 'ds_hldrBdy_navnexttext_btnInline'
+  end
+
+  sleep 3
+end
+
+
+When /^I choose to sign the docusign document later$/ do
+  sleep 3
+
+  within_frame("docusign_iframe") do
+    # Finish Later
+    click_button 'ds_hldrBdy_dlgStart_btnIntroSignLater_btnInline'
+  end
+
+  sleep 3
+end
+
+
+When /^I decline to sign the docusign document$/ do
+  sleep 3
+
+  within_frame("docusign_iframe") do
+    # Decline to Sign
+    click_button 'ds_hldrBdy_dlgStart_btnIntroDecline_btnInline'
+
+    # Decline confirmation
+    click_button 'ds_hldrBdy_dlgDecline_btnDecline_btnInline'
+  end
+
+  sleep 3
+end
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>
+    <link href="http://jonkinney.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
+    <updated>2012-07-08T03:56:00-05:00</updated>
+    <id>http://jonkinney.com/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
+    <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&rsquo;s view.</p>
+
+<p>After a bit of Googling I found this code snippet:</p>
+
+<pre><code class="html">&lt;html&gt;
+  &lt;body&gt;
+    &lt;script type='text/javascript' charset='utf-8'&gt;
+      parent.location.href = '/myloc';
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Which can be implemented in a Rails controller like so:</p>
+
+<pre><code class="ruby">render text: "&lt;html&gt;&lt;body&gt;&lt;script type='text/javascript' charset='utf-8'&gt;window.parent.document.location.href = '/myloc';&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;", content_type: :html
+</code></pre>
+
+<!-- more -->
+
+
+<p>The above code snippet takes the place of the traditional <code>redirect_to</code>. The beauty of this solution is that after the signer interacts with the document and completes his or her signing ceremony, the app will act just like we had served the embedded signing iframe code directly from our own view. There isn&rsquo;t a button to click that says &ldquo;go to parent&rdquo; or &ldquo;back to home&rdquo; or anything, it just works and redirects appropriately when the user is done interacting with the iframe.</p>
+
+<p>I created a little utility method in the <a href="https://github.com/j2fly/docusign_rest/blob/master/lib/docusign_rest/utility.rb#L49">docusign_rest</a> gem to abstract the JS portion and make it more consise. See lines 23 and 26 in the example controller code below:</p>
+
+<pre><code class="ruby    ">class SomeController &lt; ApplicationController
+
+  # the view corresponding to this action has the iframe in it with the
+  # @url as it's src. @envelope_response is populated from either:
+  # @envelope_response = client.create_envelope_from_document
+  # or
+  # @envelope_response = client.create_envelope_from_template
+  def embedded_signing
+    client = DocusignRest::Client.new
+    @url = client.get_recipient_view(
+      envelope_id: @envelope_response["envelopeId"],
+      name: current_user.display_name,
+      email: current_user.email,
+      return_url: "http://localhost:3000/docusign_response"
+    )
+  end
+
+  def docusign_response
+    utility = DocusignRest::Utility.new
+
+    if params[:event] == "signing_complete"
+      flash[:notice] = "Thanks! Successfully signed"
+      render :text =&gt; utility.breakout_path(some_path), content_type: :html
+    else
+      flash[:notice] = "You chose not to sign the document."
+      render :text =&gt; utility.breakout_path(some_other_path), content_type: :html
+    end
+  end
+
+end
+</code></pre>
+
+<p>Here is the method in the Utility class of the DocuSign module that handles embedding the path in the HTML snippet.</p>
+
+<pre><code class="ruby">def breakout_path(path)
+  "&lt;html&gt;&lt;body&gt;&lt;script type='text/javascript' charset='utf-8'&gt;parent.location.href = '#{path}';&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"
+end
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS]]></title>
+    <link href="http://jonkinney.com/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
+    <updated>2010-04-21T16:43:00-05:00</updated>
+    <id>http://jonkinney.com/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber&hellip; debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
+
+<p>The only problem was that the page didn&rsquo;t look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
+
+<!-- more -->
+
+
+<p>After playing around with the idea of modifying my actual CSS files temporarily and then switching them back (and realizing that solution was full of fail) I settled on a way strip out all links to all css files and then embed the actual CSS inline in a style tag inside the page&rsquo;s head tag. This way I can more easily and permanently modify the css background image paths all in a self contained HTML file. I did this by looping through a specified directory on the file system that contains CSS files and looking for any stylesheets that the user specifies and in the order that the user specifies so that the hierarchy would remain in tact when the styles were all embedded inline.</p>
+
+<p>Since Cucumber&rsquo;s env.rb file is auto-generated it&rsquo;s a bad place to store customized configuration options. Instead I encourage you to do what Cucumber says at the top of the env.rb file and put it somewhere else. From env.rb: &ldquo;Cucumber will automatically load all features/<em>*/</em>.rb files&rdquo;</p>
+
+<p>I chose to put this code in a file under the features/support directory called: open_browser_on_fail.rb. If it&rsquo;s sitting next to the env.rb file itself then you have the new file in the right place.</p>
+
+<p>Place the following code in that file and you&rsquo;ll be good to go!</p>
+
+<pre><code class="ruby">After do |scenario|  
+  if scenario.status == :failed
+    save_and_open_page
+  end  
+end
+
+module Webrat
+  module SaveAndOpenPage
+    def save_and_open_page
+      return unless File.exist?(Webrat.configuration.saved_pages_dir)
+
+      filename = "#{Webrat.configuration.saved_pages_dir}/webrat-#{Time.now.to_i}.html"
+
+      File.open(filename, "w") do |f|
+        f.write rewrite_public_file_references(response_body)
+      end
+
+      open_in_browser(filename)
+    end
+
+    def rewrite_public_file_references(response_html)
+      # remove conditional comments/ie stylesheets
+      response_html.gsub!(/&lt;!--\[.*?\]--&gt;/im, '')
+      # remove other stylesheets
+      response_html.gsub!(/&lt;link href=(.*)\/&gt;/i, '')
+
+      response_html.gsub!(/("|')\/(stylesheets|images|javascripts)/, '\1' + '../public' + '/\2')
+
+      response_html.gsub!(/&lt;\/head&gt;/i, "&lt;style&gt;#{rewrite_public_stylesheet_image_references('\/images', '../public')}&lt;\/style&gt;\n&lt;\/head&gt;")
+    end
+
+    def rewrite_public_stylesheet_image_references(regex, server_url)
+      dir = "/Users/jkinney/Sites/Rails/Client/new_rails_app/public/stylesheets/"
+
+      stylesheets = %w(reset admin main js_menu css_tabs firefox)
+
+      css = ""
+      stylesheets.each do |file|
+        # puts file
+        lines = []
+        File.open(dir+file+".css", "r"){|f| lines = f.readlines }
+        lines = lines.inject([]){|l, line| l &lt;&lt; line.gsub(/#{regex}/i, "#{server_url}/images")}
+        css &lt;&lt; lines.to_s
+      end
+      css
+    end
+
+  end
+end
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)]]></title>
+    <link href="http://jonkinney.com/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
+    <updated>2010-03-06T16:53:00-06:00</updated>
+    <id>http://jonkinney.com/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
+    <content type="html"><![CDATA[<p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
+
+<!-- more -->
+
+
+<p>Writing the association code yourself required some array math and it was hard to remember what order to do things in and how to exactly format it. I had to copy and paste the code in from a snippet library every time. Not only that but it was ugly and a pain in the butt to maintain, and really felt like it should be handled in the core Rails framework. It looked like this (at least my version):</p>
+
+<pre><code class="ruby">#This is from an old app that managed a relationship between MetaKeywords and Pages
+
+def manage_meta_keyword_associations(new_meta_keywords)
+  current_meta_keywords = MetaKeywordPage.find_all_by_page_id(self.id).collect{|mkp| mkp.meta_keyword_id.to_s}
+
+  meta_keywords_to_add = new_meta_keywords - current_meta_keywords
+  for meta_keyword in meta_keywords_to_add
+    MetaKeywordPage.create(:meta_keyword_id =&gt; meta_keyword, :page_id =&gt; self.id) 
+  end
+
+  meta_keywords_to_remove = current_meta_keywords - new_meta_keywords
+  for meta_keyword in meta_keywords_to_remove
+    MetaKeywordPage.find_by_meta_keyword_id_and_page_id(meta_keyword, self.id).destroy
+  end
+end
+</code></pre>
+
+<p>Here&rsquo;s <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn&rsquo;t news in and of itself, it&rsquo;s important if you&rsquo;re working with a legacy app and you try to convert a HABTM to a HM:T and can&rsquo;t figure out why it&rsquo;s not working. That&rsquo;s exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I&rsquo;m working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
+
+<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn&rsquo;t sure how to go about doing this. I&rsquo;m also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use &ldquo;change scripts&rdquo; instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
+
+<p>I modified the table in our staging environment with SQL Management Studio, I added an &ldquo;id&rdquo; column, and both &ldquo;updated_at&rdquo; and &ldquo;created_at&rdquo; timestamp columns and then generated a change script. Note: it&rsquo;s important that when in design mode that you click the &ldquo;generate change script&rdquo; button before saving the table, otherwise if you save the table before generating the change script you can&rsquo;t click the change script button anymore&hellip; it gets grayed out.</p>
+
+<p>Initially I tried just executing the whole change script directly in an execute block inside of self.up, which would look something like this:</p>
+
+<pre><code class="ruby">class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
+  def self.up
+    execute "change script here"
+  end
+end
+</code></pre>
+
+<p>Unfortunately that didn&rsquo;t work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new &ldquo;execute&rdquo; call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn&rsquo;t screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they&rsquo;re in the change script as &ldquo;BEGIN TRANSACTION&rdquo;, we just can&rsquo;t execute that code directly in our migration which is why you don&rsquo;t see them in the final code example.</p>
+
+<p>For more discussion on transactions in Rails look at this <a href="http://stackoverflow.com/questions/686852/rolling-back-a-failed-rails-migration">stackoverflow thread</a>.</p>
+
+<pre><code class="ruby">#A transaction in Active Record
+ActiveRecord::Base.transaction do
+  execute "update users set enabled = 1 where name like 'batman'"
+end
+</code></pre>
+
+<p>Because we want to retain all the data that exists in the join table and we&rsquo;re adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
+
+<pre><code class="ruby">class ModifyLocationsUsersToBeHmt &lt; ActiveRecord::Migration
+  def self.up
+    ActiveRecord::Base.transaction do
+      execute "
+      CREATE TABLE dbo.Tmp_locations_users
+        (
+        id int NOT NULL IDENTITY (1, 1),
+        location_id int NOT NULL,
+        user_id int NOT NULL,
+        created_at datetime NULL,
+        updated_at datetime NULL
+        ) ON [PRIMARY]
+      "
+      execute "SET IDENTITY_INSERT dbo.Tmp_locations_users OFF"
+
+      execute "IF EXISTS(SELECT * FROM dbo.locations_users)
+         EXEC('INSERT INTO dbo.Tmp_locations_users (location_id, user_id)
+          SELECT location_id, user_id FROM dbo.locations_users WITH (HOLDLOCK TABLOCKX)')"
+      execute "DROP TABLE dbo.locations_users"
+      execute "EXECUTE sp_rename N'dbo.Tmp_locations_users', N'locations_users', 'OBJECT'"
+
+      execute"ALTER TABLE dbo.locations_users ADD CONSTRAINT
+        PK_locations_users PRIMARY KEY CLUSTERED 
+        (
+        id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
+
+
+      execute "CREATE NONCLUSTERED INDEX index_locations_users_on_location_id ON dbo.locations_users
+        (
+        location_id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]"
+
+      execute = "CREATE NONCLUSTERED INDEX index_locations_users_on_user_id ON dbo.locations_users
+        (
+        user_id
+        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+      "
+
+      execute "update locations_users set created_at = '1-1-2010'"
+      execute "update locations_users set updated_at = '1-1-2010'"
+
+      add_column :locations_users, :position, :integer
+    end
+  end
+
+  def self.down
+    ActiveRecord::Base.transaction do
+      remove_column :locations_users, :position
+      remove_column :locations_users, :id
+      remove_column :locations_users, :created_at
+      remove_column :locations_users, :updated_at
+    end
+  end
+end
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Change Locale on OS X Snow Leopard for FreeTDS Functionality]]></title>
+    <link href="http://jonkinney.com/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
+    <updated>2009-11-23T15:29:00-06:00</updated>
+    <id>http://jonkinney.com/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
+    <content type="html"><![CDATA[<p>Recently I&rsquo;ve been trying to get my new unibody macbook pro connecting to SQL Server 2005 with FreeTDS. I was following the <a href="http://www.metaskills.net/2009/9/5/the-ultimate-os-x-snow-leopard-stack-for-rails-development-x86_64-macports-ruby-1-8-1-9-sql-server-more">great guide</a> from Ken Collins, author of the <a href="http://github.com/rails-sqlserver/2000-2005-adapter">rails-sqlserver activerecord adapter</a> that I use but no matter what configuration settings I edited I couldn&rsquo;t get my machine to connect to the SQL Server.</p>
+
+<!-- more -->
+
+
+<p>When checking the event viewer on the Windows Server 2k8 box I received the following error:</p>
+
+<pre><code class="ruby">"The login packet used to open the connection is structurally invalid; 
+the connection has been closed. 
+Please contact the vendor of the client library."
+</code></pre>
+
+<p>I was pretty sure it had to do with my locale because if that was incorrect it would make sense that the packets might be structurally invalid. My locale was set to <code>en_US.us-ascii</code> the default setting apparently after a clean OS X Snow Leopard install. The problem was that I couldn&rsquo;t figure out how to change it. Then I ran across <a href="http://lists.ibiblio.org/pipermail/freetds/2007q4/022436.html">this archived post</a> and I was able to temporarily change my locale by typing:</p>
+
+<pre><code class="bash">export LC_ALL=en_US.UTF-8
+</code></pre>
+
+<p>I was able to verify my locale settings by typing <code>locale</code> in a terminal window which yielded the following:</p>
+
+<pre><code class="bash">LANG=
+LC_COLLATE="en_US.UTF-8"
+LC_CTYPE="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_ALL="en_US.UTF-8"
+</code></pre>
+
+<p>The problem is if I opened a new terminal window my locale was back to the default ascii junk. To make this change permanent I simply had to edit my ~/.profile and add the export statement that we set earlier to the bottom of the file.</p>
+
+<pre><code class="bash">export LC_ALL=en_US.UTF-8
+</code></pre>
+
+<p>Now when I open a new window and type <code>locale</code> it says <code>en_US.UTF-8</code> for everything. At this point I was able to continue following Ken&rsquo;s guide for testing the TSQL commands and getting ruby-dbi and everything else wired up.</p>
+]]></content>
+  </entry>
+  
+</feed>

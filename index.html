@@ -1,1 +1,633 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>self.extended(thoughts)</title>
+  <meta name="author" content="Jon Kinney">
+
+  
+  <meta name="description" content="Avdi Grimm recently tweeted about a new Udmey course TDD and BDD in Ruby by Roy Osherove. I&rsquo;m not sure if this was an endorsement by Avdi, or &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jonkinney.com">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="self.extended(thoughts)" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10775549-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">self.extended(thoughts)</a></h1>
+  
+    <h2>Code, Entrepreneurship, Music, Life</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jonkinney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/studio">Studio</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-09-23T12:01:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>12:01 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I&rsquo;m not sure if this was an endorsement by Avdi, or more of a &ldquo;oh hey, there&rsquo;s this thing over here which might be interesting&rdquo; type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>&hellip; people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
+
+<p>As an experienced developer, I&rsquo;d give this course 3.5 stars if it was an option, but I rounded up because if you don&rsquo;t know anything about unit testing then this course is a great overview.</p>
+
+<p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don&rsquo;t complain every time a method on the object under test is called that you didn&rsquo;t explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-11-05T16:04:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>4:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last weekend I was fortunate enough to be invited to speak at <a href="http://chippewavalleycodecamp.com/">Chippewa Valley Code Camp - 2012</a>. CVCC is a free, 1-day, 4-track conference in Eau Claire, WI that attracts some of the brightest developers in Wisconsin and Minnesota.</p>
+
+<p>This year there were over 120 attendees and some 20 speakers presenting on things ranging from <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/76/Default.aspx">running a massive Java web application at scale</a> to <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/90/Default.aspx">Single Page Applications with JavaScript</a>. I had an awesome time meeting new people and sharing a little bit about how I run the technical and development side of Bolstr. Specifically, I talked about how we collaborate on work-flows for new features through user stories with <a href="http://cukes.info/">Cucumber</a> as we build out our Ruby on Rails web application at <a href="http://bolstr.com">Bolstr.com</a>.</p>
+
+<p>The slides from my talk &ldquo;How to be a One-Man Coding Army for a Startup&rdquo; are <a href="http://jonkinney.com/cvcc-talk-2012">available online</a>, and if you attended the session I&rsquo;d sure love it if you could leave some feedback at <a href="http://speakerrate.com/talks/18321-how-to-be-a-one-man-coding-army-for-a-startup">speakerrate</a> for me.</p>
+
+<p>Also, a big shout out to <a href="http://napcs.com/">Brian Hogan</a> for encouraging me to submit a talk and even suggesting the name. Thanks Brian!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-10-10T12:51:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:51 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we&rsquo;re doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn&rsquo;t give me insight into any unexpected API changes breaking our app. Because we&rsquo;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like <code>sleep 3</code> in the step definitions.</p>
+
+<p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&rsquo;t solve but I didn&rsquo;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/">Wiring Up LittleSnapper to CloudApp</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-10-01T09:28:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2012</span></span> <span class='time'>9:28 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
+
+<p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn&rsquo;t want to wait any longer so I started down the path of solving the problem myself.</p>
+
+<p>Here&rsquo;s how it works:</p>
+
+<ul>
+<li>Configure LittleSnapper to use SFTP to &ldquo;publish&rdquo; locally to a folder of your choosing.</li>
+<li>Create a new Automator &ldquo;Folder Action&rdquo; which runs an AppleScript when the contents of the folder changes.</li>
+<li>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">Breaking Out of an Iframe From a Rails Controller</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-07-08T03:56:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>3:56 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&rsquo;s view.</p>
+
+<p>After a bit of Googling I found this code snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">charset=</span><span class="s">&#39;utf-8&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nx">parent</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s1">&#39;/myloc&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which can be implemented in a Rails controller like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">render</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;window.parent.document.location.href = &#39;/myloc&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/07/my-new-gig-at-bolstr/">My New Gig at Bolstr</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-07-07T01:28:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>1:28 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="left" src="/images/bolstr_star.png" title="Bolstr Logo" ></p>
+
+<div style='height:8px;'>&nbsp;</div>
+
+
+<p>It&rsquo;s been nearly seven months since I joined the great team at <a href="http://bolstr.com">Bolstr</a> as Chief Technology Officer and I have to say, it&rsquo;s a job that gets even better with time!</p>
+
+<p>Since I started, I&rsquo;ve done a bunch of things:</p>
+
+<ul>
+<li>Made significant improvements to <a href="http://bolstr.com">http://bolstr.com</a></li>
+<li>Added a ton of functionality to our main application and improved test coverage / speed</li>
+<li>Written a <a href="https://github.com/j2fly/docusign_rest">robust wrapper gem</a> to the Docusign REST API and implemented their embedded e-signature solution into our main application</li>
+<li>Switched to using <a href="https://gist.github.com/2040114">Tmux and Console Vim</a> after a brief affair with Sublime Text 2</li>
+<li>Started a <a href="http://greenbayrug.com">Ruby User Group</a> in Green Bay, WI</li>
+<li>Completed <a href="http://rubyoffrails.com">several</a> advanced Ruby <a href="http://pragmaticstudio.com/ruby">courses</a> to hone my code slinging skills</li>
+</ul>
+
+
+<p>It&rsquo;s funny how time flies when you love what you do. I&rsquo;m very excited about what we&rsquo;re doing and we have some amazing opportunities already lined up in the months ahead.</p>
+
+<p>Keep in touch if you want to see the financial and banking industries squirm when crowdfunding goes mainstream!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/12/intridea-blog-posts/">Intridea Blog Posts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2011-10-12T17:00:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>5:00 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the &ldquo;Published Posts&rdquo; section after my bio.</p>
+
+<p>Here are direct links to what is posted to date (I&rsquo;ll try to keep this updated).</p>
+
+<ul>
+<li><a href="http://intridea.com/posts/its-not-enough-to-bash-in-heads-youve-got-to-bash-in-minds-with-zsh">It&rsquo;s not enough to bash in heads, you&rsquo;ve got to bash in minds&hellip;with ZSH (May 18, 2011)</a></li>
+<li><a href="http://intridea.com/posts/remote-cold-boot-a-mac">Remote Cold Boot a Mac (January 14, 2011)</a></li>
+<li><a href="http://intridea.com/posts/using-bind-locally-on-os-x-for-easy-access-to-subdomains">Using BIND locally on OS X for easy access to subdomains (June 2, 2010)</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/">Using Save_and_open_page to Open Failed Cucumber Scenerios in a Browser With Images and CSS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-04-21T16:43:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2010</span></span> <span class='time'>4:43 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber&hellip; debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
+
+<p>The only problem was that the page didn&rsquo;t look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/">Easily Convert a Has_and_belongs_to_many to a Has_many_through in Rails (for: MS SQL Server)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-03-06T16:53:00-06:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>4:53 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/">Bluepill Init Script for Monitoring Delayed Job on Linux openSUSE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-02-01T16:08:00-06:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2010</span></span> <span class='time'>4:08 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently moved a long running request in my application to delayed job (<a href="http://github.com/collectiveidea/delayed_job">the collectiveidea fork</a>) and it went really well. However, after some time the delayed job process died and my users couldn&rsquo;t use an essential part of the application. I knew it was time for a process monitor. I probably should have put one in to begin with, but I was new to delayed job (really to background processing in general) and the though hadn&rsquo;t crossed my mind.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/2">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Husband & Father, Rails Dev & Chief Architect at <a href='http://fasteragile.com'>FasterAgile</a>, Sound Engineer & A Cappella Producer, Hockey Player, Movie Geek</p>
+  <img src='/images/me100x100.png' />
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("jondkinney", 3, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/jondkinney" class="twitter-follow-button" data-show-count="false">Follow @jondkinney</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jondkinney',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jon Kinney
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jonkinney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

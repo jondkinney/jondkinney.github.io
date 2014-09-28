@@ -1,0 +1,98 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+body {
+  line-height: 1;
+	color: black;
+	background: white;
+  font-size: 62.5%; /*Eric Meyer defines this at the top level with font-size:100%, but I want to use EM for text size, so resetting to this percentage will make EM map to PX better*/
+	font-family:helvetica, arial, sans-serif; /*always define a generic font family at the end as a catch all*/
+}
+ol, ul {
+	list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
+
+
+/*JON's ADDITIONS TO THE ERIC MEYER CSS RESET*/
+.checkbox{
+ position:relative;
+ top:3px; 
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 12px;
+}
+
+h1 {font-size: 2em;padding:0 0 12px 0;white-space:nowrap;}
+h2 {font-size: 1.5em;padding:0 0 12px 0;white-space:nowrap;}
+h3 {font-size: 1.25em;padding:0 0 12px 0;white-space:nowrap;}
+h4 {font-size: 1em;padding:0 0 12px 0;}
+h5 {font-size: .83em;padding:0 0 12px 0;}
+h6 {font-size: .75em;padding:0 0 12px 0;}
+
+INPUT, SELECT, TH, TD {font-size:1em}
+
+p{
+ line-height:1.5em;
+ margin:0 0 1em 0; 
+}
+
+a{ 
+	color: blue;
+	text-decoration:none;
+	padding:3px 4px 2px 3px;
+}
+
+a:visited{ 
+  color: #666; 
+}
+
+a:hover{ 
+	color: purple; 
+  background: #c0c0c0;
+	text-decoration: underline;
+}
+
+a img{
+  background:none;
+  border:0; 
+}
+
+a.img:hover {background-color: transparent} 
+/*END JON ADDITIONS*/

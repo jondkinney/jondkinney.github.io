@@ -1,0 +1,46 @@
+    /*1*/
+    label {
+        color:#1A5A7F;
+        display: block;
+        float: left;
+        font-size:1.2em;
+        font-weight:bold;
+        margin-right: 0.5em;
+        padding:5px 0 0 0;
+        text-align: right;
+        width: 4em; /* This needs to be as wide as your widest label */
+    }
+
+    .submit input {
+        margin-left: 4.5em; /* needs to be as wide as the label and then a bit wider for some whitespace */
+    }
+    
+    /*2*/
+    fieldset {
+        border: 1px solid #ccc;
+        padding:10px 0 10px 0;
+        width: 35em;
+    }
+
+    legend {
+        background: #EDF7FC;
+        border: 1px solid #AEDBF0;
+        color: #474747;
+        margin:0 0 0px 10px;
+        padding: 6px 8px;
+    }
+    
+    /*3*/
+    input {
+        background: #f5f5f5;
+        border:1px solid #dedede;
+        color: #474747;
+        font-size:16px;
+        height:24px;
+        padding:3px 0 0 0;
+        width:20em;
+    }
+    
+    .submit{
+      margin-left:5.4em;
+    }

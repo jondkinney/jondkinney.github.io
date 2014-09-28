@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Wiring Up LittleSnapper to CloudApp - self.extended(thoughts)</title>
+  <meta name="author" content="Jon Kinney">
+
+  
+  <meta name="description" content="I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jonkinney.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="self.extended(thoughts)" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10775549-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">self.extended(thoughts)</a></h1>
+  
+    <h2>Code, Entrepreneurship, Music, Life</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jonkinney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/studio">Studio</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Wiring Up LittleSnapper to CloudApp</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-10-01T09:28:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2012</span></span> <span class='time'>9:28 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
+
+<p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn&rsquo;t want to wait any longer so I started down the path of solving the problem myself.</p>
+
+<p>Here&rsquo;s how it works:</p>
+
+<ul>
+<li>Configure LittleSnapper to use SFTP to &ldquo;publish&rdquo; locally to a folder of your choosing.</li>
+<li>Create a new Automator &ldquo;Folder Action&rdquo; which runs an AppleScript when the contents of the folder changes.</li>
+<li>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Details with Code and Screenshots</h2>
+
+<ol>
+<li><p>Configure LittleSnapper&rsquo;s publishing preferences to include a location local to your machine.</p>
+
+<ul>
+<li><p>Use your Mac username and password when setting up this connection. The &ldquo;Server&rdquo; is whatever shows up when you open System Preferences and choose &ldquo;Sharing&rdquo;. At the top you&rsquo;ll see a note stating: &ldquo;Computers on your local network can access your computer at: MBPr.local&rdquo;. Use the full name including .local shown there (which will likely be different than mine).</p></li>
+<li><p>The file path I&rsquo;m using is: <code>/Users/jon/Pictures/ScreenShots/LittleSnapper</code>.</p>
+
+<ul>
+<li>Note: I used TinkerTool to change the default location where OS X stores screenshots to ~/Pictures/ScreenShots so using a subdirectory of that folder seemes optimal.</li>
+</ul>
+</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1G3P2f1z1Q0t1I1Z2C07/Screen%20Shot%202012-10-01%20at%209.40.07%20AM.png" alt="LittleSnapper Publishing Preferences" /></p></li>
+<li><p>Create a new Automator &ldquo;Folder Action&rdquo; which runs an AppleScript when the contents of a folder you specify changes.</p>
+
+<p> <img src="http://f.cl.ly/items/0X1u2S2h43160Z2n0h0Q/Screen%20Shot%202012-10-01%20at%2010.21.50%20AM.png" alt="New Automator Folder Action" /></p>
+
+<p> Filter the available Actions by searching for &ldquo;Run AppleScript&rdquo;, then drag that action to your workflow:</p>
+
+<p> <img src="http://f.cl.ly/items/3D0G1g0H2K1O222M2t3A/Screen%20Shot%202012-10-01%20at%2010.25.35%20AM.png" alt="Drag Run AppleScript to Workflow" /></p>
+
+<p> Set the folder action to the same folder you chose in the above steps and paste in (and customize if necessary) the provided AppleScript</p>
+
+<p> <img src="http://f.cl.ly/items/3o1Q2j0K2h0P0l0p2j1a/Screen%20Shot%202012-10-01%20at%2010.26.56%20AM.png" alt="Configure AppleScript" /></p>
+
+<p> AppleScript for the Automator Action:</p>
+
+<pre><code> set cloudappSlug to do shell script "cd /Users/jon/Pictures/ScreenShots/scripts; /Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby cloud.rb"
+ set the clipboard to cloudappSlug
+ do shell script "afplay /System/Library/Sounds/Glass.aiff"
+</code></pre>
+
+<p> <strong>Note:</strong> It&rsquo;s necessary to use the full path to the version of Ruby that has the cloudapp_api gem installed under it. Type <code>which ruby</code> to show the full path to your currently executable Ruby and be sure to <code>gem install cloudapp_api</code> or <code>sudo gem install cloudapp_api</code> under that same Ruby version. Sudo is only required if you&rsquo;re not using a Ruby version management solution and are using the default system Ruby that shipped with OS X. You can also see in the above AppleScript that we change into the folder that contains the Ruby script before calling it. Be sure to customize the script to change into the folder where you place the Ruby script if it&rsquo;s different than mine.</p>
+
+<ul>
+<li>After saving the Automator Action (I chose the name &ldquo;Watch LittleSnapper&rdquo;), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup&hellip;</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1N06122b3x0d2q1q411Q/Screen%20Shot%202012-10-01%20at%2010.55.48%20AM.png" alt="Finder Folder Action Menu" /></p>
+
+<ul>
+<li>Cancel the pop up dialog and verify that your Automator Folder Action is there and checked (enabled).</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/2d1z1l3G1o1S2p1K3w3h/Screen%20Shot%202012-10-01%20at%2010.57.05%20AM.png" alt="Folder Action Worked" /></p></li>
+<li><p>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</p>
+
+<ul>
+<li><p>Place the below Ruby script somewhere on your machine (the AppleScript I provide assumes it&rsquo;s in ~/Pictures/ScreenShots/scripts/cloud.rb).</p></li>
+<li><p>Note that the first line of the Ruby script also references the full path to the version of Ruby you want to use. It will likely be different than what I show here. It should be customized the same as it was in the AppleScript above.</p></li>
+<li><p>You can also see there is authentication to the CloudApp servers necessary on line 7. Customize the script with your CloudApp username and password here.</p></li>
+</ul>
+</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;cloudapp_api&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># customize me please</span>
+</span><span class='line'><span class="no">CloudApp</span><span class="o">.</span><span class="n">authenticate</span> <span class="s2">&quot;your_email_here&quot;</span><span class="p">,</span> <span class="s2">&quot;your_password_here&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pasteboard_file</span> <span class="o">=</span> <span class="sb">`cd /Users/jon/Pictures/ScreenShots/LittleSnapper; ls -td * | head -1`</span>
+</span><span class='line'><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;/Users/jon/Pictures/ScreenShots/LittleSnapper/</span><span class="si">#{</span><span class="n">pasteboard_file</span><span class="o">.</span><span class="n">chomp</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@drop</span> <span class="o">=</span> <span class="no">CloudApp</span><span class="o">::</span><span class="no">Drop</span><span class="o">.</span><span class="n">create</span> <span class="ss">:upload</span><span class="p">,</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="n">file</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="vi">@drop</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="s2">&quot;url&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Make sure the ruby script is executable:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> ~/Pictures/ScreenShots/scripts
+</span><span class='line'>chmod 755 cloud.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Wrapping Up</h3>
+
+<p>All that&rsquo;s left to do is try it out!</p>
+
+<ul>
+<li>Take a screenshot with LittleSnapper and publish it to local folder we setup in step 1</li>
+<li>Wait for the ding</li>
+<li>Paste the new CloudApp slug to the screen shot you just uploaded!</li>
+</ul>
+
+
+<p>If this all seems like a bit of a pain for something so simple, you&rsquo;re right&hellip; it is. And for the vast majority of cases I still do what I did with Skitch which is to just take a screenshot of my annotated screenshot with the normal Cmd+Shift+4 shortcut which will automatically upload to CloudApp. However, LittleSnapper can also take screenshots of entire web pages (even the portion that doesn&rsquo;t fit on your screen!) and sometimes I want to upload those screenshots to CloudApp too. Hopefully the Realmac team will just start providing CloudApp support natively so folks won&rsquo;t have to use crazy workarounds like this!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jon Kinney</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2012-10-01T09:28:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2012</span></span> <span class='time'>9:28 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/os-x/'>os x</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jonkinney.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/" data-via="jondkinney" data-counturl="http://jonkinney.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/" title="Previous Post: Breaking Out of an iframe From a Rails Controller">&laquo; Breaking Out of an iframe From a Rails Controller</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/" title="Next Post: using PhantomJS (through poltergeist) and selenium in the same cucumber test suite">using PhantomJS (through poltergeist) and selenium in the same cucumber test suite &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Husband & Father, Rails Dev & Chief Architect at <a href='http://fasteragile.com'>FasterAgile</a>, Sound Engineer & A Cappella Producer, Hockey Player, Movie Geek</p>
+  <img src='/images/me100x100.png' />
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("jondkinney", 3, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/jondkinney" class="twitter-follow-button" data-show-count="false">Follow @jondkinney</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jondkinney',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jon Kinney
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jonkinney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jonkinney.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/';
+        var disqus_url = 'http://jonkinney.com/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
