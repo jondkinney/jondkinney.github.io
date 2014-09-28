@@ -121,7 +121,7 @@
 <p>Which can be implemented in a Rails controller like so:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">render</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;window.parent.document.location.href = &#39;/myloc&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;window.parent.document.location.href = &#39;/myloc&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -176,7 +176,7 @@
 </span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipient_view</span><span class="p">(</span>
 </span><span class='line'>      <span class="n">envelope_id</span><span class="p">:</span> <span class="vi">@envelope_response</span><span class="o">[</span><span class="s2">&quot;envelopeId&quot;</span><span class="o">]</span><span class="p">,</span>
 </span><span class='line'>      <span class="nb">name</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">email</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">email</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
 </span><span class='line'>      <span class="n">return_url</span><span class="p">:</span> <span class="s2">&quot;http://localhost:3000/docusign_response&quot;</span>
 </span><span class='line'>    <span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
@@ -278,15 +278,15 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/29/back-to-consulting/">Back to Consulting!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey Course: BDD and TDD in Ruby by Roy Osherove</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/11/05/cvcc-2012-talk/">How to Be a One-Man Coding Army for a Startup</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">Using PhantomJS (Through Poltergeist) and Selenium in the Same Cucumber Test Suite</a>
       </li>
     
   </ul>
