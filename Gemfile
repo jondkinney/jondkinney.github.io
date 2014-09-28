@@ -1,5 +1,8 @@
 source "https://rubygems.org"
 
+ruby '2.1.2'
+#ruby-gemset=jonkinneydotcom
+
 group :development do
   gem 'rake', '~> 10.0'
   gem 'jekyll', '~> 2.0'
@@ -16,6 +19,7 @@ group :development do
   gem 'stringex', '~> 1.4.0'
   gem 'liquid', '~> 2.5.5'
   gem 'powder'
+  gem 'iconv'
 end
 
 gem 'sinatra', '~> 1.4.2'

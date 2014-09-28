@@ -2,15 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://j2fly.github.com/atom.xml" rel="self"/>
-  <link href="http://j2fly.github.com/"/>
+  <link href="http://jondkinney.github.com/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/"/>
   <updated>2012-07-06T23:32:06-05:00</updated>
-  <id>http://j2fly.github.com/</id>
+  <id>http://jondkinney.github.com/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
-    
+
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
+
 </feed>
