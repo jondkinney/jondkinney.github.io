@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: OS X | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.com/jondkinney/blog/categories/os-x/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.com/jondkinney/"/>
-  <updated>2014-09-27T22:08:05-05:00</updated>
-  <id>http://jondkinney.github.com/jondkinney/</id>
+  <link href="http://jondkinney.github.io/blog/categories/os-x/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.io/"/>
+  <updated>2014-09-27T22:17:11-05:00</updated>
+  <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Wiring up LittleSnapper to CloudApp]]></title>
-    <link href="http://jondkinney.github.com/jondkinney/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
+    <link href="http://jondkinney.github.io/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
     <updated>2012-10-01T09:28:00-05:00</updated>
-    <id>http://jondkinney.github.com/jondkinney/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
+    <id>http://jondkinney.github.io/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
     <content type="html"><![CDATA[<p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
 
 <p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn't want to wait any longer so I started down the path of solving the problem myself.</p>
@@ -142,9 +142,9 @@ chmod 755 cloud.rb
   
   <entry>
     <title type="html"><![CDATA[Change Locale on OS X Snow Leopard for FreeTDS Functionality]]></title>
-    <link href="http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
+    <link href="http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
     <updated>2009-11-23T15:29:00-06:00</updated>
-    <id>http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
+    <id>http://jondkinney.github.io/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
     <content type="html"><![CDATA[<p>Recently I've been trying to get my new unibody macbook pro connecting to SQL Server 2005 with FreeTDS. I was following the <a href="http://www.metaskills.net/2009/9/5/the-ultimate-os-x-snow-leopard-stack-for-rails-development-x86_64-macports-ruby-1-8-1-9-sql-server-more">great guide</a> from Ken Collins, author of the <a href="http://github.com/rails-sqlserver/2000-2005-adapter">rails-sqlserver activerecord adapter</a> that I use but no matter what configuration settings I edited I couldn't get my machine to connect to the SQL Server.</p>
 
 <!-- more -->

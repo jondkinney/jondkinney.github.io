@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: JavaScript | self.extended(thoughts)]]></title>
-  <link href="http://jondkinney.github.com/jondkinney/blog/categories/javascript/atom.xml" rel="self"/>
-  <link href="http://jondkinney.github.com/jondkinney/"/>
-  <updated>2014-09-27T22:08:05-05:00</updated>
-  <id>http://jondkinney.github.com/jondkinney/</id>
+  <link href="http://jondkinney.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.io/"/>
+  <updated>2014-09-27T22:17:11-05:00</updated>
+  <id>http://jondkinney.github.io/</id>
   <author>
     <name><![CDATA[Jon Kinney]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>
-    <link href="http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
+    <link href="http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
     <updated>2012-07-08T03:56:00-05:00</updated>
-    <id>http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
+    <id>http://jondkinney.github.io/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
     <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action's view.</p>
 
 <p>After a bit of Googling I found this code snippet:</p>
