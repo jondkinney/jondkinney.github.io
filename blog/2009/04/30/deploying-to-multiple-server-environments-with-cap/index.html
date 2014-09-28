@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Deploying to Multiple Server Environments with Cap - self.extended(thoughts)</title>
+  <meta name="author" content="Jon Kinney">
+
+  
+  <meta name="description" content="Most anytime I develop a web application I need to deploy to multiple server environments. For me this used to mean maintaining two separate deploy. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="self.extended(thoughts)" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10775549-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">self.extended(thoughts)</a></h1>
+  
+    <h2>Code, Entrepreneurship, Music, Life</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jondkinney.github.com/jondkinney" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/studio">Studio</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Deploying to Multiple Server Environments With Cap</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T16:49:00-05:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Most anytime I develop a web application I need to deploy to multiple server environments. For me this used to mean maintaining two separate deploy.rb scripts, and I would rename one while deploying to staging, and then rename the other when I needed to deploy to production. After about three deploys I said, the hell with this! And I figured out how to allow the specification of your deployment at the command line during the cap deploy task.</p>
+
+<!-- more -->
+
+
+<p>Now I know what you&#8217;re thinking, why not create your own cap task that is called cap deploy_production and cap deploy_staging (or whatever), but I didn&#8217;t want to muck around with that. Here is how I get Capistrano to prompt ME!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">default_run_options</span><span class="o">[</span><span class="ss">:pty</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">ssh_options</span><span class="o">[</span><span class="ss">:forward_agent</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="c1"># also had to set up id_ras keys for the deploy user on the production box (to itself). And setup the tunnel definition as well in ~/.subversion/config</span>
+</span><span class='line'><span class="c1"># Local =&gt; rs_ssh = /opt/local/bin/ssh -p 2384 -l jkinney</span>
+</span><span class='line'><span class="c1"># Production =&gt; rs_ssh = /usr/bin/ssh -p 2384 -l jkinney</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:gems_for_project</span><span class="p">,</span> <span class="sx">%w(highline,will_paginate,etc...)</span> <span class="c1"># list of gems to be installed</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Make terminal prompt us for the location we want to deploy to</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_location</span><span class="p">,</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">deploy_location</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span> <span class="s2">&quot;Enter deploy location (stage/prod)&quot;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_location</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;prod&quot;</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:domain</span><span class="p">,</span> <span class="s2">&quot;209.41.75.42&quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'>  <span class="c1"># I have ssh setup on a non-standard port for my staging box, since it&#39;s exposed to the world. Our production box required VPN or local netowrk access.</span>
+</span><span class='line'>  <span class="n">ssh_options</span><span class="o">[</span><span class="ss">:port</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2384</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:domain</span><span class="p">,</span> <span class="s2">&quot;YOUR STAGING IP HERE&quot;</span>
+</span><span class='line'>  <span class="c1"># note that your staging could be on the same server, just setup your application names differently then so you aren&#39;t overwriting things.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># prompts for a release tag, if that is your sort of thing...</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:release_tag</span><span class="p">,</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">release_tag</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span> <span class="s2">&quot;Enter a release tag to deploy (type trunk or leave blank and hit enter to deploy from trunk)&quot;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">role</span> <span class="ss">:app</span><span class="p">,</span> <span class="n">domain</span>
+</span><span class='line'><span class="n">role</span> <span class="ss">:web</span><span class="p">,</span> <span class="n">domain</span>
+</span><span class='line'><span class="n">role</span> <span class="ss">:db</span><span class="p">,</span>  <span class="n">domain</span><span class="p">,</span> <span class="ss">:primary</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:application</span><span class="p">,</span> <span class="s2">&quot;jonkinneydotcom&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:user</span><span class="p">,</span> <span class="s2">&quot;deploy&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:password</span><span class="p">,</span> <span class="s2">&quot;secret&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_to</span><span class="p">,</span> <span class="s2">&quot;/var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rails_env</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># I thought this was automatic, but I seem to need to require it to cleanup my releases</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:keep_releases</span><span class="p">,</span> <span class="mi">4</span>
+</span><span class='line'><span class="n">after</span> <span class="s2">&quot;deploy&quot;</span><span class="p">,</span> <span class="s2">&quot;deploy:cleanup&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># this is using subversion, I am transitioning to GIT and will post updates when I have a modified deploy.rb</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repo_location</span><span class="p">,</span> <span class="s2">&quot;/var/svn/your_subversion_repo&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repository</span><span class="p">,</span> <span class="s2">&quot;svn+ssh://</span><span class="si">#{</span><span class="n">domain</span><span class="si">}#{</span><span class="n">repo_location</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/trunk&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:deploy</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;restart passenger&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:restart</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:no_release</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">}</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;touch </span><span class="si">#{</span><span class="n">current_path</span><span class="si">}</span><span class="s2">/tmp/restart.txt&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">[</span><span class="ss">:start</span><span class="p">,</span> <span class="ss">:stop</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">desc</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">t</span><span class="si">}</span><span class="s2"> task is a no-op with passenger&quot;</span>
+</span><span class='line'>    <span class="n">task</span> <span class="n">t</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:after_symlink</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;chmod -R a+rw </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#rcov messes with deployed apps...remove it in production</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;rm -rf </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/vendor/plugins/rails_rcov&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># OPTIONAL: symlink files from the FTP site&#39;s home directory to the rails_root </span>
+</span><span class='line'>    <span class="c1"># keep them protected and use send_file to present them to the logged in user </span>
+</span><span class='line'>    <span class="c1"># (this is more secure than hiding them in a public directory with directory listing off)</span>
+</span><span class='line'>    <span class="c1"># run &quot;rm -rf #{release_path}/admin_files&quot; </span>
+</span><span class='line'>    <span class="c1"># run &quot;ln -s #{deploy_to}/#{shared_dir}/admin_files #{release_path}&quot;    </span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the files from outside the deploy path so we can keep all the uploaded images!</span>
+</span><span class='line'>    <span class="c1"># This will allow images uploaded through an asset manager to be retained between deployments</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;rm -rf </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public/assets&quot;</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public/assets&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># setup database for production environment (database.yml should be ignored in svn)</span>
+</span><span class='line'>    <span class="n">db_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;adapter&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;mysql&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;database&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;yourapp_production&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;username&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;password&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;host&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># OPTIONAL: Deploy to production with a sqlite3 database...because we don&#39;t need anything elaborage. </span>
+</span><span class='line'>    <span class="c1"># And that way we can reset the db every hour or whatever with a cron job</span>
+</span><span class='line'>    <span class="c1"># db_params = {</span>
+</span><span class='line'>    <span class="c1">#   &quot;adapter&quot;=&gt;&quot;sqlite3&quot;,</span>
+</span><span class='line'>    <span class="c1">#   &quot;database&quot;=&gt;&quot;db/production.sqlite3.db&quot;,</span>
+</span><span class='line'>    <span class="c1">#   &quot;timeout&quot;=&gt;&quot;5000&quot;</span>
+</span><span class='line'>    <span class="c1"># }</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">db_params</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">param</span><span class="p">,</span> <span class="n">default_val</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">set</span> <span class="s2">&quot;db_</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">to_sym</span><span class="p">,</span>
+</span><span class='line'>      <span class="c1">#if you want to be prompted uncomment the line below this and comment out the one directly below that</span>
+</span><span class='line'>      <span class="c1"># lambda { Capistrano::CLI.ui.ask &quot;Enter database #{param}&quot; do |q| q.default=default_val end}</span>
+</span><span class='line'>      <span class="n">param</span> <span class="o">=</span> <span class="n">default_val</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># builds the database.yml</span>
+</span><span class='line'>    <span class="n">database_configuration</span> <span class="o">=</span> <span class="s2">&quot;production:</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">db_params</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">param</span><span class="p">,</span> <span class="n">default_val</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">val</span><span class="o">=</span><span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;db_</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">database_configuration</span><span class="o">&lt;&lt;</span><span class="s2">&quot;  </span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;mkdir -p </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">put</span> <span class="n">database_configuration</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/database.yml&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the database.yml</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/database.yml </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current/config&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the production database</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/production.sqlite3.db </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current/db&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This is what asks you if you&#39;re sure you want to deploy to production?!?!?</span>
+</span><span class='line'><span class="n">before</span> <span class="s2">&quot;deploy:update_code&quot;</span><span class="p">,</span> <span class="s2">&quot;user_confirmation_for_production_deployment&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:user_confirmation_for_production_deployment</span><span class="p">,</span> <span class="n">roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">if</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_location</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s1">&#39;prod&#39;</span>
+</span><span class='line'>    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;You are deploying to PRODUCTION. continue(y/n):&quot;</span>
+</span><span class='line'>    <span class="n">answer</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">abort</span> <span class="s2">&quot;deployment to production was stopped&quot;</span> <span class="k">unless</span> <span class="n">answer</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">######################Custom cap tasks that I find useful</span>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;Configure VHost&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:config_vhost</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">vhost_config</span> <span class="o">=&lt;&lt;-</span><span class="no">EOF</span>
+</span><span class='line'><span class="sh">&lt;VirtualHost *:80&gt;</span>
+</span><span class='line'><span class="sh">  ServerName jonkinney.com</span>
+</span><span class='line'><span class="sh">  ServerAlias www.jonkinney.com</span>
+</span><span class='line'><span class="sh">  DocumentRoot #{deploy_to}/current/public</span>
+</span><span class='line'><span class="sh">&lt;/VirtualHost&gt;</span>
+</span><span class='line'><span class="no">  EOF</span>
+</span><span class='line'>  <span class="n">put</span> <span class="n">vhost_config</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/vhost_config&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;mv </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/vhost_config /etc/apache2/sites-available/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;a2ensite </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;/etc/init.d/apache2 reload&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;create assets directory&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:create_assets_directory</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;mkdir -p </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;chmod -R 777 </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;chown -R deploy:www-data </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;make current development database the production database&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:upload_dev_db_to_prod</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">put</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;db/development.sqlite3.db&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/production.sqlite3.db&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;run remote command&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:show</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">run</span> <span class="o">&lt;&lt;-</span><span class="no">COMMAND</span>
+</span><span class='line'><span class="sh">    /var/www/apps/#{application}/current/script/runner -e production &#39;require &quot;pp&quot;; pp #{command}&#39;</span>
+</span><span class='line'><span class="no">  COMMAND</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;run remote rake db:migrate RAILS_ENV=production&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:remote_db_migrate</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">run</span><span class="p">(</span><span class="s2">&quot;cd </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current; /usr/bin/rake db:migrate RAILS_ENV=production&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hopefully this has been helpful. I know Capistrano can be somewhat of a black box for people, so if you have issues with my deploy.rb or need any help feel free to contact me or post in the comments!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jon Kinney</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T16:49:00-05:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/" data-via="jondkinney" data-counturl="http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/04/01/logging-cron-jobs-on-ubuntu/" title="Previous Post: Logging Cron Jobs on Ubuntu">&laquo; Logging Cron Jobs on Ubuntu</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/" title="Next Post: Change Locale on OS X Snow Leopard for FreeTDS Functionality">Change Locale on OS X Snow Leopard for FreeTDS Functionality &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Husband & Father, Rails Dev & Chief Architect at <a href='http://fasteragile.com'>FasterAgile</a>, Sound Engineer & A Cappella Producer, Hockey Player, Movie Geek</p>
+  <img src='/images/me100x100.png' />
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/">Review of Udmey course: BDD and TDD in Ruby by Roy Osherove</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/cvcc-2012-talk/">How to be a One-Man Coding Army for a Startup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/">using PhantomJS (through poltergeist) and selenium in the same cucumber test suite</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("jondkinney", 3, true);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/jondkinney" class="twitter-follow-button" data-show-count="false">Follow @jondkinney</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jondkinney',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos',
+            skip_repos: 'jondkinney.github.io'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jon Kinney
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

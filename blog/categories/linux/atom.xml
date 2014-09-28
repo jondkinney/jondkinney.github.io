@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | self.extended(thoughts)]]></title>
+  <link href="http://jondkinney.github.com/jondkinney/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
+  <author>
+    <name><![CDATA[Jon Kinney]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying to Multiple Server Environments with Cap]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/"/>
+    <updated>2009-04-30T16:49:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap</id>
+    <content type="html"><![CDATA[<p>Most anytime I develop a web application I need to deploy to multiple server environments. For me this used to mean maintaining two separate deploy.rb scripts, and I would rename one while deploying to staging, and then rename the other when I needed to deploy to production. After about three deploys I said, the hell with this! And I figured out how to allow the specification of your deployment at the command line during the cap deploy task.</p>
+
+<!-- more -->
+
+
+<p>Now I know what you're thinking, why not create your own cap task that is called cap deploy_production and cap deploy_staging (or whatever), but I didn't want to muck around with that. Here is how I get Capistrano to prompt ME!</p>
+
+<p>```ruby
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true</p>
+
+<h1>also had to set up id_ras keys for the deploy user on the production box (to itself). And setup the tunnel definition as well in ~/.subversion/config</h1>
+
+<h1>Local => rs_ssh = /opt/local/bin/ssh -p 2384 -l jkinney</h1>
+
+<h1>Production => rs_ssh = /usr/bin/ssh -p 2384 -l jkinney</h1>
+
+<p>set :gems_for_project, %w(highline,will_paginate,etc...) # list of gems to be installed</p>
+
+<h1>Make terminal prompt us for the location we want to deploy to</h1>
+
+<p>set :deploy_location, Proc.new { deploy_location = Capistrano::CLI.ui.ask "Enter deploy location (stage/prod)" }</p>
+
+<p>if "#{deploy_location}" == "prod"
+  set :domain, "209.41.75.42"
+else
+  # I have ssh setup on a non-standard port for my staging box, since it's exposed to the world. Our production box required VPN or local netowrk access.
+  ssh_options[:port] = 2384
+  set :domain, "YOUR STAGING IP HERE"
+  # note that your staging could be on the same server, just setup your application names differently then so you aren't overwriting things.
+end</p>
+
+<h1>prompts for a release tag, if that is your sort of thing...</h1>
+
+<p>set :release_tag, Proc.new { release_tag = Capistrano::CLI.ui.ask "Enter a release tag to deploy (type trunk or leave blank and hit enter to deploy from trunk)" }</p>
+
+<p>role :app, domain
+role :web, domain
+role :db,  domain, :primary => true</p>
+
+<p>set :application, "jonkinneydotcom"</p>
+
+<p>set :user, "deploy"
+set :password, "secret"
+set :deploy_to, "/var/www/apps/#{application}"</p>
+
+<p>set :rails_env, "production"</p>
+
+<h1>I thought this was automatic, but I seem to need to require it to cleanup my releases</h1>
+
+<p>set :keep_releases, 4
+after "deploy", "deploy:cleanup"</p>
+
+<h1>this is using subversion, I am transitioning to GIT and will post updates when I have a modified deploy.rb</h1>
+
+<p>set :repo_location, "/var/svn/your_subversion_repo"
+set :repository, "svn+ssh://#{domain}#{repo_location}/#{application}/trunk"</p>
+
+<p>namespace :deploy do
+  desc "restart passenger"
+  task :restart, :roles => :app, :except => {:no_release => true} do</p>
+
+<pre><code>run "touch #{current_path}/tmp/restart.txt"
+</code></pre>
+
+<p>  end</p>
+
+<p>  [:start, :stop].each do |t|</p>
+
+<pre><code>desc "#{t} task is a no-op with passenger"
+task t, :roles =&gt; :app do; end
+</code></pre>
+
+<p>  end</p>
+
+<p>  task :after_symlink do</p>
+
+<pre><code>run "chmod -R a+rw #{release_path}/public"
+
+#rcov messes with deployed apps...remove it in production
+run "rm -rf #{release_path}/vendor/plugins/rails_rcov" 
+
+# OPTIONAL: symlink files from the FTP site's home directory to the rails_root 
+# keep them protected and use send_file to present them to the logged in user 
+# (this is more secure than hiding them in a public directory with directory listing off)
+# run "rm -rf #{release_path}/admin_files" 
+# run "ln -s #{deploy_to}/#{shared_dir}/admin_files #{release_path}"    
+
+#symlink the files from outside the deploy path so we can keep all the uploaded images!
+# This will allow images uploaded through an asset manager to be retained between deployments
+run "rm -rf #{release_path}/public/assets" 
+run "ln -s #{deploy_to}/#{shared_dir}/assets #{release_path}/public/assets"
+
+# setup database for production environment (database.yml should be ignored in svn)
+db_params = {
+  "adapter"=&gt;"mysql",
+  "database"=&gt;"yourapp_production",
+  "username"=&gt;"root",
+  "password"=&gt;"secret",
+  "host"=&gt;"localhost",
+}
+
+# OPTIONAL: Deploy to production with a sqlite3 database...because we don't need anything elaborage. 
+# And that way we can reset the db every hour or whatever with a cron job
+# db_params = {
+#   "adapter"=&gt;"sqlite3",
+#   "database"=&gt;"db/production.sqlite3.db",
+#   "timeout"=&gt;"5000"
+# }
+
+db_params.each do |param, default_val|
+  set "db_#{param}".to_sym,
+  #if you want to be prompted uncomment the line below this and comment out the one directly below that
+  # lambda { Capistrano::CLI.ui.ask "Enter database #{param}" do |q| q.default=default_val end}
+  param = default_val
+end
+
+# builds the database.yml
+database_configuration = "production:\n"
+db_params.each do |param, default_val|
+  val=self.send("db_#{param}")
+  database_configuration&lt;&lt;"  #{param}: #{val}\n"
+end
+
+run "mkdir -p #{deploy_to}/#{shared_dir}/config"
+
+put database_configuration, "#{deploy_to}/#{shared_dir}/config/database.yml"    
+
+#symlink the database.yml
+run "ln -s #{deploy_to}/#{shared_dir}/config/database.yml #{deploy_to}/current/config"
+
+#symlink the production database
+run "ln -s #{deploy_to}/#{shared_dir}/config/production.sqlite3.db #{deploy_to}/current/db"
+</code></pre>
+
+<p>  end
+end</p>
+
+<h1>This is what asks you if you're sure you want to deploy to production?!?!?</h1>
+
+<p>before "deploy:update_code", "user_confirmation_for_production_deployment"
+task :user_confirmation_for_production_deployment, roles => :app do
+  if "#{deploy_location}" == 'prod'</p>
+
+<pre><code>message = "You are deploying to PRODUCTION. continue(y/n):"
+answer = Capistrano::CLI.ui.ask(message)   
+abort "deployment to production was stopped" unless answer == 'y'
+</code></pre>
+
+<p>  end
+end</p>
+
+<h6>################Custom cap tasks that I find useful</h6>
+
+<p>desc "Configure VHost"
+task :config_vhost do
+  vhost_config =&lt;<-EOF
+<VirtualHost *:80>
+  ServerName jonkinney.com
+  ServerAlias www.jonkinney.com
+  DocumentRoot #{deploy_to}/current/public
+</VirtualHost>
+  EOF
+  put vhost_config, "#{deploy_to}/#{shared_dir}/config/vhost_config"
+  sudo "mv #{deploy_to}/#{shared_dir}/config/vhost_config /etc/apache2/sites-available/#{application}"
+  sudo "a2ensite #{application}"
+  sudo "/etc/init.d/apache2 reload"
+end</p>
+
+<p>desc "create assets directory"
+task :create_assets_directory do
+  sudo "mkdir -p #{deploy_to}/#{shared_dir}/assets"
+  sudo "chmod -R 777 #{deploy_to}/#{shared_dir}/assets"
+  sudo "chown -R deploy:www-data #{deploy_to}/#{shared_dir}/assets"
+end</p>
+
+<p>desc "make current development database the production database"
+task :upload_dev_db_to_prod do
+  put(File.read("db/development.sqlite3.db"), "#{deploy_to}/#{shared_dir}/config/production.sqlite3.db")
+end</p>
+
+<p>desc "run remote command"
+task :show, :roles => :app do
+  run &lt;&lt;-COMMAND</p>
+
+<pre><code>/var/www/apps/#{application}/current/script/runner -e production 'require "pp"; pp #{command}'
+</code></pre>
+
+<p>  COMMAND
+end</p>
+
+<p>desc "run remote rake db:migrate RAILS_ENV=production"
+task :remote_db_migrate do
+  run("cd #{deploy_to}/current; /usr/bin/rake db:migrate RAILS_ENV=production")
+end
+```</p>
+
+<p>Hopefully this has been helpful. I know Capistrano can be somewhat of a black box for people, so if you have issues with my deploy.rb or need any help feel free to contact me or post in the comments!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Logging Cron Jobs on Ubuntu]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/04/01/logging-cron-jobs-on-ubuntu/"/>
+    <updated>2009-04-01T15:53:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/04/01/logging-cron-jobs-on-ubuntu</id>
+    <content type="html"><![CDATA[<p>I am running a VPS over at <a href="http://silverrack.com">SilverRack.com</a> and I love it. Dave (the owner) has been very helpful and responsive anytime I've had questions or issues, and I highly recommend their service. Also if you're a member of a local Ruby user group then you can get $10 off the standard 256mb slice making it extremely affordable to have your very own server! I also have an unlimited Dreamhost account, but I like having root access and full reign of my server.</p>
+
+<h3>Enable the cron.log for Ubuntu</h3>
+
+<p>By default, Ubuntu disables the cron log, so you need to turn it on, and additionally create the log file before you can start tailing that log.</p>
+
+<!-- more -->
+
+
+<p>Use these steps to get your log on:</p>
+
+<p>Create the cron.log file
+<code>bash
+touch /var/log/cron.log
+</code></p>
+
+<p>Edit /etc/syslog.conf and uncomment the line starting with <code>cron.*</code>
+<code>bash
+vim /etc/syslog.conf
+</code></p>
+
+<p>Restart sysklogd</p>
+
+<p><code>bash
+$ /etc/init.d/sysklogd restart
+</code></p>
+
+<p>Restart cron</p>
+
+<p><code>bash
+$ /etc/init.d/cron restart
+</code></p>
+
+<p>Then to watch your cron jobs execute this command:</p>
+
+<p><code>bash
+$ tail -f /var/log/cron.log
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

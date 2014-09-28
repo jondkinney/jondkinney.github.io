@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: CSS | self.extended(thoughts)]]></title>
+  <link href="http://jondkinney.github.com/jondkinney/blog/categories/css/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
+  <author>
+    <name><![CDATA[Jon Kinney]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Madison web meetup: Advanced CSS]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/02/27/madison-web-meetup-advanced-css/"/>
+    <updated>2009-02-27T16:29:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/02/27/madison-web-meetup-advanced-css</id>
+    <content type="html"><![CDATA[<p>Recently Inacom had the privilege of hosting the <a href="http://www.meetup.com/madisonwebmeetup/">Madison Web Design &amp; Development Meetup</a>. The topic for this meeting was Advanced CSS. I put together a sideshow to try to keep the presentation more guided, but because of the depth of the topic we wound up going quite a bit over our loose 1 hour time slot. I just wanted to thank everyone for sticking around and seeming quite interested! I had a great time presenting and I hope that you all enjoyed our discussions. If you're looking for the demo files and the presentation check them out in the full article.</p>
+
+<!-- more -->
+
+
+<p>Here is a PDF of the sideshow: <a href="http://jondkinney.github.com/jondkinney/assets/21/advanced_css.pdf">Advanced CSS Presentation</a> which has a lot of great resources for everyone to use. The links inside the PDF are also clickable so that should work out great.</p>
+
+<p>I posted my demo files in a <a href="http://jondkinney.github.com/jondkinney/assets/22/demos.zip">zipped folder</a> and also put them up in HTML format so people could view them that way if desired. I would recommend downloading the zip and viewing the source code in the following order as my comments in the HTML and CSS go from the most detailed to the least (in hopes that you don't need a ton of comments each and every time! We are learning after all right?!?! :)</p>
+
+<h3>DEMOS!!</h3>
+
+<ul>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/2_col_float.html">2 column with floating and negative margining</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/footer_stick.html">Footer stick</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/form.html">Form</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/css_tables.html">CSS Tables</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/newspaper.html">Newspaper 3 columns</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/newspaper2.html">Newspaper 3 columns that auto match the height of each</a></li>
+</ul>
+
+
+<p>Thank you very much everyone for coming and for the kind words! I would definitely be interested in presenting again if there is a topic that I know about that the rest of the group has interest in.</p>
+]]></content>
+  </entry>
+  
+</feed>

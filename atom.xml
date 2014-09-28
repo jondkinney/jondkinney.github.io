@@ -1,0 +1,1566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[self.extended(thoughts)]]></title>
+  <link href="http://jondkinney.github.com/jondkinney/atom.xml" rel="self"/>
+  <link href="http://jondkinney.github.com/jondkinney/"/>
+  <updated>2014-09-27T22:08:05-05:00</updated>
+  <id>http://jondkinney.github.com/jondkinney/</id>
+  <author>
+    <name><![CDATA[Jon Kinney]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Review of Udmey course: BDD and TDD in Ruby by Roy Osherove]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove/"/>
+    <updated>2013-09-23T12:01:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2013/09/23/review-of-udmey-course-bdd-and-tdd-in-ruby-by-roy-osherove</id>
+    <content type="html"><![CDATA[<p>Avdi Grimm recently <a href="https://twitter.com/avdi/status/381090549488287744">tweeted</a> about a new Udmey course <a href="https://www.udemy.com/tdd-bdd-in-ruby">TDD and BDD in Ruby</a> by <a href="https://twitter.com/royosherove">Roy Osherove</a>. I&#8217;m not sure if this was an endorsement by Avdi, or more of a &#8220;oh hey, there&#8217;s this thing over here which might be interesting&#8221; type mention, but when <a href="http://storify.com/allafarce/avdi-grimm-s-super-happy-fun-time-at-newark-int-l">Avdi tweets</a>&#8230; people listen, so I decided to go check out the course. What follows is the review I left on the Udmey site, shared here more widely.</p>
+
+<p>As an experienced developer, I&#8217;d give this course 3.5 stars if it was an option, but I rounded up because if you don&#8217;t know anything about unit testing then this course is a great overview.</p>
+
+<p>The most valuable parts to me were the advanced RSpec overview and discussion of fakes (mocks, stubs). Roy covers this well, but encourages using a 3rd party mock library outside of what RSpec provides called <a href="https://github.com/psyho/bogus">Bogus</a>. The reason is to allow for non-strict mock expectations, which are less brittle since they don&#8217;t complain every time a method on the object under test is called that you didn&#8217;t explicitly stub out. However, RSpec does support this with the <a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-6/docs/method-stubs/as-null-object">as_null_object</a> method so it would have been nice to not introduce an additional gem unnecessarily.</p>
+
+<!-- more -->
+
+
+<p>Another thing that was a bit glossed over is the fact that in (I think all) of his mock expectation examples Roy is actually using a &#8216;spy&#8217; where in he does the assert AFTER the method under test is invoked. That&#8217;s a fine way to test, but it would have been useful to mention to viewers that the other (more pervasive?) way of doing it is setting up an expectation first</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">blah</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:something</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or in the new RSpec syntax&#8230;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">blah</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:something</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and then doing the work on that method AFTER that expectation to determine whether or not that expectation was fulfilled. This confused me when I first got into testing since it&#8217;s backwards from the typical &#8216;do work&#8217; and &#8216;assert a state change&#8217; work flow, but I think there are advantages to doing mock expectations first so you end up thinking about the code you wish you had instead of checking that it was called at the end. Really, they&#8217;re both fine ways, I just wish the multiple ways of doing it were discussed in this course. Here&#8217;s a <a href="http://myronmars.to/n/dev-blog/2013/07/rspec-2-14-is-released">blog article</a> that shows how to do both options in RSpec (check the Mocks:Spies section).</p>
+
+<p>Another error I noticed was in the discussion of <code>let</code> vs <code>let!</code>. Roy talks about how <code>let</code> memoizes (caches) whatever it&#8217;s storing so that if that variable is used multiple times, it&#8217;ll just retrieve whatever was set on that variable previously. That is in fact how <code>let</code> in RSpec works, BUT that only happens within the current example if the <code>let</code> gets called multiple times. It DOES NOT memoize/cache the <code>let</code> value BETWEEN examples as Roy described. See the <a href="https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let">docs</a>.</p>
+
+<p>One thing I picked up that I liked quite a bit was this tip:</p>
+
+<p>When describing a method on a class like <code>Calc#add</code>, define a method that does what you want to test below the describe/context for that method, and re-use that helper method in the tests so that if the implementation changes later you only have to update the code in one place.</p>
+
+<p>Here&#8217;s an example where extracting a method called &#8216;adding&#8217; could help clean up specs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">Calculator</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">context</span> <span class="s2">&quot;a single number&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">adding</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">calc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="c1">#calls a let defined above</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;adding 2 increases the number by 2&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">adding</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Roy also does a good job of explaining RSpec&#8217;s &#8216;subject&#8217; and &#8216;its&#8217; which I never took the time to fully grok until now.</p>
+
+<p>Truth be told, I didn&#8217;t watch the TeamCity stuff because I&#8217;m using Jenkins for CI on <a href="http://circleci.com">CircleCi</a> (which I highly recommend!). If you don&#8217;t know anything about CI or want a bit more hand holding to setup your own server, then I&#8217;m sure this section is fine.</p>
+
+<p>One other negative of this class was the rather lackluster production quality. It gets the job done, but the audio in the videos is not up to par with something like RailsCasts or Destroy All Software. It doesn&#8217;t appear to have been mastered at all (loudness differs vastly across the videos) and the lessons are actually all &#8216;live&#8217; in that Roy was teaching a class of real people while screen recording these videos. I didn&#8217;t realize that when I purchased the course and it did disappoint me a bit when I saw that this was how the information was going to be presented. In fact, some of the Q&amp;A sessions between Roy and the class are completely unintelligible because of the way the gate on the microphone was setup. It cut off the audience almost entirely.</p>
+
+<p>Speaking of live screen recording, there were definitely a few times when Roy got bit by the &#8216;live demo&#8217; demons and had to pull his chute / abandon ship / insert clever metaphor here&#8230;but it didn&#8217;t detract from the lesson too much.</p>
+
+<p>All in all, I&#8217;m glad I took a few hours to go through this material. Thanks to Roy for presenting it, and to Avdi for tweeting about it to get me there.</p>
+
+<p>Here are some notes I took while going through the course: <a href="https://gist.github.com/jondkinney/6674458">https://gist.github.com/jondkinney/6674458</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to be a One-Man Coding Army for a Startup]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/11/05/cvcc-2012-talk/"/>
+    <updated>2012-11-05T16:04:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/11/05/cvcc-2012-talk</id>
+    <content type="html"><![CDATA[<p>Last weekend I was fortunate enough to be invited to speak at <a href="http://chippewavalleycodecamp.com/">Chippewa Valley Code Camp - 2012</a>. CVCC is a free, 1-day, 4-track conference in Eau Claire, WI that attracts some of the brightest developers in Wisconsin and Minnesota.</p>
+
+<p>This year there were over 120 attendees and some 20 speakers presenting on things ranging from <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/76/Default.aspx">running a massive Java web application at scale</a> to <a href="http://www.chippewavalleycodecamp.com/Sessions/CurrentSessions/tabid/96/CodecampId/5/SessionId/90/Default.aspx">Single Page Applications with JavaScript</a>. I had an awesome time meeting new people and sharing a little bit about how I run the technical and development side of Bolstr. Specifically, I talked about how we collaborate on work-flows for new features through user stories with <a href="http://cukes.info/">Cucumber</a> as we build out our Ruby on Rails web application at <a href="http://bolstr.com">Bolstr.com</a>.</p>
+
+<p>The slides from my talk &#8220;How to be a One-Man Coding Army for a Startup&#8221; are <a href="http://jonkinney.com/cvcc-talk-2012">available online</a>, and if you attended the session I&#8217;d sure love it if you could leave some feedback at <a href="http://speakerrate.com/talks/18321-how-to-be-a-one-man-coding-army-for-a-startup">speakerrate</a> for me.</p>
+
+<p>Also, a big shout out to <a href="http://napcs.com/">Brian Hogan</a> for encouraging me to submit a talk and even suggesting the name. Thanks Brian!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[using PhantomJS (through poltergeist) and selenium in the same cucumber test suite]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite/"/>
+    <updated>2012-10-10T12:51:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/10/10/using-phantomjs-through-poltergeist-and-selenium-same-cucumber-test-suite</id>
+    <content type="html"><![CDATA[<p>We use DocuSign at Bosltr to facilitate electronic signatures and testing this functionality with Cucumber has proved to be quite a pain. First of all DocuSign uses an iframe to deliver its functionality so there was that added complexity right off the bat. Secondly, because we&#8217;re doing integration testing, I wanted to actually hit the DocuSign test servers and verify that things are still working as I expect. Stubbing the requests out wouldn&#8217;t give me insight into any unexpected API changes breaking our app. Because we&#8217;re reaching out externally I had to account for the delay in receiving data from DocuSign often needing to revert to ugly things like <code>sleep 3</code> in the step definitions.</p>
+
+<p>The default Selenium driver through Firefox is the only solution for testing the DocuSign iframe that I could get working. However, the rest of the test suite that needs JavaScript testing has been working wonderfully on Poltergeist, an awesome headless PhantomJS driver for Capybara. Poltergeist was throwing errors about elements overlapping in the DocuSign iframe that I couldn&#8217;t solve but I didn&#8217;t want to abandon Poltergeist and revert to Selenium for ALL our JS testing, so I figured out a way to use both by tagging stories and using some Before and After hooks.</p>
+
+<!-- more -->
+
+
+<p>The rest of this post assumes you <a href="https://github.com/jonleighton/poltergeist">already have Poltergeist installed</a>.</p>
+
+<p>Inside of <code>features/support/env.rb</code> add the following hooks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Hooks</span>
+</span><span class='line'><span class="no">Before</span><span class="p">(</span><span class="s1">&#39;@docusign&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">scenario</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Capybara</span><span class="o">.</span><span class="n">current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">After</span><span class="p">(</span><span class="s1">&#39;@docusign&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">scenario</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Capybara</span><span class="o">.</span><span class="n">use_default_driver</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Additionally, add:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:rack_test</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">javascript_driver</span> <span class="o">=</span> <span class="ss">:poltergeist</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8230;which I actually have in my <code>Spork.each_run do</code> block</p>
+
+<p>Now by default any stories tagged with just <code>@javascript</code> will run through PhantomJS. If you want to use Selenium for a given test then you need to tag it with BOTH <code>@javascript</code> AND <code>@docusign</code>. Perhaps naming the tag <code>@selenium</code> would be more appropriate, but I only plan to use Selenium for testing DocuSign stories so this works for me for now. Note: I&#8217;m not sure why the <code>@javascript</code> tag is required, but it didn&#8217;t work for me unless I had both tags specified. I&#8217;m guessing <code>@javacript</code> sets up more than just the driver, but if anyone has more of an explanation I&#8217;d love to know.</p>
+
+<p>In an effort to help other devs perhaps more quickly acceptance test DocuSign with Cucumber here are the step definitions that I came up with for our use case.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">When</span> <span class="sr">/^I sign the docusign document as an &quot;(.+)&quot; and click finish$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">user_type</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Docusign disclaimer (review button)</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_startReview_btnInline&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Sign</span>
+</span><span class='line'>    <span class="n">page</span><span class="o">.</span><span class="n">find_button</span><span class="p">(</span><span class="s1">&#39;Sign Here&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Adopt and sign (might not always need to do this step if the user has</span>
+</span><span class='line'>    <span class="c1"># already adopted his or her signature. I would have though we&#39;d have to</span>
+</span><span class='line'>    <span class="c1"># adopt each time in the testing world but it doesn&#39;t seem to be that way)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">page</span><span class="o">.</span><span class="n">has_css?</span><span class="p">(</span><span class="s1">&#39;#ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgAdoptSig_btnAdoptSignature_btnInline&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">user_type</span> <span class="o">==</span> <span class="s1">&#39;attorney&#39;</span>
+</span><span class='line'>      <span class="c1"># DocuSign gives us .FirstPage as a class on the first page and just</span>
+</span><span class='line'>      <span class="c1"># .Page for each page after that, so this really only works if your first</span>
+</span><span class='line'>      <span class="c1"># &#39;Sign Here&#39; is on the first page and there is only one subsequent one</span>
+</span><span class='line'>      <span class="c1"># within all of the rest of the .Page pages. Still, fits this use case</span>
+</span><span class='line'>      <span class="c1"># alright as long as the engagement letters in the test env fit on one</span>
+</span><span class='line'>      <span class="c1"># page so the attorney disclaimer bit is always on page two.</span>
+</span><span class='line'>      <span class="n">within</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s2">&quot;//div[@class=&#39;Page&#39; and @class != &#39;FirstPage&#39;]&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">click_button</span> <span class="s1">&#39;Sign Here&#39;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Confirm signing</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_navnexttext_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I choose to sign the docusign document later$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Finish Later</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_btnIntroSignLater_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I decline to sign the docusign document$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">within_frame</span><span class="p">(</span><span class="s2">&quot;docusign_iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># Decline to Sign</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgStart_btnIntroDecline_btnInline&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Decline confirmation</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;ds_hldrBdy_dlgDecline_btnDecline_btnInline&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">3</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Wiring up LittleSnapper to CloudApp]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp/"/>
+    <updated>2012-10-01T09:28:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/10/01/wiring-up-littlesnapper-to-cloudapp</id>
+    <content type="html"><![CDATA[<p>I used to love Skitch, but the recent changes have made it less awesome so I decided to seek out alternative options. I have a licensed copy of <a href="http://www.realmacsoftware.com/littlesnapper/">LittleSnapper</a> from a bundle of Mac apps that I purchased a while back so I decided to give it a go.</p>
+
+<p>I also use CloudApp multiple times per day (and pay for a pro subscription) so I was encouraged when I saw <a href="http://blog.getcloudapp.com/ember-in-the-house">an article</a> stating that RealMac (the team behind LittleSnapper) was working on integration with CloudApp, but <a href="https://twitter.com/cloudapp/status/250758889249849344">nothing has developed</a> on that front in over a year and I didn&#8217;t want to wait any longer so I started down the path of solving the problem myself.</p>
+
+<p>Here&#8217;s how it works:</p>
+
+<ul>
+<li>Configure LittleSnapper to use SFTP to &#8220;publish&#8221; locally to a folder of your choosing.</li>
+<li>Create a new Automator &#8220;Folder Action&#8221; which runs an AppleScript when the contents of the folder changes.</li>
+<li>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Details with Code and Screenshots</h2>
+
+<ol>
+<li><p>Configure LittleSnapper&#8217;s publishing preferences to include a location local to your machine.</p>
+
+<ul>
+<li><p>Use your Mac username and password when setting up this connection. The &#8220;Server&#8221; is whatever shows up when you open System Preferences and choose &#8220;Sharing&#8221;. At the top you&#8217;ll see a note stating: &#8220;Computers on your local network can access your computer at: MBPr.local&#8221;. Use the full name including .local shown there (which will likely be different than mine).</p></li>
+<li><p>The file path I&#8217;m using is: <code>/Users/jon/Pictures/ScreenShots/LittleSnapper</code>.</p>
+
+<ul>
+<li>Note: I used TinkerTool to change the default location where OS X stores screenshots to ~/Pictures/ScreenShots so using a subdirectory of that folder seemes optimal.</li>
+</ul>
+</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1G3P2f1z1Q0t1I1Z2C07/Screen%20Shot%202012-10-01%20at%209.40.07%20AM.png" alt="LittleSnapper Publishing Preferences" /></p></li>
+<li><p>Create a new Automator &#8220;Folder Action&#8221; which runs an AppleScript when the contents of a folder you specify changes.</p>
+
+<p> <img src="http://f.cl.ly/items/0X1u2S2h43160Z2n0h0Q/Screen%20Shot%202012-10-01%20at%2010.21.50%20AM.png" alt="New Automator Folder Action" /></p>
+
+<p> Filter the available Actions by searching for &#8220;Run AppleScript&#8221;, then drag that action to your workflow:</p>
+
+<p> <img src="http://f.cl.ly/items/3D0G1g0H2K1O222M2t3A/Screen%20Shot%202012-10-01%20at%2010.25.35%20AM.png" alt="Drag Run AppleScript to Workflow" /></p>
+
+<p> Set the folder action to the same folder you chose in the above steps and paste in (and customize if necessary) the provided AppleScript</p>
+
+<p> <img src="http://f.cl.ly/items/3o1Q2j0K2h0P0l0p2j1a/Screen%20Shot%202012-10-01%20at%2010.26.56%20AM.png" alt="Configure AppleScript" /></p>
+
+<p> AppleScript for the Automator Action:</p>
+
+<pre><code> set cloudappSlug to do shell script "cd /Users/jon/Pictures/ScreenShots/scripts; /Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby cloud.rb"
+ set the clipboard to cloudappSlug
+ do shell script "afplay /System/Library/Sounds/Glass.aiff"
+</code></pre>
+
+<p> <strong>Note:</strong> It&#8217;s necessary to use the full path to the version of Ruby that has the cloudapp_api gem installed under it. Type <code>which ruby</code> to show the full path to your currently executable Ruby and be sure to <code>gem install cloudapp_api</code> or <code>sudo gem install cloudapp_api</code> under that same Ruby version. Sudo is only required if you&#8217;re not using a Ruby version management solution and are using the default system Ruby that shipped with OS X. You can also see in the above AppleScript that we change into the folder that contains the Ruby script before calling it. Be sure to customize the script to change into the folder where you place the Ruby script if it&#8217;s different than mine.</p>
+
+<ul>
+<li>After saving the Automator Action (I chose the name &#8220;Watch LittleSnapper&#8221;), navigate to the chosen folder in Finder and right click, choose Services > Folder Action Setup&#8230;</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/1N06122b3x0d2q1q411Q/Screen%20Shot%202012-10-01%20at%2010.55.48%20AM.png" alt="Finder Folder Action Menu" /></p>
+
+<ul>
+<li>Cancel the pop up dialog and verify that your Automator Folder Action is there and checked (enabled).</li>
+</ul>
+
+
+<p> <img src="http://f.cl.ly/items/2d1z1l3G1o1S2p1K3w3h/Screen%20Shot%202012-10-01%20at%2010.57.05%20AM.png" alt="Folder Action Worked" /></p></li>
+<li><p>Use the CloudApp API through a Ruby script (called by the aforementioned AppleScript) to publish the given file.</p>
+
+<ul>
+<li><p>Place the below Ruby script somewhere on your machine (the AppleScript I provide assumes it&#8217;s in ~/Pictures/ScreenShots/scripts/cloud.rb).</p></li>
+<li><p>Note that the first line of the Ruby script also references the full path to the version of Ruby you want to use. It will likely be different than what I show here. It should be customized the same as it was in the AppleScript above.</p></li>
+<li><p>You can also see there is authentication to the CloudApp servers necessary on line 7. Customize the script with your CloudApp username and password here.</p></li>
+</ul>
+</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/Users/jon/.rbenv/versions/1.9.3-p194-perf/bin/ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;cloudapp_api&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># customize me please</span>
+</span><span class='line'><span class="no">CloudApp</span><span class="o">.</span><span class="n">authenticate</span> <span class="s2">&quot;your_email_here&quot;</span><span class="p">,</span> <span class="s2">&quot;your_password_here&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pasteboard_file</span> <span class="o">=</span> <span class="sb">`cd /Users/jon/Pictures/ScreenShots/LittleSnapper; ls -td * | head -1`</span>
+</span><span class='line'><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;/Users/jon/Pictures/ScreenShots/LittleSnapper/</span><span class="si">#{</span><span class="n">pasteboard_file</span><span class="o">.</span><span class="n">chomp</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@drop</span> <span class="o">=</span> <span class="no">CloudApp</span><span class="o">::</span><span class="no">Drop</span><span class="o">.</span><span class="n">create</span> <span class="ss">:upload</span><span class="p">,</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="n">file</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="vi">@drop</span><span class="o">.</span><span class="n">data</span><span class="o">[</span><span class="s2">&quot;url&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Make sure the ruby script is executable:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> ~/Pictures/ScreenShots/scripts
+</span><span class='line'>chmod 755 cloud.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Wrapping Up</h3>
+
+<p>All that&#8217;s left to do is try it out!</p>
+
+<ul>
+<li>Take a screenshot with LittleSnapper and publish it to local folder we setup in step 1</li>
+<li>Wait for the ding</li>
+<li>Paste the new CloudApp slug to the screen shot you just uploaded!</li>
+</ul>
+
+
+<p>If this all seems like a bit of a pain for something so simple, you&#8217;re right&#8230; it is. And for the vast majority of cases I still do what I did with Skitch which is to just take a screenshot of my annotated screenshot with the normal Cmd+Shift+4 shortcut which will automatically upload to CloudApp. However, LittleSnapper can also take screenshots of entire web pages (even the portion that doesn&#8217;t fit on your screen!) and sometimes I want to upload those screenshots to CloudApp too. Hopefully the Realmac team will just start providing CloudApp support natively so folks won&#8217;t have to use crazy workarounds like this!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Breaking Out of an iframe From a Rails Controller]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller/"/>
+    <updated>2012-07-08T03:56:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/07/08/breaking-out-of-an-iframe-from-a-rails-controller</id>
+    <content type="html"><![CDATA[<p>For the <a href="https://github.com/j2fly/docusign_rest">docusign_rest</a> gem that I recently created I needed to break out of the DocuSign iframe after a signer successfully signed the embedded PDF and redirect to a controller action showing that action&#8217;s view.</p>
+
+<p>After a bit of Googling I found this code snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">charset=</span><span class="s">&#39;utf-8&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nx">parent</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s1">&#39;/myloc&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which can be implemented in a Rails controller like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">render</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;window.parent.document.location.href = &#39;/myloc&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>The above code snippet takes the place of the traditional <code>redirect_to</code>. The beauty of this solution is that after the signer interacts with the document and completes his or her signing ceremony, the app will act just like we had served the embedded signing iframe code directly from our own view. There isn&#8217;t a button to click that says &#8220;go to parent&#8221; or &#8220;back to home&#8221; or anything, it just works and redirects appropriately when the user is done interacting with the iframe.</p>
+
+<p>I created a little utility method in the <a href="https://github.com/j2fly/docusign_rest/blob/master/lib/docusign_rest/utility.rb#L49">docusign_rest</a> gem to abstract the JS portion and make it more consise. See lines 23 and 26 in the example controller code below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SomeController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># the view corresponding to this action has the iframe in it with the</span>
+</span><span class='line'>  <span class="c1"># @url as it&#39;s src. @envelope_response is populated from either:</span>
+</span><span class='line'>  <span class="c1"># @envelope_response = client.create_envelope_from_document</span>
+</span><span class='line'>  <span class="c1"># or</span>
+</span><span class='line'>  <span class="c1"># @envelope_response = client.create_envelope_from_template</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">embedded_signing</span>
+</span><span class='line'>    <span class="n">client</span> <span class="o">=</span> <span class="no">DocusignRest</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipient_view</span><span class="p">(</span>
+</span><span class='line'>      <span class="n">envelope_id</span><span class="p">:</span> <span class="vi">@envelope_response</span><span class="o">[</span><span class="s2">&quot;envelopeId&quot;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>      <span class="nb">name</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">email</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">return_url</span><span class="p">:</span> <span class="s2">&quot;http://localhost:3000/docusign_response&quot;</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">docusign_response</span>
+</span><span class='line'>    <span class="n">utility</span> <span class="o">=</span> <span class="no">DocusignRest</span><span class="o">::</span><span class="no">Utility</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:event</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;signing_complete&quot;</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Thanks! Successfully signed&quot;</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">utility</span><span class="o">.</span><span class="n">breakout_path</span><span class="p">(</span><span class="n">some_path</span><span class="p">),</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You chose not to sign the document.&quot;</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">utility</span><span class="o">.</span><span class="n">breakout_path</span><span class="p">(</span><span class="n">some_other_path</span><span class="p">),</span> <span class="n">content_type</span><span class="p">:</span> <span class="ss">:html</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is the method in the Utility class of the DocuSign module that handles embedding the path in the HTML snippet.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">breakout_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>  <span class="s2">&quot;&lt;html&gt;&lt;body&gt;&lt;script type=&#39;text/javascript&#39; charset=&#39;utf-8&#39;&gt;parent.location.href = &#39;</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39;;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My New Gig at Bolstr]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2012/07/07/my-new-gig-at-bolstr/"/>
+    <updated>2012-07-07T01:28:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2012/07/07/my-new-gig-at-bolstr</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://jondkinney.github.com/jondkinney/images/bolstr_star.png" title="Bolstr Logo" ></p>
+
+<div style='height:8px;'>&nbsp;</div>
+
+
+<p>It&#8217;s been nearly seven months since I joined the great team at <a href="http://bolstr.com">Bolstr</a> as Chief Technology Officer and I have to say, it&#8217;s a job that gets even better with time!</p>
+
+<p>Since I started, I&#8217;ve done a bunch of things:</p>
+
+<ul>
+<li>Made significant improvements to <a href="http://bolstr.com">http://bolstr.com</a></li>
+<li>Added a ton of functionality to our main application and improved test coverage / speed</li>
+<li>Written a <a href="https://github.com/j2fly/docusign_rest">robust wrapper gem</a> to the Docusign REST API and implemented their embedded e-signature solution into our main application</li>
+<li>Switched to using <a href="https://gist.github.com/2040114">Tmux and Console Vim</a> after a brief affair with Sublime Text 2</li>
+<li>Started a <a href="http://greenbayrug.com">Ruby User Group</a> in Green Bay, WI</li>
+<li>Completed <a href="http://rubyoffrails.com">several</a> advanced Ruby <a href="http://pragmaticstudio.com/ruby">courses</a> to hone my code slinging skills</li>
+</ul>
+
+
+<p>It&#8217;s funny how time flies when you love what you do. I&#8217;m very excited about what we&#8217;re doing and we have some amazing opportunities already lined up in the months ahead.</p>
+
+<p>Keep in touch if you want to see the financial and banking industries squirm when crowdfunding goes mainstream!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Intridea Blog Posts]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2011/10/12/intridea-blog-posts/"/>
+    <updated>2011-10-12T17:00:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2011/10/12/intridea-blog-posts</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve been blogging lately, just not here :) If you want to see some of my lastest posts check them out at <a href="http://intridea.com/about/people/jon">http://intridea.com/about/people/jon</a>. You can see the &#8220;Published Posts&#8221; section after my bio.</p>
+
+<p>Here are direct links to what is posted to date (I&#8217;ll try to keep this updated).</p>
+
+<ul>
+<li><a href="http://intridea.com/posts/its-not-enough-to-bash-in-heads-youve-got-to-bash-in-minds-with-zsh">It&#8217;s not enough to bash in heads, you&#8217;ve got to bash in minds&#8230;with ZSH (May 18, 2011)</a></li>
+<li><a href="http://intridea.com/posts/remote-cold-boot-a-mac">Remote Cold Boot a Mac (January 14, 2011)</a></li>
+<li><a href="http://intridea.com/posts/using-bind-locally-on-os-x-for-easy-access-to-subdomains">Using BIND locally on OS X for easy access to subdomains (June 2, 2010)</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using save_and_open_page to open failed cucumber scenerios in a browser with images and  CSS]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/"/>
+    <updated>2010-04-21T16:43:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/04/21/using-save-and-open-page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve been doing a lot of Cucumber testing lately and have really been liking it, but there is one thing that is hard with Cucumber&#8230; debugging errors. That is until I found out about the save_and_open_page method that webrat provides for opening a browser to the page the cuke puked on from Bodaniel Jeanes over on <a target='_blank' href="http://bjeanes.com/2010/02/10/automatically-open-the-last-page-for-failed-scenarios">his blog</a>.</p>
+
+<p>The only problem was that the page didn&#8217;t look very nice. I could have left it (it was working after all) but then I ran across <a target='_blank' href="http://gist.github.com/320890">an init script for cuke</a> in a gist from Duff that allowed for the rewriting of the paths to the local image, JavaScript and CSS files so they at least could be referenced properly. While this worked, most of my images were specified as backgrounds in my actual CSS files so if I wanted to be able to see the page as it was intended I would need to find a way to change the paths in the actual CSS files as well.</p>
+
+<!-- more -->
+
+
+<p>After playing around with the idea of modifying my actual CSS files temporarily and then switching them back (and realizing that solution was full of fail) I settled on a way strip out all links to all css files and then embed the actual CSS inline in a style tag inside the page&#8217;s head tag. This way I can more easily and permanently modify the css background image paths all in a self contained HTML file. I did this by looping through a specified directory on the file system that contains CSS files and looking for any stylesheets that the user specifies and in the order that the user specifies so that the hierarchy would remain in tact when the styles were all embedded inline.</p>
+
+<p>Since Cucumber&#8217;s env.rb file is auto-generated it&#8217;s a bad place to store customized configuration options. Instead I encourage you to do what Cucumber says at the top of the env.rb file and put it somewhere else. From env.rb: &#8220;Cucumber will automatically load all features/<em>*/</em>.rb files&#8221;</p>
+
+<p>I chose to put this code in a file under the features/support directory called: open_browser_on_fail.rb. If it&#8217;s sitting next to the env.rb file itself then you have the new file in the right place.</p>
+
+<p>Place the following code in that file and you&#8217;ll be good to go!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">After</span> <span class="k">do</span> <span class="o">|</span><span class="n">scenario</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">scenario</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="ss">:failed</span>
+</span><span class='line'>    <span class="n">save_and_open_page</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">Webrat</span>
+</span><span class='line'>  <span class="k">module</span> <span class="nn">SaveAndOpenPage</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">save_and_open_page</span>
+</span><span class='line'>      <span class="k">return</span> <span class="k">unless</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="no">Webrat</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">saved_pages_dir</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">Webrat</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">saved_pages_dir</span><span class="si">}</span><span class="s2">/webrat-</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="si">}</span><span class="s2">.html&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">rewrite_public_file_references</span><span class="p">(</span><span class="n">response_body</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">open_in_browser</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">rewrite_public_file_references</span><span class="p">(</span><span class="n">response_html</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># remove conditional comments/ie stylesheets</span>
+</span><span class='line'>      <span class="n">response_html</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/&lt;!--\[.*?\]--&gt;/im</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># remove other stylesheets</span>
+</span><span class='line'>      <span class="n">response_html</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/&lt;link href=(.*)\/&gt;/i</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">response_html</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/(&quot;|&#39;)\/(stylesheets|images|javascripts)/</span><span class="p">,</span> <span class="s1">&#39;\1&#39;</span> <span class="o">+</span> <span class="s1">&#39;../public&#39;</span> <span class="o">+</span> <span class="s1">&#39;/\2&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">response_html</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/&lt;\/head&gt;/i</span><span class="p">,</span> <span class="s2">&quot;&lt;style&gt;</span><span class="si">#{</span><span class="n">rewrite_public_stylesheet_image_references</span><span class="p">(</span><span class="s1">&#39;\/images&#39;</span><span class="p">,</span> <span class="s1">&#39;../public&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;\/style&gt;</span><span class="se">\n</span><span class="s2">&lt;\/head&gt;&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">rewrite_public_stylesheet_image_references</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">server_url</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">dir</span> <span class="o">=</span> <span class="s2">&quot;/Users/jkinney/Sites/Rails/Client/new_rails_app/public/stylesheets/&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">stylesheets</span> <span class="o">=</span> <span class="sx">%w(reset admin main js_menu css_tabs firefox)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">css</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>      <span class="n">stylesheets</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+</span><span class='line'>        <span class="c1"># puts file</span>
+</span><span class='line'>        <span class="n">lines</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>        <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">dir</span><span class="o">+</span><span class="n">file</span><span class="o">+</span><span class="s2">&quot;.css&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">){</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span> <span class="p">}</span>
+</span><span class='line'>        <span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">){</span><span class="o">|</span><span class="n">l</span><span class="p">,</span> <span class="n">line</span><span class="o">|</span> <span class="n">l</span> <span class="o">&lt;&lt;</span> <span class="n">line</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/</span><span class="si">#{</span><span class="n">regex</span><span class="si">}</span><span class="sr">/i</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">server_url</span><span class="si">}</span><span class="s2">/images&quot;</span><span class="p">)}</span>
+</span><span class='line'>        <span class="n">css</span> <span class="o">&lt;&lt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">to_s</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">css</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Easily convert a has_and_belongs_to_many to a has_many_through in Rails (for: MS SQL Server)]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server/"/>
+    <updated>2010-03-06T16:53:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/03/06/easily-convert-a-has-and-belongs-to-many-to-a-has-many-through-in-rails-for-ms-sql-server</id>
+    <content type="html"><![CDATA[<p>One of the things that bugged me about Rails when they made the move from only having has_and_belongs_to_many (HABTM) to also including the has_many_through (HM:T) join model option (which is now the preferred way to go), was that you needed to write your own code in the model to get the associations to work properly. With the old HABTM implementation this was handled for you.</p>
+
+<!-- more -->
+
+
+<p>Writing the association code yourself required some array math and it was hard to remember what order to do things in and how to exactly format it. I had to copy and paste the code in from a snippet library every time. Not only that but it was ugly and a pain in the butt to maintain, and really felt like it should be handled in the core Rails framework. It looked like this (at least my version):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#This is from an old app that managed a relationship between MetaKeywords and Pages</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">manage_meta_keyword_associations</span><span class="p">(</span><span class="n">new_meta_keywords</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">current_meta_keywords</span> <span class="o">=</span> <span class="no">MetaKeywordPage</span><span class="o">.</span><span class="n">find_all_by_page_id</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">mkp</span><span class="o">|</span> <span class="n">mkp</span><span class="o">.</span><span class="n">meta_keyword_id</span><span class="o">.</span><span class="n">to_s</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">meta_keywords_to_add</span> <span class="o">=</span> <span class="n">new_meta_keywords</span> <span class="o">-</span> <span class="n">current_meta_keywords</span>
+</span><span class='line'>  <span class="k">for</span> <span class="n">meta_keyword</span> <span class="k">in</span> <span class="n">meta_keywords_to_add</span>
+</span><span class='line'>    <span class="no">MetaKeywordPage</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:meta_keyword_id</span> <span class="o">=&gt;</span> <span class="n">meta_keyword</span><span class="p">,</span> <span class="ss">:page_id</span> <span class="o">=&gt;</span> <span class="nb">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">meta_keywords_to_remove</span> <span class="o">=</span> <span class="n">current_meta_keywords</span> <span class="o">-</span> <span class="n">new_meta_keywords</span>
+</span><span class='line'>  <span class="k">for</span> <span class="n">meta_keyword</span> <span class="k">in</span> <span class="n">meta_keywords_to_remove</span>
+</span><span class='line'>    <span class="no">MetaKeywordPage</span><span class="o">.</span><span class="n">find_by_meta_keyword_id_and_page_id</span><span class="p">(</span><span class="n">meta_keyword</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">destroy</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&#8217;s <a href="http://paulbarry.com/articles/2007/10/24/has_many-through-checkboxes">another post</a> detailing this requirement, but luckily as of 18 months ago (or longer) Rails no longer makes you manage that association code yourself. While this isn&#8217;t news in and of itself, it&#8217;s important if you&#8217;re working with a legacy app and you try to convert a HABTM to a HM:T and can&#8217;t figure out why it&#8217;s not working. That&#8217;s exactly what happened to me a few weeks ago after digging back into an old codebase. I needed the HM:T implementation though because I needed to add the position column to the join table to allow users to order their locations by the most recently added one. The app I&#8217;m working in has users, employers and locations. Users and locations are associated through the locations_users (join table) and locations belong to employers, thus users are associated to employers through the locations_users table.</p>
+
+<p>The problem is that there was a lot of data in my existing HABTM table (locations_users) that I needed to retain and I wasn&#8217;t sure how to go about doing this. I&#8217;m also using Microsoft SQL Server 2005 with my Ruby on Rails app so that throws another kink in the mix as most google searches will only yield info for MySQL or PostgreSQL. I thought about just modifying the table directly in SQL Management Studio but that was less than desirable because it is hard to automate and hard to document. However, most .NET developers I know use &#8220;change scripts&#8221; instead of migrations like we do in the Rails world so I thought about how I could get a hybrid solution working.</p>
+
+<p>I modified the table in our staging environment with SQL Management Studio, I added an &#8220;id&#8221; column, and both &#8220;updated_at&#8221; and &#8220;created_at&#8221; timestamp columns and then generated a change script. Note: it&#8217;s important that when in design mode that you click the &#8220;generate change script&#8221; button before saving the table, otherwise if you save the table before generating the change script you can&#8217;t click the change script button anymore&#8230; it gets grayed out.</p>
+
+<p>Initially I tried just executing the whole change script directly in an execute block inside of self.up, which would look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ModifyLocationsUsersToBeHmt</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">up</span>
+</span><span class='line'>    <span class="n">execute</span> <span class="s2">&quot;change script here&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unfortunately that didn&#8217;t work, but I did manage to figure out a way to still execute the change script incrementally. I just needed a new &#8220;execute&#8221; call for each SQL statement (which you can see in the final code example at the end of this post). The last thing to do was to try to execute this task with some sort of fail-safe so that I wouldn&#8217;t screw up my data if something went wrong. Luckily ActiveRecord supports transactions as long as your database does, and SQLServer 2005 definitely supports them. In fact they&#8217;re in the change script as &#8220;BEGIN TRANSACTION&#8221;, we just can&#8217;t execute that code directly in our migration which is why you don&#8217;t see them in the final code example.</p>
+
+<p>For more discussion on transactions in Rails look at this <a href="http://stackoverflow.com/questions/686852/rolling-back-a-failed-rails-migration">stackoverflow thread</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#A transaction in Active Record</span>
+</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">transaction</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">execute</span> <span class="s2">&quot;update users set enabled = 1 where name like &#39;batman&#39;&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Because we want to retain all the data that exists in the join table and we&#8217;re adding an ID col with some timestamps and re-positioning the fields, SQL Server will be creating a tmp table, dumping all our records into that, then renaming the tmp table to locations_users and modifying the ID col to be a true auto-incrementing primary column. Here is the final, transactional Active Record Migration for SQL Server 2005.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ModifyLocationsUsersToBeHmt</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">up</span>
+</span><span class='line'>    <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">transaction</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">      CREATE TABLE dbo.Tmp_locations_users</span>
+</span><span class='line'><span class="s2">        (</span>
+</span><span class='line'><span class="s2">        id int NOT NULL IDENTITY (1, 1),</span>
+</span><span class='line'><span class="s2">        location_id int NOT NULL,</span>
+</span><span class='line'><span class="s2">        user_id int NOT NULL,</span>
+</span><span class='line'><span class="s2">        created_at datetime NULL,</span>
+</span><span class='line'><span class="s2">        updated_at datetime NULL</span>
+</span><span class='line'><span class="s2">        ) ON [PRIMARY]</span>
+</span><span class='line'><span class="s2">      &quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;SET IDENTITY_INSERT dbo.Tmp_locations_users OFF&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;IF EXISTS(SELECT * FROM dbo.locations_users)</span>
+</span><span class='line'><span class="s2">         EXEC(&#39;INSERT INTO dbo.Tmp_locations_users (location_id, user_id)</span>
+</span><span class='line'><span class="s2">          SELECT location_id, user_id FROM dbo.locations_users WITH (HOLDLOCK TABLOCKX)&#39;)&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;DROP TABLE dbo.locations_users&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;EXECUTE sp_rename N&#39;dbo.Tmp_locations_users&#39;, N&#39;locations_users&#39;, &#39;OBJECT&#39;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execute</span><span class="s2">&quot;ALTER TABLE dbo.locations_users ADD CONSTRAINT</span>
+</span><span class='line'><span class="s2">        PK_locations_users PRIMARY KEY CLUSTERED </span>
+</span><span class='line'><span class="s2">        (</span>
+</span><span class='line'><span class="s2">        id</span>
+</span><span class='line'><span class="s2">        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]&quot;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;CREATE NONCLUSTERED INDEX index_locations_users_on_location_id ON dbo.locations_users</span>
+</span><span class='line'><span class="s2">        (</span>
+</span><span class='line'><span class="s2">        location_id</span>
+</span><span class='line'><span class="s2">        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execute</span> <span class="o">=</span> <span class="s2">&quot;CREATE NONCLUSTERED INDEX index_locations_users_on_user_id ON dbo.locations_users</span>
+</span><span class='line'><span class="s2">        (</span>
+</span><span class='line'><span class="s2">        user_id</span>
+</span><span class='line'><span class="s2">        ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]</span>
+</span><span class='line'><span class="s2">      &quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;update locations_users set created_at = &#39;1-1-2010&#39;&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;update locations_users set updated_at = &#39;1-1-2010&#39;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">add_column</span> <span class="ss">:locations_users</span><span class="p">,</span> <span class="ss">:position</span><span class="p">,</span> <span class="ss">:integer</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">down</span>
+</span><span class='line'>    <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">transaction</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">remove_column</span> <span class="ss">:locations_users</span><span class="p">,</span> <span class="ss">:position</span>
+</span><span class='line'>      <span class="n">remove_column</span> <span class="ss">:locations_users</span><span class="p">,</span> <span class="ss">:id</span>
+</span><span class='line'>      <span class="n">remove_column</span> <span class="ss">:locations_users</span><span class="p">,</span> <span class="ss">:created_at</span>
+</span><span class='line'>      <span class="n">remove_column</span> <span class="ss">:locations_users</span><span class="p">,</span> <span class="ss">:updated_at</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bluepill init script for Monitoring Delayed Job on Linux openSUSE]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/"/>
+    <updated>2010-02-01T16:08:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse</id>
+    <content type="html"><![CDATA[<p>I recently moved a long running request in my application to delayed job (<a href="http://github.com/collectiveidea/delayed_job">the collectiveidea fork</a>) and it went really well. However, after some time the delayed job process died and my users couldn&#8217;t use an essential part of the application. I knew it was time for a process monitor. I probably should have put one in to begin with, but I was new to delayed job (really to background processing in general) and the though hadn&#8217;t crossed my mind.</p>
+
+<!-- more -->
+
+
+<p>I googled around and found <a href="http://blog.plataformatec.com.br/2010/02/monitoring-delayed-job-with-bluepill-and-capistrano">several</a> <a href="http://rails.co.za/2009/11/14/monitoring-delayed-job-with-bluepill.html">articles</a> that told me exactly how to get bluepill to monitor delayed job and even one for <a href="http://mickeyben.com/2009/12/22/monitoring-apache-with-bluepill.html">monitoring apache</a>, but none of them seemed to give me a way to create an init script that would ensure that if the server rebooted, bluepill would start up and make sure delayed job continued to work.</p>
+
+<p>It took a while but I finally found <a target="_blank" href="http://groups.google.com/group/bluepill-rb/browse_thread/thread/96f9db9d5213ef39">this post</a> in the bluepill google group asking about documentation and an init script. The author (Carl) later answered his own post with <a target="_blank" href="http://gist.github.com/272125">this gist</a> containing an init script for bluepill! I thought I was set, so I set out to figure out how to create an init script for openSUSE, the flavor of Linux <a target="_blank" href="http://avastonetech.com">my company</a> uses. A simple google search yielded this <a target="_blank" href="http://en.opensuse.org/SDB:How_to_Create_Your_Own_Init_Script">great post</a> about creating your own init script in openSUSE.</p>
+
+<p>I followed it&#8217;s directions and was very happy to find that issuing the following command <code>/etc/init.d/bluepill restart</code> resulted in bluepill being started and then executing <code>bluepill status</code> revealed that the delayed job process was indeed &#8220;UP&#8221; meaning that bluepill was doing it&#8217;s job. Then I rebooted the machine and what happened next isn&#8217;t for the faint of heart&#8230; after the machine rebooted and I SSH&#8217;d back into the box to check the bluepill log and I was devastated. The logs were reporting that bluepill couldn&#8217;t start!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="no">Start</span> <span class="n">command</span> <span class="n">execution</span> <span class="n">returned</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="nb">exit</span> <span class="n">code</span><span class="p">:</span>
+</span><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="p">{</span><span class="ss">:stdout</span><span class="o">=&gt;</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:stderr</span><span class="o">=&gt;</span><span class="s2">&quot;script/delayed_job:3:in &#39;require&#39;: no such file to load -- rubygems (LoadError) from script/delayed_job:3&quot;</span><span class="p">,</span> <span class="ss">:exit_code</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">}</span>
+</span><span class='line'><span class="no">Mar</span>  <span class="mi">3</span> <span class="mi">18</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mo">02</span> <span class="k">if</span><span class="o">-</span><span class="n">suse11</span><span class="o">-</span><span class="n">stage</span> <span class="n">bluepilld</span><span class="o">[</span><span class="mi">2344</span><span class="o">]</span><span class="p">:</span> <span class="o">[</span><span class="n">application_name</span><span class="ss">:delayed_job</span><span class="o">]</span> <span class="no">Going</span> <span class="n">from</span> <span class="n">down</span> <span class="o">=&gt;</span> <span class="n">starting</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, so maybe it&#8217;s not that bad but I&#8217;m not a Linux expert (I&#8217;m decent, but only because I need to know Linux to host rails) and this was my first init script so I was pretty sunk. Having nowhere else to go, I <a target="_blank" href="http://github.com/arya/bluepill/issues/closed#issue/41">turned to</a> the author of bluepill himself, <a target="_blank" href="http://github.com/arya">Arya</a>. He was very helpful in answering my questions and as it turned out, my environment variables were not setup properly. Well, really the problem was that I had two installations of Ruby (apparently) and so the script was trying to start under the wrong one (I guess). Ayra&#8217;s suggestion in the issues section of his github page was to add this code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">export</span> <span class="no">PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/bin:$PATH&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It worked and I haven&#8217;t bothered to investigate much further. Here is my full init script, hopefully this will help someone else in the future!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Author: Jon Kinney</span>
+</span><span class='line'><span class="c"># Based on the opensuse skeleton /etc/init.d/skeleton init script</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">### BEGIN INIT INFO</span>
+</span><span class='line'><span class="c"># Provides: bluepill</span>
+</span><span class='line'><span class="c"># Required-Start:</span>
+</span><span class='line'><span class="c"># Required-Stop:</span>
+</span><span class='line'><span class="c"># Default-Start: 2 3 4 5</span>
+</span><span class='line'><span class="c"># Default-Stop: 0 1 6</span>
+</span><span class='line'><span class="c"># Short-Description: bluepill daemon, providing process monitoring</span>
+</span><span class='line'><span class="c"># Description: bluepill is a monitoring tool. More info at http://github.com/arya/bluepill.</span>
+</span><span class='line'><span class="c">### END INIT INFO</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/bin:$PATH&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Check for missing binaries</span>
+</span><span class='line'><span class="nv">BLUEPILL_BIN</span><span class="o">=</span>/usr/local/bin/bluepill
+</span><span class='line'><span class="nb">test</span> -x <span class="nv">$BLUEPILL_BIN</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_BIN not installed&quot;</span>;
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">exit </span>0;
+</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>5; <span class="k">fi</span>; <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Check for existence of needed config file and read it</span>
+</span><span class='line'><span class="nv">BLUEPILL_CONFIG</span><span class="o">=</span>/srv/www/app_name/shared/config/delayed_job.pill
+</span><span class='line'><span class="nb">test</span> -r <span class="nv">$BLUEPILL_CONFIG</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;$BLUEPILL_CONFIG not existing&quot;</span>;
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">exit </span>0;
+</span><span class='line'>        <span class="k">else </span><span class="nb">exit </span>6; <span class="k">fi</span>; <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
+</span><span class='line'>    start<span class="o">)</span>
+</span><span class='line'>        <span class="nb">echo</span> -n <span class="s2">&quot;Starting bluepill &quot;</span>
+</span><span class='line'>        <span class="nv">$BLUEPILL_BIN</span> load <span class="nv">$BLUEPILL_CONFIG</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    stop<span class="o">)</span>
+</span><span class='line'>        <span class="nb">echo</span> -n <span class="s2">&quot;Shutting down bluepill &quot;</span>
+</span><span class='line'>        <span class="nv">$BLUEPILL_BIN</span> quit
+</span><span class='line'>        ;;
+</span><span class='line'>    restart<span class="o">)</span>
+</span><span class='line'>        <span class="c">## Stop the service and regardless of whether it was</span>
+</span><span class='line'>        <span class="c">## running or not, start it again.</span>
+</span><span class='line'>        <span class="nv">$0</span> stop
+</span><span class='line'>        <span class="nv">$0</span> start
+</span><span class='line'>        ;;
+</span><span class='line'>    *<span class="o">)</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Usage: $0 {start|stop|restart}&quot;</span>
+</span><span class='line'>        <span class="nb">exit </span>1
+</span><span class='line'>        ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Change Locale on OS X Snow Leopard for FreeTDS Functionality]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/"/>
+    <updated>2009-11-23T15:29:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality</id>
+    <content type="html"><![CDATA[<p>Recently I&#8217;ve been trying to get my new unibody macbook pro connecting to SQL Server 2005 with FreeTDS. I was following the <a href="http://www.metaskills.net/2009/9/5/the-ultimate-os-x-snow-leopard-stack-for-rails-development-x86_64-macports-ruby-1-8-1-9-sql-server-more">great guide</a> from Ken Collins, author of the <a href="http://github.com/rails-sqlserver/2000-2005-adapter">rails-sqlserver activerecord adapter</a> that I use but no matter what configuration settings I edited I couldn&#8217;t get my machine to connect to the SQL Server.</p>
+
+<!-- more -->
+
+
+<p>When checking the event viewer on the Windows Server 2k8 box I received the following error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;The login packet used to open the connection is structurally invalid; </span>
+</span><span class='line'><span class="s2">the connection has been closed. </span>
+</span><span class='line'><span class="s2">Please contact the vendor of the client library.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I was pretty sure it had to do with my locale because if that was incorrect it would make sense that the packets might be structurally invalid. My locale was set to <code>en_US.us-ascii</code> the default setting apparently after a clean OS X Snow Leopard install. The problem was that I couldn&#8217;t figure out how to change it. Then I ran across <a href="http://lists.ibiblio.org/pipermail/freetds/2007q4/022436.html">this archived post</a> and I was able to temporarily change my locale by typing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I was able to verify my locale settings by typing <code>locale</code> in a terminal window which yielded the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">LANG</span><span class="o">=</span>
+</span><span class='line'><span class="nv">LC_COLLATE</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_CTYPE</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_MESSAGES</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_MONETARY</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_NUMERIC</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_TIME</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nv">LC_ALL</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem is if I opened a new terminal window my locale was back to the default ascii junk. To make this change permanent I simply had to edit my ~/.profile and add the export statement that we set earlier to the bottom of the file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now when I open a new window and type <code>locale</code> it says <code>en_US.UTF-8</code> for everything. At this point I was able to continue following Ken&#8217;s guide for testing the TSQL commands and getting ruby-dbi and everything else wired up.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying to Multiple Server Environments with Cap]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap/"/>
+    <updated>2009-04-30T16:49:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/04/30/deploying-to-multiple-server-environments-with-cap</id>
+    <content type="html"><![CDATA[<p>Most anytime I develop a web application I need to deploy to multiple server environments. For me this used to mean maintaining two separate deploy.rb scripts, and I would rename one while deploying to staging, and then rename the other when I needed to deploy to production. After about three deploys I said, the hell with this! And I figured out how to allow the specification of your deployment at the command line during the cap deploy task.</p>
+
+<!-- more -->
+
+
+<p>Now I know what you&#8217;re thinking, why not create your own cap task that is called cap deploy_production and cap deploy_staging (or whatever), but I didn&#8217;t want to muck around with that. Here is how I get Capistrano to prompt ME!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">default_run_options</span><span class="o">[</span><span class="ss">:pty</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">ssh_options</span><span class="o">[</span><span class="ss">:forward_agent</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="c1"># also had to set up id_ras keys for the deploy user on the production box (to itself). And setup the tunnel definition as well in ~/.subversion/config</span>
+</span><span class='line'><span class="c1"># Local =&gt; rs_ssh = /opt/local/bin/ssh -p 2384 -l jkinney</span>
+</span><span class='line'><span class="c1"># Production =&gt; rs_ssh = /usr/bin/ssh -p 2384 -l jkinney</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:gems_for_project</span><span class="p">,</span> <span class="sx">%w(highline,will_paginate,etc...)</span> <span class="c1"># list of gems to be installed</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Make terminal prompt us for the location we want to deploy to</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_location</span><span class="p">,</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">deploy_location</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span> <span class="s2">&quot;Enter deploy location (stage/prod)&quot;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_location</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;prod&quot;</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:domain</span><span class="p">,</span> <span class="s2">&quot;209.41.75.42&quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'>  <span class="c1"># I have ssh setup on a non-standard port for my staging box, since it&#39;s exposed to the world. Our production box required VPN or local netowrk access.</span>
+</span><span class='line'>  <span class="n">ssh_options</span><span class="o">[</span><span class="ss">:port</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2384</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:domain</span><span class="p">,</span> <span class="s2">&quot;YOUR STAGING IP HERE&quot;</span>
+</span><span class='line'>  <span class="c1"># note that your staging could be on the same server, just setup your application names differently then so you aren&#39;t overwriting things.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># prompts for a release tag, if that is your sort of thing...</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:release_tag</span><span class="p">,</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">release_tag</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span> <span class="s2">&quot;Enter a release tag to deploy (type trunk or leave blank and hit enter to deploy from trunk)&quot;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">role</span> <span class="ss">:app</span><span class="p">,</span> <span class="n">domain</span>
+</span><span class='line'><span class="n">role</span> <span class="ss">:web</span><span class="p">,</span> <span class="n">domain</span>
+</span><span class='line'><span class="n">role</span> <span class="ss">:db</span><span class="p">,</span>  <span class="n">domain</span><span class="p">,</span> <span class="ss">:primary</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:application</span><span class="p">,</span> <span class="s2">&quot;jonkinneydotcom&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:user</span><span class="p">,</span> <span class="s2">&quot;deploy&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:password</span><span class="p">,</span> <span class="s2">&quot;secret&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_to</span><span class="p">,</span> <span class="s2">&quot;/var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rails_env</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># I thought this was automatic, but I seem to need to require it to cleanup my releases</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:keep_releases</span><span class="p">,</span> <span class="mi">4</span>
+</span><span class='line'><span class="n">after</span> <span class="s2">&quot;deploy&quot;</span><span class="p">,</span> <span class="s2">&quot;deploy:cleanup&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># this is using subversion, I am transitioning to GIT and will post updates when I have a modified deploy.rb</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repo_location</span><span class="p">,</span> <span class="s2">&quot;/var/svn/your_subversion_repo&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repository</span><span class="p">,</span> <span class="s2">&quot;svn+ssh://</span><span class="si">#{</span><span class="n">domain</span><span class="si">}#{</span><span class="n">repo_location</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/trunk&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:deploy</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;restart passenger&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:restart</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:no_release</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">}</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;touch </span><span class="si">#{</span><span class="n">current_path</span><span class="si">}</span><span class="s2">/tmp/restart.txt&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">[</span><span class="ss">:start</span><span class="p">,</span> <span class="ss">:stop</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">desc</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">t</span><span class="si">}</span><span class="s2"> task is a no-op with passenger&quot;</span>
+</span><span class='line'>    <span class="n">task</span> <span class="n">t</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:after_symlink</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;chmod -R a+rw </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#rcov messes with deployed apps...remove it in production</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;rm -rf </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/vendor/plugins/rails_rcov&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># OPTIONAL: symlink files from the FTP site&#39;s home directory to the rails_root </span>
+</span><span class='line'>    <span class="c1"># keep them protected and use send_file to present them to the logged in user </span>
+</span><span class='line'>    <span class="c1"># (this is more secure than hiding them in a public directory with directory listing off)</span>
+</span><span class='line'>    <span class="c1"># run &quot;rm -rf #{release_path}/admin_files&quot; </span>
+</span><span class='line'>    <span class="c1"># run &quot;ln -s #{deploy_to}/#{shared_dir}/admin_files #{release_path}&quot;    </span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the files from outside the deploy path so we can keep all the uploaded images!</span>
+</span><span class='line'>    <span class="c1"># This will allow images uploaded through an asset manager to be retained between deployments</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;rm -rf </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public/assets&quot;</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public/assets&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># setup database for production environment (database.yml should be ignored in svn)</span>
+</span><span class='line'>    <span class="n">db_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;adapter&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;mysql&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;database&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;yourapp_production&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;username&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;password&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;host&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># OPTIONAL: Deploy to production with a sqlite3 database...because we don&#39;t need anything elaborage. </span>
+</span><span class='line'>    <span class="c1"># And that way we can reset the db every hour or whatever with a cron job</span>
+</span><span class='line'>    <span class="c1"># db_params = {</span>
+</span><span class='line'>    <span class="c1">#   &quot;adapter&quot;=&gt;&quot;sqlite3&quot;,</span>
+</span><span class='line'>    <span class="c1">#   &quot;database&quot;=&gt;&quot;db/production.sqlite3.db&quot;,</span>
+</span><span class='line'>    <span class="c1">#   &quot;timeout&quot;=&gt;&quot;5000&quot;</span>
+</span><span class='line'>    <span class="c1"># }</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">db_params</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">param</span><span class="p">,</span> <span class="n">default_val</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">set</span> <span class="s2">&quot;db_</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">to_sym</span><span class="p">,</span>
+</span><span class='line'>      <span class="c1">#if you want to be prompted uncomment the line below this and comment out the one directly below that</span>
+</span><span class='line'>      <span class="c1"># lambda { Capistrano::CLI.ui.ask &quot;Enter database #{param}&quot; do |q| q.default=default_val end}</span>
+</span><span class='line'>      <span class="n">param</span> <span class="o">=</span> <span class="n">default_val</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># builds the database.yml</span>
+</span><span class='line'>    <span class="n">database_configuration</span> <span class="o">=</span> <span class="s2">&quot;production:</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">db_params</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">param</span><span class="p">,</span> <span class="n">default_val</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">val</span><span class="o">=</span><span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;db_</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">database_configuration</span><span class="o">&lt;&lt;</span><span class="s2">&quot;  </span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;mkdir -p </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">put</span> <span class="n">database_configuration</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/database.yml&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the database.yml</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/database.yml </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current/config&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">#symlink the production database</span>
+</span><span class='line'>    <span class="n">run</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/production.sqlite3.db </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current/db&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># This is what asks you if you&#39;re sure you want to deploy to production?!?!?</span>
+</span><span class='line'><span class="n">before</span> <span class="s2">&quot;deploy:update_code&quot;</span><span class="p">,</span> <span class="s2">&quot;user_confirmation_for_production_deployment&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:user_confirmation_for_production_deployment</span><span class="p">,</span> <span class="n">roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">if</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_location</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s1">&#39;prod&#39;</span>
+</span><span class='line'>    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;You are deploying to PRODUCTION. continue(y/n):&quot;</span>
+</span><span class='line'>    <span class="n">answer</span> <span class="o">=</span> <span class="no">Capistrano</span><span class="o">::</span><span class="no">CLI</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">abort</span> <span class="s2">&quot;deployment to production was stopped&quot;</span> <span class="k">unless</span> <span class="n">answer</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">######################Custom cap tasks that I find useful</span>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;Configure VHost&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:config_vhost</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">vhost_config</span> <span class="o">=&lt;&lt;-</span><span class="no">EOF</span>
+</span><span class='line'><span class="sh">&lt;VirtualHost *:80&gt;</span>
+</span><span class='line'><span class="sh">  ServerName jonkinney.com</span>
+</span><span class='line'><span class="sh">  ServerAlias www.jonkinney.com</span>
+</span><span class='line'><span class="sh">  DocumentRoot #{deploy_to}/current/public</span>
+</span><span class='line'><span class="sh">&lt;/VirtualHost&gt;</span>
+</span><span class='line'><span class="no">  EOF</span>
+</span><span class='line'>  <span class="n">put</span> <span class="n">vhost_config</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/vhost_config&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;mv </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/vhost_config /etc/apache2/sites-available/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;a2ensite </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;/etc/init.d/apache2 reload&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;create assets directory&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:create_assets_directory</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;mkdir -p </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;chmod -R 777 </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'>  <span class="n">sudo</span> <span class="s2">&quot;chown -R deploy:www-data </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/assets&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;make current development database the production database&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:upload_dev_db_to_prod</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">put</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;db/development.sqlite3.db&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">shared_dir</span><span class="si">}</span><span class="s2">/config/production.sqlite3.db&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;run remote command&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:show</span><span class="p">,</span> <span class="ss">:roles</span> <span class="o">=&gt;</span> <span class="ss">:app</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">run</span> <span class="o">&lt;&lt;-</span><span class="no">COMMAND</span>
+</span><span class='line'><span class="sh">    /var/www/apps/#{application}/current/script/runner -e production &#39;require &quot;pp&quot;; pp #{command}&#39;</span>
+</span><span class='line'><span class="no">  COMMAND</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">desc</span> <span class="s2">&quot;run remote rake db:migrate RAILS_ENV=production&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:remote_db_migrate</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">run</span><span class="p">(</span><span class="s2">&quot;cd </span><span class="si">#{</span><span class="n">deploy_to</span><span class="si">}</span><span class="s2">/current; /usr/bin/rake db:migrate RAILS_ENV=production&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hopefully this has been helpful. I know Capistrano can be somewhat of a black box for people, so if you have issues with my deploy.rb or need any help feel free to contact me or post in the comments!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Logging Cron Jobs on Ubuntu]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/04/01/logging-cron-jobs-on-ubuntu/"/>
+    <updated>2009-04-01T15:53:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/04/01/logging-cron-jobs-on-ubuntu</id>
+    <content type="html"><![CDATA[<p>I am running a VPS over at <a href="http://silverrack.com">SilverRack.com</a> and I love it. Dave (the owner) has been very helpful and responsive anytime I&#8217;ve had questions or issues, and I highly recommend their service. Also if you&#8217;re a member of a local Ruby user group then you can get $10 off the standard 256mb slice making it extremely affordable to have your very own server! I also have an unlimited Dreamhost account, but I like having root access and full reign of my server.</p>
+
+<h3>Enable the cron.log for Ubuntu</h3>
+
+<p>By default, Ubuntu disables the cron log, so you need to turn it on, and additionally create the log file before you can start tailing that log.</p>
+
+<!-- more -->
+
+
+<p>Use these steps to get your log on:</p>
+
+<p>Create the cron.log file</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>touch /var/log/cron.log
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit /etc/syslog.conf and uncomment the line starting with <code>cron.*</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/syslog.conf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart sysklogd</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>/etc/init.d/sysklogd restart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart cron</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>/etc/init.d/cron restart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then to watch your cron jobs execute this command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>tail -f /var/log/cron.log
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Madison web meetup: Advanced CSS]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2009/02/27/madison-web-meetup-advanced-css/"/>
+    <updated>2009-02-27T16:29:00-06:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2009/02/27/madison-web-meetup-advanced-css</id>
+    <content type="html"><![CDATA[<p>Recently Inacom had the privilege of hosting the <a href="http://www.meetup.com/madisonwebmeetup/">Madison Web Design &amp; Development Meetup</a>. The topic for this meeting was Advanced CSS. I put together a sideshow to try to keep the presentation more guided, but because of the depth of the topic we wound up going quite a bit over our loose 1 hour time slot. I just wanted to thank everyone for sticking around and seeming quite interested! I had a great time presenting and I hope that you all enjoyed our discussions. If you&#8217;re looking for the demo files and the presentation check them out in the full article.</p>
+
+<!-- more -->
+
+
+<p>Here is a PDF of the sideshow: <a href="http://jondkinney.github.com/jondkinney/assets/21/advanced_css.pdf">Advanced CSS Presentation</a> which has a lot of great resources for everyone to use. The links inside the PDF are also clickable so that should work out great.</p>
+
+<p>I posted my demo files in a <a href="http://jondkinney.github.com/jondkinney/assets/22/demos.zip">zipped folder</a> and also put them up in HTML format so people could view them that way if desired. I would recommend downloading the zip and viewing the source code in the following order as my comments in the HTML and CSS go from the most detailed to the least (in hopes that you don&#8217;t need a ton of comments each and every time! We are learning after all right?!?! :)</p>
+
+<h3>DEMOS!!</h3>
+
+<ul>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/2_col_float.html">2 column with floating and negative margining</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/footer_stick.html">Footer stick</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/form.html">Form</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/css_tables.html">CSS Tables</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/newspaper.html">Newspaper 3 columns</a></li>
+<li><a href="http://jondkinney.github.com/jondkinney/advanced_css/newspaper2.html">Newspaper 3 columns that auto match the height of each</a></li>
+</ul>
+
+
+<p>Thank you very much everyone for coming and for the kind words! I would definitely be interested in presenting again if there is a topic that I know about that the rest of the group has interest in.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rails in the Entreprise]]></title>
+    <link href="http://jondkinney.github.com/jondkinney/blog/2008/09/16/rails-in-the-entreprise/"/>
+    <updated>2008-09-16T16:20:00-05:00</updated>
+    <id>http://jondkinney.github.com/jondkinney/blog/2008/09/16/rails-in-the-entreprise</id>
+    <content type="html"><![CDATA[<p>The first website that I built for Inacom using <a href="http://rubyonrails.org/">ruby on rails</a> in 2006 was deployed to <a href="http://www.ubuntu.com/">Ubuntu</a> 6.06 LTS server and I hand rolled my own install for everything (it was painful). We had <a href="http://www.mysql.com/">MySQL</a> on the same 256 MB VM as the rails code was running from, and we setup a proxy with <a href="http://www.apache.org/">Apache</a> and <a href="http://mongrel.rubyforge.org/">Mongrel</a>. Deploying from <a href="http://www.capify.org/">Capistrano</a> 1.4 made things a bit easier once everything was setup, but the initial build was not an easy task. It was also my first time doing what some would consider fairly heavy Linux command line system administration, so that didn&#8217;t speed up the process either.</p>
+
+<!-- more -->
+
+
+<p>Fast forward 2 years and now I&#8217;m deploying servers in a mater of minutes, not days thanks to the deprec gem (using mongrel and nginx) and <a href="http://www.vmware.com/products/vi/vc/">VMWare Virtual Center</a> which allows us to store templates of our production rails servers. But VMWare VC isn&#8217;t the only Enterprise product that we&#8217;ve integrated with our rails development, we can deploy to Windows with <a href="http://www.iis.net/">IIS</a> (though it still isn&#8217;t highly recommended because of performance concerns), <a href="http://www.apple.com/server/macosx/">OS X Server</a>, and our de-facto favorite Linux Ubuntu.</p>
+
+<p>Not only can we deploy the rails code on a solid hosted virtual private server (VPS), but we can also tie into a lot of the existing corporate Microsoft stack. This very blog has a <a href="http://www.microsoft.com/sqlserver/2008/en/us/default.aspx">SQL Server</a> back end and authenticates against Inacom&#8217;s <a href="http://www.microsoft.com/windowsserver2008/en/us/active-directory.aspx">Active Directory</a> with SSL over the LDAP protocol.</p>
+
+<p>The bottom line is that Rails is ready for the enterprise, and it&#8217;s only getting better. Rails 2.2 will be thread safe, a feature that has been cause for some concern over the years, and it should allow for much better raw performance.</p>
+
+<p>To check out some of the &#8220;rails applications that scale&#8221; see <a href="http://www.softwaredeveloper.com/features/best-ruby-on-rails-061307/">Rails in Action</a>: The 56 Best RoR Driven Sites.</p>
+
+<p>In the next few articles we&#8217;ll be detailing how we setup our production Linux server for this blog on Ubuntu 8.04 LTS and got it communicating with SQL Server via <a href="http://www.freetds.org/">FreeTDS</a> and the new awesome <a href="http://rubyforge.org/projects/odbc-rails/">ActiveRecord ODBC adaptor</a> written by Tim Haynes. But next, check out how we set up Active Directory authentication for this blog with a small mod to the the restful_authentication plugin.</p>
+]]></content>
+  </entry>
+  
+</feed>
