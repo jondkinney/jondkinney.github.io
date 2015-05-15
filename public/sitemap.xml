@@ -133,21 +133,21 @@
   
   <url>
     <loc>http://jonkinney.com/blog/archives/</loc>
-    <lastmod>2015-05-15T15:37:54-05:00</lastmod>
+    <lastmod>2015-05-15T15:40:20-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/</loc>
-    <lastmod>2015-05-15T15:37:54-05:00</lastmod>
+    <lastmod>2015-05-15T15:40:20-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://jonkinney.com/studio/</loc>
-    <lastmod>2015-05-15T15:37:54-05:00</lastmod>
+    <lastmod>2015-05-15T15:40:20-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -216,7 +216,61 @@
   
   <url>
     <loc>http://jonkinney.com/vim_default/index.html</loc>
-    <lastmod>2015-05-15T15:37:50Z</lastmod>
+    <lastmod>2015-05-15T15:40:16Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2008/09/16/rails-in-the-enterprise/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/02/27/madison-web-meetup-advanced-css/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/04/01/logging-cron-jobs-on-ubuntu/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/04/30/deploying-to-multiple-server-environments-with-cap/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2009/11/23/change-locale-on-os-x-snow-leopard-for-freetds-functionality/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/02/01/bluepill-init-script-for-monitoring-delayed-job-on-linux-opensuse/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/03/06/easily-convert-a-has_and_belongs_to_many-to-a-has_many_through-in-rails-for-ms-sql-server/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2010/04/21/using-save_and_open_page-to-open-failed-cucumber-scenerios-in-a-browser-with-images-and-css/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jonkinney.com/Users/jon/Sites/Rails/github/jonkinneydotcom/public/articles/2011/10/12/intridea-blog-posts/index.html</loc>
+    <lastmod>2015-05-15T15:40:20Z</lastmod>
     <priority>0.6</priority>
   </url>
   
