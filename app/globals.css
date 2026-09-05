@@ -7,7 +7,7 @@
   display: block;
   flex: 0 0 30px;
   width: 30px;
-  height: 34px;
+  height: 30px;
   color: var(--ink);
 }
 .monogram::before {
@@ -25,7 +25,7 @@
   top: 8px;
   left: 2px;
   width: 12px;
-  height: 25px;
+  height: 21px;
   border-right: 3px solid currentColor;
   border-bottom: 3px solid currentColor;
   border-bottom-right-radius: 7px;
@@ -48,7 +48,7 @@
   content: "";
   position: absolute;
   right: 0;
-  bottom: 5px;
+  bottom: 1px;
   width: 3px;
   height: 3px;
   background: var(--frost);
