@@ -36,6 +36,7 @@ The comparison controls only appear with `review=1`. The close control hides the
 - `app/home.tsx`: project records, links, copy, page sections, and the three arrangements.
 - `app/globals.css`: palette, layout, breakpoints, and reduced-motion support.
 - `app/layout.tsx`: site metadata and Person structured data.
+- `design/social-card.svg`: editable 1200 × 630 social card. Run `node scripts/render-social-card.mjs` after a build to render the PNG with the site's Geist fonts; this requires `rsvg-convert` from librsvg. The committed PNG is served directly to social crawlers.
 - `public/images/`: Jon’s published Headway photo and existing product assets.
 - `public/jon-kinney-speaker-bio.txt`: downloadable bio; keep in sync with `speakerBio` in `app/home.tsx`.
 

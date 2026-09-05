@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <title>Jon Kinney — Good software. Better ways to build it.</title>
+  <defs>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 H 0 V 28" fill="none" stroke="#3c4654" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="grid-fade" x1="0" x2="1">
+      <stop stop-color="white" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="white" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="white" stop-opacity="0.85"/>
+    </linearGradient>
+    <mask id="grid-mask"><rect x="798" y="142" width="354" height="370" fill="url(#grid-fade)"/></mask>
+    <!-- The same shared j/k stem and aligned baseline as the website. -->
+    <g id="monogram">
+      <circle cx="12.5" cy="2.5" r="1.5" fill="#edf0f4"/>
+      <path d="M12.5 8 V22 A5.5 5.5 0 0 1 7 27.5 H2" fill="none" stroke="#edf0f4" stroke-width="3"/>
+      <path d="M13 18.5 L23.25 9 M13 18.5 L23.25 27.5" fill="none" stroke="#edf0f4" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="28.5" cy="27.5" r="1.5" fill="#92bbd0"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="630" fill="#242c37"/>
+  <rect x="24.5" y="24.5" width="1151" height="581" fill="none" stroke="#3c4654"/>
+  <path d="M64 123 H1136" stroke="#3c4654"/>
+
+  <use href="#monogram" transform="translate(64 57) scale(1.6)"/>
+  <text x="132" y="88" font-family="Geist" font-size="30" font-weight="600" letter-spacing="-0.7" fill="#edf0f4">Jon Kinney</text>
+  <text x="1136" y="73" text-anchor="end" font-family="Geist Mono" font-size="13" letter-spacing="1.2" fill="#adb8c9">INDEPENDENT DEVELOPER</text>
+  <text x="1136" y="96" text-anchor="end" font-family="Geist" font-size="16" fill="#adb8c9">Partner &amp; CTO at Headway</text>
+
+  <g mask="url(#grid-mask)"><rect x="798" y="142" width="354" height="370" fill="url(#grid)"/></g>
+  <path d="M838 180 H1136 M838 459 H1136" stroke="#3c4654"/>
+  <g stroke="#92bbd0" stroke-width="1.5" opacity="0.75">
+    <path d="M839 174 V186 M833 180 H845 M1130 459 H1142 M1136 453 V465"/>
+  </g>
+  <use href="#monogram" transform="translate(876 207) scale(7.8)"/>
+
+  <g font-family="Geist" font-size="84" font-weight="600" letter-spacing="-3.8">
+    <text x="64" y="232" fill="#edf0f4">Good software.</text>
+    <text x="64" y="327" fill="#92bbd0">Better ways</text>
+    <text x="64" y="422" fill="#92bbd0">to build it.</text>
+  </g>
+  <text x="67" y="482" font-family="Geist" font-size="22" fill="#adb8c9">Open-source tools. Technical leadership. Building Fulcrum.</text>
+
+  <path d="M64 540 H1136" stroke="#3c4654"/>
+  <circle cx="69" cy="576" r="4" fill="#acc3a2"/>
+  <text x="86" y="584" font-family="Geist" font-size="24" font-weight="500" fill="#edf0f4">jonkinney.com</text>
+  <text x="1136" y="582" text-anchor="end" font-family="Geist Mono" font-size="17" letter-spacing="2" fill="#adb8c9">LINUX / RUST / RAILS</text>
+</svg>

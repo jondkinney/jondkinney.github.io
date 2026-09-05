@@ -12,6 +12,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const socialImage = {
+  url: "https://jonkinney.com/images/jon-kinney-social.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: "Jon Kinney — Good software. Better ways to build it. Independent developer and Partner & CTO at Headway.",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://jonkinney.com"),
   alternates: { canonical: "https://jonkinney.com/" },
@@ -23,9 +31,13 @@ export const metadata: Metadata = {
     title: "Jon Kinney — Good software. Better ways to build it.",
     description: "Open-source tools, technical leadership, and a better development flow. Partner & CTO at Headway. Building Fulcrum.",
     type: "website",
+    siteName: "Jon Kinney",
+    images: [socialImage],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    creator: "@jondkinney",
+    images: [socialImage],
     title: "Jon Kinney — Developer, CTO & Open-source Builder",
     description: "Open-source tools, technical leadership, and a better way to build together.",
   },
