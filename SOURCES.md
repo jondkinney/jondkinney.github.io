@@ -14,6 +14,7 @@ Reviewed September 5, 2026.
 - Bazecor Lens: https://github.com/jondkinney/omarchy-bazecor-lens
 - Omasnip: https://github.com/jondkinney/omasnip
 - Oma2fa: https://github.com/jondkinney/oma2fa
+- Omapop: https://github.com/jondkinney/omapop (selection actions and PopClip-compatible extensions).
 - Omasnap: https://github.com/tobi/omasnap
 - Omarchy: https://github.com/basecamp/omarchy
 - Fulcrum: https://usefulcrum.ai/ (public early-access destination; copy reflects the user’s newer product brief).
