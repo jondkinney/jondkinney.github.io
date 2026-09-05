@@ -13,10 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jonkinney.com"),
+  alternates: { canonical: "https://jonkinney.com/" },
   title: "Jon Kinney — Developer, CTO & Open-source Builder",
   description: "I build open-source tools, lead the technical work at Headway, and help teams find their flow. Linux, Rust, Rails, and a better way to build together with Fulcrum. Based in Green Bay, Wisconsin.",
   icons: { icon: { url: "/images/jon-kinney.jpeg", type: "image/jpeg" } },
   openGraph: {
+    url: "https://jonkinney.com/",
     title: "Jon Kinney — Good software. Better ways to build it.",
     description: "Open-source tools, technical leadership, and a better development flow. Partner & CTO at Headway. Building Fulcrum.",
     type: "website",
@@ -42,6 +45,8 @@ export default function RootLayout({
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Jon Kinney",
+          url: "https://jonkinney.com/",
+          image: "https://jonkinney.com/images/jon-kinney.jpeg",
           jobTitle: "Partner & CTO",
           worksFor: { "@type": "Organization", name: "Headway", url: "https://www.headway.io/" },
           homeLocation: { "@type": "Place", name: "Green Bay, Wisconsin" },
