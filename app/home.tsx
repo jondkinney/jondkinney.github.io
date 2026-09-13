@@ -26,6 +26,7 @@ const plugins = [
   { name: "Bazecor Lens", glyph: "⌘", description: "Your keyboard’s active layer, right where you need it.", url: "https://github.com/jondkinney/omarchy-bazecor-lens" },
   { name: "Omasnip", glyph: "{ }", description: "Code snapshots, Vim editing, and an Omasnap handoff.", url: "https://github.com/jondkinney/omasnip" },
   { name: "Oma2fa", glyph: "•••", description: "A private, quick way to find verification codes.", url: "https://github.com/jondkinney/oma2fa" },
+  { name: "Bar Screens", glyph: "▭", description: "One bar, only on the screens you choose.", url: "https://github.com/jondkinney/omarchy-barscreens" },
 ];
 const features = [
   { label: "Plan & pitch", title: "Make a plan you can stand behind.", text: "Scope the work, build an estimate, and turn it into a clear proposal. Give clients—and the internal teams you need buy-in from—a shared picture of what comes next." },
